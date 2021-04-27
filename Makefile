@@ -19,6 +19,3 @@ docker-db-make:
 	docker-compose exec web python manage.py makemigrations
 docker-db-migrate:
 	docker-compose exec web python manage.py migrate
-
-
-
