@@ -47,7 +47,7 @@
                         {% for el in users %}
                         <tr data-href="{% url 'admin_user-detail'  pk=el.pk %}">
                             <td>{{ el.id }}</td>
-                            <td>{{ el.first_name }} {{ el.middle_name }} {{ el.last_name }}</td>
+                            <td>{{ el.first_name }} {{ el.last_name }} {{ el.middle_name }}</td>
                             <td>{{ el.number }}</td>
                             <td>{{ el.email }}</td>
                             <td></td>

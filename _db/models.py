@@ -106,7 +106,7 @@ class User(CustomAbstractUser):
     user_type = models.CharField(choices=TYPE, default='Управляющий домом', max_length=155, null=True, blank=True)
 
     def __str__(self):
-        return self.first_name + self.last_name
+        return f'{self.first_name} {self.last_name}'
 
     class Meta:
         app_label = '_db'
@@ -136,7 +136,7 @@ class Section(models.Model):
 
 
 class Floor(models.Model):
-    house = models.ForeignKey(House, on_delete=models.CASCADE)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -178,39 +178,36 @@ class RateService(models.Model):
     price = models.FloatField()
 
 
+class Apartment(models.Model):
+    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, verbose_name='')
+    name = models.CharField('Номер квартиры', max_length=255)
+    apartment_area = models.FloatField('Площадь квартиры', max_length=255)
+    self_account = models.CharField('', max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Account(models.Model):
     STATUS = (
         ('Active', 'Активен'),
         ('Inactive','Неактивен')
     )
     wallet = models.CharField('Номер лицевого счёта', max_length=255, null=True)
-    house = models.ForeignKey(House, on_delete=models.CASCADE, null=True, blank=True, verbose_name='')
-    section = models.ForeignKey(Section, on_delete=models.CASCADE, null=True, blank=True, verbose_name='')
-    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, null=True, blank=True, verbose_name='')
     money = models.FloatField(default=0)
     status = models.CharField('',choices=STATUS, max_length=55, blank=True)
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, null=True, verbose_name='')
 
     def __str__(self):
         return self.wallet
 
 
-class Apartment(models.Model):
-    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, verbose_name='')
-    section = models.ForeignKey(Section, on_delete=models.CASCADE, blank=True, verbose_name='')
-    house = models.ForeignKey(House, on_delete=models.CASCADE, blank=True, verbose_name='')
-    name = models.CharField('Номер квартиры', max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, verbose_name='')
-    apartment_area = models.FloatField('Площадь квартиры', max_length=255)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
-    self_account = models.CharField('собственный аккаунт', max_length=255, null=True)
-
-    def __str__(self):
-        return self.name
-
-
 class TransferType(models.Model):
-
-    status = models.BooleanField(default=0)
+    TYPE = (
+        ('Приход', 'Приход'),
+        ('Расход', 'Расход')
+    )
+    status = models.CharField(choices=TYPE, max_length=55)
     name = models.CharField(max_length=255)
 
     def __str__(self):

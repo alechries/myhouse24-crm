@@ -34,22 +34,26 @@
                                 <label>Площадь (кв.м)</label>
                                 {{ form.apartment_area }}
                             </div>
+                            <!-- Дом
                             <div class="form-group">
                                 <label>Дом</label>
-                                {{ form.house|as_crispy_field }}
                             </div>
+                            -->
+                            <!-- Секция
                             <div class="form-group">
                                 <label>Секция</label>
-                                {{ form.section|as_crispy_field }}
+
                             </div>
+                            -->
                             <div class="form-group">
                                 <label>Этаж</label>
                                 {{ form.floor|as_crispy_field }}
                             </div>
+                            <!-- Владелец
                             <div class="form-group">
                                 <label>Владелец</label>
-                                {{ form.user|as_crispy_field }}
                             </div>
+                            -->
                             <div class="form-group">
                                 <label>Тариф</label>
                                 <p>место для тарифа</p>
@@ -58,8 +62,7 @@
                         <div class="col-xs-12 col-sm-6">
                             <div class="form-group">
                                 <label>Лицевой счёт</label>
-                                {{ form.self_account }}
-                                {{ form.account|as_crispy_field }}
+                                {{ form.self_account|as_crispy_field }}
                             </div>
                         </div>
                     </div>

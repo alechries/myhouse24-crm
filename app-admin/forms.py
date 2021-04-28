@@ -275,7 +275,7 @@ class AccountForm(forms.ModelForm):
             empty_label=None,
         )
 
-        fields = ['status', 'section', 'house', 'floor', 'wallet']
+        fields = ['status', 'apartment', 'wallet']
         widgets = {
             'wallet': forms.TextInput(attrs={
                 'input_type': 'text',
@@ -309,7 +309,8 @@ class ApartmentForm(forms.ModelForm):
 
     class Meta:
         model = models.Apartment
-        fields = ['apartment_area', 'name', 'house', 'floor', 'section', 'user', 'account', 'self_account']
+        self_account = forms.TextInput()
+        fields = ['apartment_area', 'name', 'floor', 'self_account']
         widgets = {
             'name': forms.TextInput(attrs={
                 'input_type': 'text',
@@ -320,19 +321,14 @@ class ApartmentForm(forms.ModelForm):
                 'class': 'form-control',
                 'area_required': 'false',
             }),
-            'self_account': forms.TextInput(attrs={
-                'input_type': 'text',
-                'class': 'form-control',
-                'area_required': 'false',
-            }),
         }
 
 
 class UserForm(forms.ModelForm):
     class Meta:
         model = models.User
-        fields = ['status', 'avatar', 'first_name', 'middle_name', 'last_name', 'date_of_birth', 'about', 'number', 'viber',
-                  'telegram', 'email', 'password']
+        fields = ['status', 'avatar', 'first_name', 'middle_name', 'last_name', 'date_of_birth', 'about', 'number',
+                  'viber', 'telegram', 'email', 'password']
         widgets = {
             'avatar': forms.FileInput(),
             'first_name': forms.TextInput(attrs={
