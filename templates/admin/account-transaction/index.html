@@ -110,7 +110,7 @@
                                     <a class="btn btn-default btn-sm" href="{% url 'admin_account-transaction-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a class="btn btn-default btn-sm" href="/admin/account-transaction/delete/110" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-transaction-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </div>

@@ -2,7 +2,13 @@
 {% load crispy_forms_tags %}
 {% load crispy_forms_filters %}
 {% block page_title %}
-    <h1 class="m-0">Новый владелец</h1>
+    {% if request.path == '/admin/user' %}
+        <h1 class="m-0">Новый владелец</h1>
+    {% elif request.path == '/admin/user/create'%}
+        <h1 class="m-0">Создание владельца</h1>
+    {% else %}
+        <h1 class="m-0">Редактирование владельца</h1>
+    {% endif %}
 {% endblock %}
 {% block pagination_link %}
     <li class="breadcrumb-item">
@@ -16,7 +22,13 @@
             Владельцы квартир
         </a>
     </li>
-    <li class="breadcrumb-item active">Новый владелец</li>
+    {% if request.path == '/admin/user' %}
+        <li class="breadcrumb-item active">Новый владелец</li>
+    {% elif request.path == '/admin/user/create'%}
+        <li class="breadcrumb-item active">Создание владельца</li>
+    {% else %}
+        <li class="breadcrumb-item active">Редактирование владельца</li>
+    {% endif %}
 {% endblock %}
 {% block main_content %}
     <section class="content input-form">

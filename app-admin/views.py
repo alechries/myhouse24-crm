@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from _db import models, utils
 from . import forms
 from django.forms import modelformset_factory
@@ -84,7 +84,7 @@ def account_transaction_change_view(request, pk):
 def account_transaction_delete_view(request, pk):
     account_transaction = get_object_or_404(models.Transfer, id=pk)
     account_transaction.delete()
-    return render(request, 'admin/account-transaction/index.html')
+    return redirect('admin_account-transaction')
 
 
 def invoice_view(request):
@@ -225,7 +225,6 @@ def user_change_view(request, pk):
             alerts.append('Неуспешно')
     return render(request, 'admin/user/create.html', {'form': form,
                                                       'alerts': alerts})
-
 
 
 def user_delete_view(request):
