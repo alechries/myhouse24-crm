@@ -23,12 +23,12 @@ def logout_view(request):
 
 def account_transaction_view(request):
     accounts = models.Transfer.objects.all()
-    return render(request, 'admin/account-transaction/index.html', {'accounts':accounts})
+    return render(request, 'admin/account-transaction/index.html', {'accounts': accounts})
 
 
 def account_transaction_detail_view(request, pk):
     transaction = models.Transfer.objects.filter(id=pk)
-    return render(request, 'admin/account-transaction/detail.html', {'transaction':transaction})
+    return render(request, 'admin/account-transaction/detail.html', {'transaction': transaction})
 
 
 def account_transaction_create_in_view(request):
@@ -83,6 +83,7 @@ def account_transaction_change_view(request, pk):
 
 def account_transaction_delete_view(request, pk):
     account_transaction = get_object_or_404(models.Transfer, id=pk)
+    print(account_transaction)
     account_transaction.delete()
     return redirect('admin_account-transaction')
 
@@ -279,12 +280,16 @@ def message_create_view(request):
                                                          'alerts': alerts})
 
 
-def message_change_view(request):
-    return render(request, 'admin/message/change.html')
+def message_detail_view(request, pk):
+    message = get_object_or_404(models.Message, id=pk)
+    return render(request, 'admin/message/detail.html', {'message': message})
 
 
-def message_delete_view(request):
-    return render(request, 'admin/message/delete.html')
+def message_delete_view(request, pk):
+    message = get_object_or_404(models.Message, id=pk)
+    message.delete()
+    return redirect('admin_message')
+
 
 
 def master_request_view(request):
@@ -298,7 +303,7 @@ def master_request_create_view(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            alerts.append('Сообщение отправлено')
+            alerts.append('Заявка создана')
         else:
             alerts.append('Произошла ошибка')
     return render(request, 'admin/master-request/create.html', {'form': form,
@@ -666,16 +671,37 @@ def pay_company_view(request):
 
 
 def transaction_purpose_view(request):
-    return render(request, 'admin/transaction-purpose/index.html')
+    transfer_type = models.TransferType.objects.all()
+    return render(request, 'admin/transaction-purpose/index.html', {'transfer_type': transfer_type})
 
 
 def transaction_purpose_create_view(request):
-    return render(request, 'admin/transaction-purpose/create.html')
+    form = forms.TransactionPurposeForm(request.POST)
+    alerts = []
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            alerts.append('Запись была успешно добавлена!')
+        else:
+            alerts.append('Неуспешно')
+    return render(request, 'admin/transaction-purpose/create.html', {'form': form,
+                                                                     'alerts': alerts})
 
 
-def transaction_purpose_change_view(request):
-    return render(request, 'admin/transaction-purpose/change.html')
+def transaction_purpose_change_view(request, pk):
+    alerts = []
+    form = forms.TransactionPurposeForm(request.POST or None, instance=get_object_or_404(models.TransferType, id=pk))
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            alerts.append('Успех')
+        else:
+            alerts.append('Неуспешно')
+    return render(request, 'admin/transaction-purpose/create.html', {'form': form,
+                                                                     'alerts': alerts})
 
 
-def transaction_purpose_delete_view(request):
-    return render(request, 'admin/transaction-purpose/delete.html')
+def transaction_purpose_delete_view(request, pk):
+    transfer_type = get_object_or_404(models.TransferType, id=pk)
+    transfer_type.delete()
+    return redirect('admin_transaction-purpose')
