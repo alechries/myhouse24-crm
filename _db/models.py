@@ -207,8 +207,8 @@ class TransferType(models.Model):
         ('Приход', 'Приход'),
         ('Расход', 'Расход')
     )
-    status = models.CharField(choices=TYPE, max_length=55)
-    name = models.CharField(max_length=255)
+    status = models.CharField(choices=TYPE, max_length=55, verbose_name='', blank=True)
+    name = models.CharField(max_length=255, verbose_name='', blank=True)
 
     def __str__(self):
         return self.name
