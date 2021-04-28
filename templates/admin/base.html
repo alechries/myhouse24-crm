@@ -330,6 +330,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
       {% endfor %}
       {% endif %}
     </div>
+    <div class="default-area">
+      {% if warnings %}
+      {% for warning in warnings %}
+      <div class="alert alert-warning" role="alert">
+        {{ error }}
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+    <div class="default-area">
+      {% if errors %}
+      {% for error in errors %}
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
     <!-- Main content -->
       {% block main_content %}
       {% endblock %}
