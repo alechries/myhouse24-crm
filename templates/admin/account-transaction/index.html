@@ -95,12 +95,12 @@
                             <td>{{ el.transfer_type.name }}</td>
                             <td>{{ el.user }}</td>
                             <td>{{ el.account }}</td>
-                            {% if el.transfer_type.status == 0 %}
+                            {% if el.transfer_type.status == 'Приход' %}
                                 <td style="color: #00ba13; text-align: center"><small class="label label-success">Приход</small></td>
                             {% else %}
                                 <td style="color: #c62232; text-align: center"><small class="label label-danger">Расход</small></td>
                             {% endif %}
-                            {% if el.transfer_type.status == 0 %}
+                            {% if el.transfer_type.status == 'Приход' %}
                                 <td style="color: #00ba13">{{ el.amount }}</td>
                             {% else %}
                                 <td style="color: #c62232">-{{ el.amount }}</td>
@@ -110,7 +110,7 @@
                                     <a class="btn btn-default btn-sm" href="{% url 'admin_account-transaction-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-transaction-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-transaction-delete' pk=el.pk %}" title="Удалить">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </div>

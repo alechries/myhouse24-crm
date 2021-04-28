@@ -64,7 +64,7 @@
                         </tr>
                         <tr>
                             <td>Сумма</td>
-                            {% if el.transfer_type.status == 0 %}
+                            {% if el.transfer_type.status == 'Приход' %}
                                 <td style="color: #00ba13">{{ el.amount }}.00</td>
                             {% else %}
                                 <td style="color: #c62232">-{{ el.amount }}.00</td>
