@@ -3,6 +3,8 @@ from _db import models, utils
 from . import forms
 from django.forms import modelformset_factory
 from .utils import serial_number_transfer
+from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.http import HttpResponse, HttpResponseNotFound
 
 
 def index_view(request):
@@ -447,6 +449,12 @@ def website_about_view(request):
         'about_seo_form': about_seo_form,
     }
     return render(request, 'admin/website/about.html', context)
+
+
+def website_services_blocks_delete_view(request, pk):
+    entry = models.WebsiteServiceBlocks.objects.get(id=pk)
+    entry.delete()
+    return HttpResponse()
 
 
 def website_services_view(request):

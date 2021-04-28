@@ -51,6 +51,7 @@ urlpatterns = [
     path('website/main-page', views.website_main_page_view, name='admin_website-main-page'),
     path('website/about', views.website_about_view, name='admin_website-about'),
     path('website/services', views.website_services_view, name='admin_website-services'),
+    path('website/services/blocks/delete/<int:pk>', views.website_services_blocks_delete_view, name='admin_website-services-blocks-delete'),
     path('website/tariffs', views.website_tariffs_view, name='admin_website-tariffs'),
     path('website/contact', views.website_contact_view, name='admin_website-contact'),
     path('services', views.services_view, name='admin_services'),
