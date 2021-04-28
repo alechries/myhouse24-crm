@@ -1,3 +1,52 @@
 {% extends 'admin/base.html' %}
+{% load crispy_forms_tags %}
+{% block page_title %}
+    {% if request.path == '/admin/transaction-purpose/create' %}
+        <h1 class="m-0">Новая статья</h1>
+    {% else %}
+        <h1 class="m-0">Редактирование</h1>
+    {% endif %}
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_transaction-purpose' %}">
+            Статьи приходов\расходов
+        </a>
+    </li>
+    <li class="breadcrumb-item active">Новая статья</li>
+{% endblock %}
 {% block main_content %}
+    <section class="content input-form">
+        <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            <div class="container-fluid">
+                <div class="card card-secondary card-outline">
+                    <div class="default-area">
+                         <div class="row">
+                            <div class="col-xs-12 col-lg-7">
+                                <label>Название</label>
+                                {{ form.name|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-7">
+                                <label>Приход/расход</label>
+                                {{ form.status|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row d-flex justify-content-end">
+                            <a href="{% url 'admin_account-transaction' %}" type="button" class="btn btn-default margin-bottom-15">Отмена</a>
+                            <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </form>
+    </section>
 {% endblock %}

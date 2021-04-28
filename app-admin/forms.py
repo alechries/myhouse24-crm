@@ -460,6 +460,12 @@ class MasterRequestForm(forms.ModelForm):
         }
 
 
+class TransactionPurposeForm(forms.ModelForm):
+    class Meta:
+        model = models.TransferType
+        fields = ['status', 'name']
+
+
 class InvoiceIDCreateForm(forms.ModelForm):
 
     pass
