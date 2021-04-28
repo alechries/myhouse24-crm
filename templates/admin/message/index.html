@@ -23,27 +23,16 @@
                         <th style="width: 40px; min-width: 40px"></th>
                         <th>Получатели</th>
                         <th>Текст</th>
-                        <th>Дата</th>
-                        <th style="width: 80px; min-width: 80px">&nbsp;</th>
+                        <th style="width: 120px">Дата</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for el in messages %}
-                        <tr>
+                        <tr data-href="{% url 'admin_message-detail'  pk=el.pk %}">
                             <td></td>
                             <td>{{ el.destination }}</td>
                             <td>{{ el.text }}</td>
                             <td>{{ el.created_date }}</td>
-                            <td>
-                                <div class="btn-group pull-right">
-                                    <a class="btn btn-default btn-sm" href="#" title="Редактировать" data-toggle="tooltip">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </a>
-                                    <a class="btn btn-default btn-sm" href="/admin/account-transaction/delete/110" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </div>
-                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -51,4 +40,11 @@
             </div>
          </div>
     </section>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $('tr[data-href]').on("click", function() {
+    document.location = $(this).data('href');
+    });
+    </script>
 {% endblock %}
