@@ -321,33 +321,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
     <!-- /.content-header -->
 
+    {% if alerts %}
     <div class="default-area">
-      {% if alerts %}
       {% for alert in alerts %}
       <div class="alert alert-success" role="alert">
         {{ alert }}
       </div>
       {% endfor %}
-      {% endif %}
     </div>
+    {% endif %}
+    {% if warnings %}
     <div class="default-area">
-      {% if warnings %}
       {% for warning in warnings %}
       <div class="alert alert-warning" role="alert">
         {{ error }}
       </div>
       {% endfor %}
-      {% endif %}
     </div>
+    {% endif %}
+    {% if errors %}
     <div class="default-area">
-      {% if errors %}
       {% for error in errors %}
       <div class="alert alert-danger" role="alert">
         {{ error }}
       </div>
       {% endfor %}
-      {% endif %}
     </div>
+    {% endif %}
     <!-- Main content -->
       {% block main_content %}
       {% endblock %}
@@ -383,6 +383,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'admin/js/adminlte.min.js' %}"></script>
+<script>
+  // Элемент
+// Клик
+// Подменю, закрыть, кроме своего
+
+<!--let menus = $(document).find('.menu');-->
+
+<!--menus.each(function() {-->
+<!--  let menu = $(this);-->
+<!--  menu.addEventListener('click', function(){-->
+<!--    let clicked = $(this);-->
+<!--    if (menu !== clicked) {-->
+
+<!--    }-->
+<!--  })-->
+<!--});-->
+let menus = document.getElementsByClassName("menu");
+
+for(let i = 0; i < menus.length; i++) {
+  menus[i].addEventListener("click", () => {
+    for(let y = 0; y < menus.length; y++) {
+      let clicked = menus[i];
+      let current = menus[y];
+      if(clicked !== current) {
+        current.classList.remove("menu-is-opening");
+        current.classList.remove("menu-open");
+        let list = current.children[1].style.display = "none";
+      }
+    }
+  });
+}
+
+</script>
 {% block scripts %}
 {% endblock %}
 </body>
