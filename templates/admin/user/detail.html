@@ -1,6 +1,6 @@
 {% extends 'admin/base.html' %}
 {% block page_title %}
-    <h1 class="m-0">Квартира №{{ apartment.id }}, {{ apartment.house.name }}</h1>
+    <h1 class="m-0">Профиль владельца</h1>
 {% endblock %}
 {% block pagination_link %}
     <li class="breadcrumb-item">
@@ -21,8 +21,7 @@
     <div class="container-fluid">
         <div class="card card-secondary card-outline">
             <section>
-            <div class="d-flex justify-content-between" style="padding: 0 10px">
-                <h4>Просмотр квартиры</h4>
+            <div class="d-flex justify-content-end" style="padding: 0 10px">
                 <a href="{% url 'admin_user-change' pk=user.id %}" class="btn btn-success">Редактировать профиль</a>
             </div>
                 <div class="default-area">

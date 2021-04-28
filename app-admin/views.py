@@ -63,15 +63,13 @@ def account_transaction_create_out_view(request):
                                                                           })
 
 
-def account_transaction_in_change_view(request, pk):
+def account_transaction_change_view(request, pk):
     alerts = []
+    form = forms.AccountTransactionForm(request.POST or None, instance=get_object_or_404(models.Transfer, id=pk))
     if request.method == 'POST':
-        form = forms.AccountTransactionForm(request.POST)
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно редактирована!')
-    else:
-        form = forms.AccountTransactionForm(instance=get_object_or_404(models.Transfer, id=pk))
     transfer = get_object_or_404(models.Transfer, id=pk)
     if transfer.transfer_type.status == 0:
         return render(request, 'admin/account-transaction/create_in.html', {'form': form,
@@ -82,8 +80,11 @@ def account_transaction_in_change_view(request, pk):
                                                                              'alerts': alerts,
                                                                              })
 
-def account_transaction_delete_view(request):
-    return render(request, 'admin/account-transaction/delete.html')
+
+def account_transaction_delete_view(request, pk):
+    account_transaction = get_object_or_404(models.Transfer, id=pk)
+    account_transaction.delete()
+    return render(request, 'admin/account-transaction/index.html')
 
 
 def invoice_view(request):
@@ -131,13 +132,11 @@ def account_create_view(request):
 
 def account_change_view(request, pk):
     alerts = []
+    form = forms.AccountForm(request.POST or None, instance=get_object_or_404(models.Account, id=pk))
     if request.method == 'POST':
-        form = forms.AccountForm(request.POST)
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно редактирована!')
-    else:
-        form = forms.AccountForm(instance=get_object_or_404(models.Account, id=pk))
     return render(request, 'admin/account/create.html', {'form': form,
                                                          'alerts': alerts})
 
@@ -171,13 +170,11 @@ def apartment_create_view(request):
 
 def apartment_change_view(request, pk):
     alerts = []
+    form = forms.ApartmentForm(request.POST or None, instance=get_object_or_404(models.Apartment, id=pk))
     if request.method == 'POST':
-        form = forms.ApartmentForm(request.POST)
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно редактирована!')
-    else:
-        form = forms.ApartmentForm(instance=get_object_or_404(models.Apartment, id=pk))
     return render(request, 'admin/apartment/create.html', {'form': form,
                                                            'alerts': alerts})
 
@@ -217,16 +214,18 @@ def user_detail_view(request, pk):
 
 
 def user_change_view(request, pk):
-    form = forms.UserForm(instance=get_object_or_404(models.User, id=pk))
     alerts = []
+    form = forms.UserForm(request.POST or None, instance=get_object_or_404(models.User, id=pk))
     if request.method == 'POST':
         print(form.data)
         if form.is_valid():
             form.save()
-            alerts.append('Запись была успешно добавлена!')
+            alerts.append('Успех')
         else:
             alerts.append('Неуспешно')
-    return render(request, 'admin/user/create.html', {'form': form})
+    return render(request, 'admin/user/create.html', {'form': form,
+                                                      'alerts': alerts})
+
 
 
 def user_delete_view(request):
