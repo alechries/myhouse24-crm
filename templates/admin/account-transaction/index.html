@@ -69,7 +69,7 @@
     </section>
     <section class="content input-form">
          <div class="container-fluid">
-            <div class="card card-secondary card-outline">
+            <div class="card card-secondary card-outline table-responsive">
                     <table class="table table-bordered table-hover table-striped linkedRow">
                         <thead>
                             <tr>
@@ -107,7 +107,7 @@
                             {% endif %}
                             <td>
                                 <div class="btn-group pull-right">
-                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-transaction-in-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-transaction-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
                                     <a class="btn btn-default btn-sm" href="/admin/account-transaction/delete/110" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
