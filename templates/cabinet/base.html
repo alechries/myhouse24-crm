@@ -298,34 +298,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-
+{% if alerts %}
     <div class="default-area">
-        {% if alerts %}
-        {% for alert in alerts %}
-        <div class="alert alert-success" role="alert">
-            {{ alert }}
-        </div>
-        {% endfor %}
-        {% endif %}
+      {% for alert in alerts %}
+      <div class="alert alert-success" role="alert">
+        {{ alert }}
+      </div>
+      {% endfor %}
     </div>
+    {% endif %}
+    {% if warnings %}
     <div class="default-area">
-        {% if warnings %}
-        {% for warning in warnings %}
-        <div class="alert alert-warning" role="alert">
-            {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
+      {% for warning in warnings %}
+      <div class="alert alert-warning" role="alert">
+        {{ error }}
+      </div>
+      {% endfor %}
     </div>
+    {% endif %}
+    {% if errors %}
     <div class="default-area">
-        {% if errors %}
-        {% for error in errors %}
-        <div class="alert alert-danger" role="alert">
-            {{ error }}
-        </div>
-        {% endfor %}
-        {% endif %}
+      {% for error in errors %}
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+      {% endfor %}
     </div>
+    {% endif %}
     <!-- Main content -->
     {% block main_content %}
     {% endblock %}
