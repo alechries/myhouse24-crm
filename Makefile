@@ -2,7 +2,7 @@ init: build up db
 update: down pull build up db
 up: build docker-up
 down: docker-down
-restart: down up
+restart: down build up
 db: docker-db-make docker-db-migrate
 pull: docker-pull
 build: docker-build
