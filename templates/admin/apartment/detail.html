@@ -29,8 +29,13 @@
                     <table class="table table-bordered table-striped">
                         <tr>
                             <td>Лицевой счёт</td>
-                            <td>{% if apartment.self_account != 'None' %}{{ apartment.self_account }}{% else %}
-                                {{ apartment.account }}{% endif %}</td>
+                            {% if account %}
+                                {% for el in account %}
+                                <td>{{ el.wallet }}</td>
+                                {% endfor %}
+                            {% else %}
+                            <td>Нет лицевого счёта</td>
+                            {% endif %}
                         </tr>
                         <tr>
                             <td>Номер квартиры</td>
@@ -42,19 +47,19 @@
                         </tr>
                         <tr>
                             <td>Дом</td>
-                            <td>{{ apartment.house.name }}</td>
+                            <td>{{ apartment.floor.section.house.name }}</td>
                         </tr>
                         <tr>
                             <td>Секция</td>
-                            <td>Секция {{ apartment.section }}</td>
+                            <td>{{ apartment.floor.section }}</td>
                         </tr>
                         <tr>
                             <td>Этаж</td>
-                            <td>Этаж {{ apartment.floor }}</td>
+                            <td>{{ apartment.floor }}</td>
                         </tr>
                         <tr>
                             <td>Владелец</td>
-                            <td>{{ apartment.user }}</td>
+                            <td>{{ apartment.floor.section.house.user}}</td>
                         </tr>
                         <tr>
                             <td>Тариф</td>
@@ -70,7 +75,6 @@
                     <div class="col">
                         <a href="#">Посмотреть квитанции</a>
                     </div>
-
                 </div>
             </section>
         </div>

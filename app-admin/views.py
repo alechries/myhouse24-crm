@@ -154,7 +154,10 @@ def apartment_view(request):
 
 def apartment_detail_view(request, pk):
     apartment = get_object_or_404(models.Apartment, id=pk)
-    return render(request, 'admin/apartment/detail.html', {'apartment': apartment})
+    account = models.Account.objects.filter(apartment=apartment)
+    print(account)
+    return render(request, 'admin/apartment/detail.html', {'apartment': apartment,
+                                                           'account': account})
 
 
 def apartment_create_view(request):
