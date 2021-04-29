@@ -153,12 +153,28 @@ class Service(models.Model):
     active = models.BooleanField(default=True)
 
 
+class Apartment(models.Model):
+    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, verbose_name='')
+    name = models.CharField('Номер квартиры', max_length=255)
+    apartment_area = models.FloatField('Площадь квартиры', max_length=255)
+    self_account = models.CharField('', max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Meter(models.Model):
-    house = models.ForeignKey(House, on_delete=models.CASCADE)
+    STATUS = (
+        ('Новое', 'Новое'),
+        ('Учтено', 'Учтено'),
+        ('Учтено и оплаченно', 'Учтено и оплаченно'),
+        ('Нулевое', 'Нулевое')
+    )
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     counter = models.IntegerField()
     indication_date = models.DateField()
-    status = models.CharField(max_length=255)
+    status = models.CharField(choices=STATUS, max_length=255)
 
 
 class Currency(models.Model):
@@ -176,16 +192,6 @@ class RateService(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     currency = models.ForeignKey(Currency, on_delete=models.CASCADE)
     price = models.FloatField()
-
-
-class Apartment(models.Model):
-    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, verbose_name='')
-    name = models.CharField('Номер квартиры', max_length=255)
-    apartment_area = models.FloatField('Площадь квартиры', max_length=255)
-    self_account = models.CharField('', max_length=255, null=True, blank=True)
-
-    def __str__(self):
-        return self.name
 
 
 class Account(models.Model):
