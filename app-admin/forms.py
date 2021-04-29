@@ -1,7 +1,6 @@
 from django import forms
 from _db import models
 from datetime import datetime
-from .utils import serial_number_transfer
 
 
 class SEOForm(forms.ModelForm):
@@ -207,23 +206,13 @@ class WebsiteContactsForm(forms.ModelForm):
 
 
 class AccountTransactionForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AccountTransactionForm, self).__init__(*args, **kwargs)
+        self.fields['manager'].queryset = models.User.objects.filter(is_staff=1)
+        self.fields['user'].queryset = models.User.objects.filter(is_staff=0)
+
     class Meta:
         model = models.Transfer
-        user = forms.ModelChoiceField(
-            queryset=models.User.objects.filter(is_superuser=False),
-            to_field_name="user",
-            empty_label=None,
-        )
-        manager = forms.ModelChoiceField(
-            queryset=models.User.objects.filter(is_superuser=True),
-            to_field_name="manager",
-            empty_label=None,
-        )
-        account = forms.ModelChoiceField(
-            queryset=models.Account.objects.all(),
-            to_field_name="account",
-            empty_label=None,
-        )
         fields = ['user', 'manager', 'account', 'transfer_type', 'amount', 'comment', 'payment_made', 'created_date',
                   'number']
         widgets = {
@@ -249,7 +238,7 @@ class AccountTransactionForm(forms.ModelForm):
             }),
             'number': forms.TextInput(attrs={
                 'input_type': 'text',
-                # 'value': serial_number_transfer(),
+                 #'value': ,
                 'class': 'form-control',
                 'required': 'false'
             }),
