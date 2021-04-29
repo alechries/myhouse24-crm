@@ -62,7 +62,7 @@ def account_transaction_create_out_view(request):
 
     return render(request, 'admin/account-transaction/create_out.html', {'form': form,
                                                                          'alerts': alerts,
-                                                                          })
+                                                                         })
 
 
 def account_transaction_change_view(request, pk):
@@ -73,7 +73,7 @@ def account_transaction_change_view(request, pk):
             form.save()
             alerts.append('Запись была успешно редактирована!')
     transfer = get_object_or_404(models.Transfer, id=pk)
-    if transfer.transfer_type.status == 0:
+    if transfer.transfer_type.status == 'Приход':
         return render(request, 'admin/account-transaction/create_in.html', {'form': form,
                                                                             'alerts': alerts,
                                                                             })
