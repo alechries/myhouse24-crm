@@ -72,6 +72,7 @@ def account_transaction_change_view(request, pk):
     if transfer.transfer_type.status == 'Приход':
         return render(request, 'admin/account-transaction/create_in.html', {'form': form,
                                                                             'alerts': alerts,
+
                                                                             })
     else:
         return render(request, 'admin/account-transaction/create_out.html', {'form': form,

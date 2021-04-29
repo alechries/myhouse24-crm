@@ -206,11 +206,6 @@ class WebsiteContactsForm(forms.ModelForm):
 
 
 class AccountTransactionForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(AccountTransactionForm, self).__init__(*args, **kwargs)
-        self.fields['manager'].queryset = models.User.objects.filter(is_staff=1)
-        self.fields['user'].queryset = models.User.objects.filter(is_staff=0)
-
     class Meta:
         model = models.Transfer
         fields = ['user', 'manager', 'account', 'transfer_type', 'amount', 'comment', 'payment_made', 'created_date',
