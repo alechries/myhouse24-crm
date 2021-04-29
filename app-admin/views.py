@@ -2,7 +2,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from _db import models, utils
 from . import forms
 from django.forms import modelformset_factory
-from .utils import serial_number_transfer
 from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseNotFound
 
@@ -35,8 +34,6 @@ def account_transaction_detail_view(request, pk):
 
 def account_transaction_create_in_view(request):
     form = forms.AccountTransactionForm(request.POST)
-    serial_number = serial_number_transfer()
-    print(serial_number)
     alerts = []
     if request.method == 'POST' and form.is_valid():
         form.transfer_type = 1
@@ -44,7 +41,6 @@ def account_transaction_create_in_view(request):
         alerts.append('Запись была успешно добавлена!')
 
     return render(request, 'admin/account-transaction/create_in.html', {'form': form,
-                                                                        'serial_number': serial_number,
                                                                         'alerts': alerts,
                                                                         })
 
@@ -52,11 +48,11 @@ def account_transaction_create_in_view(request):
 def account_transaction_create_out_view(request):
     form = forms.AccountTransactionForm(request.POST)
     form.transfer_type = 0
-    print(form.transfer_type)
+
     alerts = []
     if request.method == 'POST' and form.is_valid():
         form.type = 0
-        print(form.is_valid())
+
         form.save()
         alerts.append('Запись была успешно добавлена!')
 
@@ -74,8 +70,10 @@ def account_transaction_change_view(request, pk):
             alerts.append('Запись была успешно редактирована!')
     transfer = get_object_or_404(models.Transfer, id=pk)
     if transfer.transfer_type.status == 'Приход':
+        transaction = 0
         return render(request, 'admin/account-transaction/create_in.html', {'form': form,
                                                                             'alerts': alerts,
+                                                                            'transaction': transaction
                                                                             })
     else:
         return render(request, 'admin/account-transaction/create_out.html', {'form': form,
@@ -85,7 +83,7 @@ def account_transaction_change_view(request, pk):
 
 def account_transaction_delete_view(request, pk):
     account_transaction = get_object_or_404(models.Transfer, id=pk)
-    print(account_transaction)
+
     account_transaction.delete()
     return redirect('admin_account-transaction')
 
@@ -117,7 +115,6 @@ def account_view(request):
 
 def account_detail(request, pk):
     account = models.Account.objects.filter(id=pk)
-    print(account)
     return render(request, 'admin/account/detail.html', {'account': account})
 
 
@@ -158,7 +155,6 @@ def apartment_view(request):
 def apartment_detail_view(request, pk):
     apartment = get_object_or_404(models.Apartment, id=pk)
     account = models.Account.objects.filter(apartment=apartment)
-    print(account)
     return render(request, 'admin/apartment/detail.html', {'apartment': apartment,
                                                            'account': account})
 
@@ -202,7 +198,6 @@ def user_create_view(request):
     form = forms.UserForm(request.POST, request.FILES)
     alerts = []
     if request.method == 'POST':
-        print(form.data)
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно добавлена!')
@@ -223,7 +218,6 @@ def user_change_view(request, pk):
     alerts = []
     form = forms.UserForm(request.POST or None, instance=get_object_or_404(models.User, id=pk))
     if request.method == 'POST':
-        print(form.data)
         if form.is_valid():
             form.save()
             alerts.append('Успех')

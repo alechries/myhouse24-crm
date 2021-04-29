@@ -1,4 +1,4 @@
-from datetime import datetime
+"""from datetime import datetime
 from _db import models
 
 
@@ -33,3 +33,4 @@ def serial_number_transfer():
     else:
         date = f'{date}001'
     return date
+"""
