@@ -1,10 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'cabinet/base.html' %}
+{% load crispy_forms_tags %}
+{% block page_title %}
+    <h1 class="m-0">Новая заявка</h1>
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_master-request' %}">
+            Вызов мастера
+        </a>
+    </li>
+    <li class="breadcrumb-item">Новая заявка</li>
+{% endblock %}
+{% block main_content %}
+    <section class="content input-form">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container-fluid">
+            <div class="card card-secondary card-outline">
+                <div class="default-area">
+                    <div class="row">
+                        <div class="col">
+                            <label>Тип мастера</label>
+                            {{ form.master_type|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Квартира</label>
+                            {{ form.apartment|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Дата</label>
+                            {{ form.date }}
+                        </div>
+                        <div class="col">
+                            <label>Время</label>
+                            {{ form.time }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Описание</label>
+                    {{ form.description|as_crispy_field  }}
+                </div>
+                <div class="row d-flex justify-content-end">
+                    <a href="{% url 'admin_account-transaction' %}" type="button" class="btn btn-default margin-bottom-15">Отмена</a>
+                    <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </form>
+</section>
+{% endblock %}
