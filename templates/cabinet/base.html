@@ -30,7 +30,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </li>
         </ul>
         <p class="nav-item d-none d-sm-inline-block top-bar" style="margin: 0">
-            Панель администратора
+            Личный кабинет
         </p>
 
 
@@ -41,8 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!-- Notifications -->
                     <li class="dropdown notifications-menu">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-child fa-lg"></i>
-                            <span class="label label-warning">2</span>
+                            <i class="fas fa-bell" style="width: auto"></i>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">Новых пользователей: 2</li>
@@ -67,7 +66,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!--<img src="/app-admin/dist/img/user2-160x160.jpg" class="user-image" alt="Михаил Поляков">-->
                             <i class="fa fa-user-circle text-purple"></i>
-                            <span class="hidden-xs">Михаил Поляков</span>
+                            <span class="hidden-xs">{{ user }}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
@@ -109,13 +108,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                     <li class="nav-item menu
-            {% if request.path == '/admin/services' %} menu-open
-            {% elif request.path == '/admin/tariffs' %} menu-open
-            {% elif request.path == '/admin/user-admin/role' %} menu-open
-            {% elif request.path == '/admin/user-admin/users/list' %} menu-open
-            {% elif request.path == '/admin/pay-company' %} menu-open
-            {% elif request.path == '/admin/transaction-purpose' %} menu-open
-            {% else %} menu {% endif %}">
+                        {% if request.path == '/admin/services' %} menu-open
+                        {% elif request.path == '/admin/tariffs' %} menu-open
+                        {% elif request.path == '/admin/user-admin/role' %} menu-open
+                        {% elif request.path == '/admin/user-admin/users/list' %} menu-open
+                        {% elif request.path == '/admin/pay-company' %} menu-open
+                        {% elif request.path == '/admin/transaction-purpose' %} menu-open
+                        {% else %} menu {% endif %}">
                         <a href="" class="nav-link">
                             <i class="fas fa-chart-line"></i>
                             <p>
@@ -123,30 +122,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{% url 'admin_services' %}" class="nav-link {% if request.path == '/admin/services' %} active {% endif %}">
-                                    <span class="navbar-item">
-                                        <i class="fas fa-building"></i>
-                                        ЖК "Королевские сады", кв.5008
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{% url 'admin_tariffs' %}" class="nav-link {% if request.path == '/admin/tariffs' %} active {% endif %}">
-                                    <span>
-                                        <i class="fas fa-building"></i>
-                                        ЖК "Люксенбург", кв.9026
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{% url 'admin_user-admin-role' %}" class="nav-link {% if request.path == '/admin/user-admin/role' %} active {% endif %}">
-                                    <span>
-                                        <i class="fas fa-building"></i>
-                                        ЖК "Королевские сады", кв.2001
-                                    </span>
-                                </a>
-                            </li>
+                            {% for apartment in apartments %}
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link {% if request.path == '/admin/services' %} active {% endif %}">
+                                        <span class="navbar-item">
+                                            <i class="fas fa-building"></i>
+                                            {{ apartment.get_full_name }}
+                                        </span>
+                                    </a>
+                                </li>
+                            {% endfor %}
                         </ul>
                     </li>
                     <li class="nav-item menu
@@ -240,7 +225,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'admin_message' %}" class="nav-link {% if request.path == '/admin/message' %} active {% endif %}">
+                        <a href="{% url 'cabinet_messages' %}" class="nav-link {% if request.path == 'cabinet/messages/view' %} active {% endif %}">
                             <i class="far fa-envelope"></i>
                             <p>
                                 Сообщения
@@ -271,34 +256,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        {% block page_title %}
-                        <h1 class="m-0">Статистика</h1>
-                        {% endblock %}
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            {% block pagination_link %}
-                            {% endblock %}
-                        </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-        <!-- /.content-header -->
-
-        <!-- Main content -->
-        {% block main_content %}
-        {% endblock %}
-        <!-- /.content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            {% block page_title %}
+            <h1 class="m-0">Статистика</h1>
+            {% endblock %}
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              {% block pagination_link %}
+              {% endblock %}
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
     </div>
-    <!-- /.content-wrapper -->
-{% if alerts %}
+    <!-- /.content-header -->
+
+    {% if alerts %}
     <div class="default-area">
       {% for alert in alerts %}
       <div class="alert alert-success" role="alert">
@@ -326,41 +305,74 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
     {% endif %}
     <!-- Main content -->
-    {% block main_content %}
-    {% endblock %}
+      {% block main_content %}
+      {% endblock %}
     <!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
+  </div>
+  <!-- /.content-wrapper -->
 
-
-<!-- Control Sidebar -->
-<aside class="control-sidebar control-sidebar-dark">
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
     <div class="p-3">
-        <h5>Title</h5>
-        <p>Sidebar content</p>
+      <h5>Title</h5>
+      <p>Sidebar content</p>
     </div>
-</aside>
-<!-- /.control-sidebar -->
+  </aside>
+  <!-- /.control-sidebar -->
 
-<!-- Main Footer -->
-<footer class="main-footer">
+  <!-- Main Footer -->
+  <footer class="main-footer">
     <!-- To the right -->
     <div class="float-right d-none d-sm-inline">
     </div>
     <!-- Default to the left -->
-    Разработано <a href="https://avada-media.ua/">AVADA-MEDIA</a>. На базе системы управления <a href="https://avada-media.ua/myhouse24/">"МойДом24"</a>
-</footer>
+        Разработано <a href="https://avada-media.ua/">AVADA-MEDIA</a>. На базе системы управления <a href="https://avada-media.ua/myhouse24/">"МойДом24"</a>
+  </footer>
 </div>
 <!-- ./wrapper -->
 
 <!-- REQUIRED SCRIPTS -->
-
 <!-- jQuery -->
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'admin/js/adminlte.min.js' %}"></script>
+<script>
+  // Элемент
+// Клик
+// Подменю, закрыть, кроме своего
+
+<!--let menus = $(document).find('.menu');-->
+
+<!--menus.each(function() {-->
+<!--  let menu = $(this);-->
+<!--  menu.addEventListener('click', function(){-->
+<!--    let clicked = $(this);-->
+<!--    if (menu !== clicked) {-->
+
+<!--    }-->
+<!--  })-->
+<!--});-->
+let menus = document.getElementsByClassName("menu");
+
+for(let i = 0; i < menus.length; i++) {
+  menus[i].addEventListener("click", () => {
+    for(let y = 0; y < menus.length; y++) {
+      let clicked = menus[i];
+      let current = menus[y];
+      if(clicked !== current) {
+        current.classList.remove("menu-is-opening");
+        current.classList.remove("menu-open");
+        let list = current.children[1].style.display = "none";
+      }
+    }
+  });
+}
+
+</script>
+{% block scripts %}
+{% endblock %}
 </body>
 </html>
