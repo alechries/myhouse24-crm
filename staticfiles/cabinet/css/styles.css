@@ -74,8 +74,8 @@ body{
 .navbar-nav>li>a{
     padding: 18px 15px;
 }
-.dropdown-toggle::after {
-    content: none;
+button.dropdown-toggle::after {
+    content: "";
 }
 li.dropdown.notifications-menu>a, li.dropdown.user.user-menu>a {
     border-left: 1px solid #d2d6de;
@@ -114,10 +114,180 @@ li.breadcrumb-item>a{
 [class*=sidebar-light-] .nav-sidebar>.nav-item.menu-open>.nav-link, [class*=sidebar-light-] .nav-sidebar>.nav-item:hover>.nav-link{
     background-color: #e1f1ea;
 }
-
-.panel-content{
-    padding: 1.5rem !important;
+.default-area {
+    padding: 10px
 }
-.sidebar-mini .nav-sidebar, .sidebar-mini .nav-sidebar .nav-link, .sidebar-mini .nav-sidebar>.nav-header{
-    white-space: normal;
+.default-area div {
+    margin: 0.5rem 0;
+}
+.default-half {
+    padding-right: 50%;
+}
+.content-wrapper>.content {
+    min-height: 250px;
+    padding: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.small-box>.small-box-footer {
+    position: relative;
+    text-align: center;
+    padding: 3px 0;
+    color: #fff;
+    color: rgba(255,255,255,0.8);
+    display: block;
+    z-index: 10;
+    background: rgba(0,0,0,0.1);
+    text-decoration: none;
+}
+@media (min-width: 768px){
+    .col-sm-6 {
+        width: 50%;
+    }
+}
+.small-box h3 {
+    font-size: 38px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    white-space: nowrap;
+    padding: 0;
+    color: white;
+}
+.bg-yellow, .bg-yellow>a {
+    color: #fff!important;
+}
+.page-header {
+    margin: 10px 0 20px 0;
+    font-size: 22px;
+}
+.small-box {
+    border-radius: 2px;
+    position: relative;
+    display: block;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgb(0 0 10%);
+}
+.bg-yellow, .callout.callout-warning, .alert-warning, .label-warning, .modal-warning .modal-body {
+    background-color: #f39c12 !important;
+}
+.bg-primary {
+    color: #fff;
+    background-color: #337ab7!important;
+}
+.info-box{
+    padding: 0;
+    border-radius: 1px;
+}
+.info-box .info-box-icon {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 2px;
+    display: block;
+    float: left;
+    height: 90px;
+    width: 90px;
+    text-align: center;
+    font-size: 45px;
+    line-height: 90px;
+    background: rgba(0,0,0,0.2);
+}
+.info-box>span>i{
+    width: 100%;
+}
+.dropdown-toggle::after {
+    display: inline-block;
+    margin-left: .255em;
+    vertical-align: .255em;
+    content: none;
+    border-top: .3em solid;
+    border-right: .3em solid transparent;
+    border-bottom: 0;
+    border-left: .3em solid transparent;
+}
+.pull-right {
+    float: right;
+}
+.content>.row{
+    padding: 0;
+    margin: 0;
+}
+.page-header-spec {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+section.content.input-form div{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.form-control{
+    border-radius: 0px;
+}
+input#PaymentMadeInput{
+    margin-top: 5px;
+    margin-right: 2px;
+    width: auto;
+    height: auto;
+}
+.margin-bottom-15{
+    margin-bottom: 15px;
+    margin-right: 5px;
+}
+.checkbox-input{
+    margin-left: 50%!important;
+    margin-bottom: 0!important;
+}
+.input-form-height-20{
+    padding: 0px;
+    height: 25px;
+}
+.form-title-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.label{
+    background-color: #00a65a;
+    border-radius: .25em;
+    color: white;
+    padding: .2em .6em .3em;
+}
+.label-success{
+    background-color: #00a65a!important;
+}
+.label-danger{
+    background-color: #ff0c0c!important;
+}
+th{
+    font-size: 14px;
+}
+.table-responsive {
+    overflow: hidden;
+    min-height: .01%;
+    overflow-x: auto;
+}
+.largeImg {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+}
+.smallImg {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+.margin-bottom-30 {
+    margin-bottom: 30px;
+}
+img {
+    vertical-align: middle;
+}
+.carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {
+    display: block;
+    max-width: 100%;
+    height: auto;
 }
