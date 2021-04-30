@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'cabinet/base.html' %}
+{% block main_content %}
+    <section class="content input-form">
+         <div class="container-fluid">
+            <div class="card card-secondary card-outline table-responsive">
+                <table class="table table-bordered table-hover table-striped linkedRow">
+                    <thead>
+                    <tr>
+                        <th style="width: 40px; min-width: 40px"></th>
+                        <th style="width: 250px">От кого</th>
+                        <th>Текст</th>
+                        <th>Дата</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for el in messages %}
+                        <tr>
+                            <td></td>
+                            <td>{{ el.addressee }}</td>
+                            <td>{{ el.get_short_text|safe }}</td>
+                            <td>{{ el.get_long_date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+         </div>
+    </section>
+{% endblock %}
