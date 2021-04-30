@@ -162,6 +162,9 @@ class Apartment(models.Model):
     def __str__(self):
         return self.name
 
+    def get_full_name(self):
+        return f'{self.floor.section.house.name}, кв.{self.name}'
+
 
 class Meter(models.Model):
     STATUS = (
@@ -329,18 +332,30 @@ class WebsiteContacts(SingletonModel):
 
 class Message(models.Model):
     destination = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, verbose_name='')
-    addressee = models.CharField(max_length=255, null=True, blank=True)
+    addressee = models.CharField(default='Админ', max_length=255, null=True, blank=True)
     title = models.CharField(max_length=255)
     text = models.TextField()
     indebtedness = models.BooleanField('', default=False)
     created_date = models.DateField(default=timezone.now)
 
+    def __str__(self):
+        return self.title
+
+    def get_short_text(self):
+        if len(self.text) > 50:
+            return f'<b>{self.title}</b> - {self.text[:49]}...'
+        else:
+            return f'<b>{self.title}</b> - {self.text}'
+
+    def get_long_date(self):
+        return self.created_date.strftime('%d.%m.%Y')
+
 
 class MasterRequest(models.Model):
     TYPE = (
-        ('Сантехник','Сантехник'),
-        ('Электрик','Электрик'),
-        ('Слесарь','Слесарь'),
+        ('Сантехник', 'Сантехник'),
+        ('Электрик', 'Электрик'),
+        ('Слесарь', 'Слесарь'),
         ('Любой специалист', 'Любой специалист'),
     )
     STATUS = (
@@ -350,11 +365,11 @@ class MasterRequest(models.Model):
     )
     date = models.DateField(blank=True, verbose_name='')
     time = models.TimeField(blank=True, verbose_name='')
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', blank=True, verbose_name='')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', blank=True, verbose_name='', null=True)
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, verbose_name='')
     master_type = models.CharField(choices=TYPE, max_length=155, blank=True, verbose_name='')
-    status = models.CharField(choices=STATUS, max_length=155, blank=True, verbose_name='')
-    master = models.ForeignKey(User, on_delete=models.CASCADE, related_name='master', blank=True, verbose_name='')
+    status = models.CharField(choices=STATUS, max_length=155, blank=True, verbose_name='', default='Новое')
+    master = models.ForeignKey(User, on_delete=models.CASCADE, related_name='master', blank=True, verbose_name='', null=True)
     description = models.TextField(blank=True, verbose_name='')
     comment = models.TextField(blank=True, verbose_name='')
 
