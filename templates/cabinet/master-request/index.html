@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'cabinet/base.html' %}
+{% block main_content %}
+    <section class="content input-form">
+         <div class="container-fluid">
+            <div class="card card-secondary card-outline table-responsive">
+                <table class="table table-bordered table-hover table-striped linkedRow">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px; min-width: 40px">№ Заявки</th>
+                            <th style="width: 250px">Тип мастера</th>
+                            <th>Описание</th>
+                            <th>Удобное время</th>
+                            <th>Статус</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for el in requests %}
+                        <tr>
+                            <td>{{ el.id }}</td>
+                            <td>{{ el.master_type }}</td>
+                            <td>{{ el.description }}</td>
+                            <td>{{ el.get_full_time }}</td>
+                             <td>{{ el.status }}</td>
+                             <td></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+         </div>
+    </section>
+{% endblock %}

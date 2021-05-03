@@ -373,3 +373,9 @@ class MasterRequest(models.Model):
     description = models.TextField(blank=True, verbose_name='')
     comment = models.TextField(blank=True, verbose_name='')
 
+    def __str__(self):
+        return self.description
+
+    def get_full_time(self):
+        return f'{self.date} - {self.time}'
+

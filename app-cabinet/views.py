@@ -65,8 +65,9 @@ def messages_delete_view(request):
 
 
 def master_request_view(request):
-
-    return render(request, 'cabinet/master-request/index.html')
+    user = models.User.objects.filter(id=1)[0]
+    requests = models.MasterRequest.objects.filter(apartment__floor__section__house__user=user)
+    return render(request, 'cabinet/master-request/index.html', {'requests': requests})
 
 
 def master_request_create_view(request):
