@@ -30,6 +30,7 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% if counters.count > 0 %}
                     {% for el in counters %}
                         <tr data-href="{% url 'admin_counter-house-view'  pk=el.apartment.pk %}">
                             <td>{{ el.apartment.floor.section.house.name }}</td>
@@ -49,7 +50,12 @@
                                     </div>
                                 </td>
                         </tr>
-                        {% endfor %}
+                    {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7"><div class="empty">Ничего не найдено.</div></td>
+                        </tr>
+                    {% endif %}
                     </tbody>
                 </table>
             </div>

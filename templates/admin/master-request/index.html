@@ -33,6 +33,7 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% if requests.count > 0 %}
                     {% for el in requests %}
                         <tr>
                             <td>{{ el.id }}</td>
@@ -43,19 +44,30 @@
                             <td>{{ el.apartment.floor.section.house.user }}</td>
                             <td>{{ el.apartment.floor.section.house.user.number }}</td>
                             <td>{{ el.master }}</td>
-                            <td>{{ el.status }}</td>
+                            {% if el.status == 'Новое' %}
+                                <td style="color: #00ba13; text-align: center"><small class="label label-success">Новое</small></td>
+                            {% elif el.status == 'В работе' %}
+                                <td style="color: #00ba13; text-align: center"><small class="label label-warning">В работе</small></td>
+                            {% else %}
+                                <td style="color: #00ba13; text-align: center"><small class="label label-success">Выполнено</small></td>
+                            {% endif %}
                             <td>
                                 <div class="btn-group pull-right">
-                                    <a class="btn btn-default btn-sm" href="#" title="Редактировать" data-toggle="tooltip">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_master-request-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a class="btn btn-default btn-sm" href="/admin/account-transaction/delete/110" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_master-request-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
-                        {% endfor %}
+                    {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="10"><div class="empty">Ничего не найдено.</div></td>
+                        </tr>
+                    {% endif %}
                     </tbody>
                 </table>
             </div>

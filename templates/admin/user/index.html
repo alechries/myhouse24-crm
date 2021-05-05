@@ -44,6 +44,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {% if users.count > 0 %}
                         {% for el in users %}
                         <tr data-href="{% url 'admin_user-detail'  pk=el.pk %}">
                             <td>{{ el.id }}</td>
@@ -67,6 +68,11 @@
                             </td>
                         </tr>
                         {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="10"><div class="empty">Ничего не найдено.</div></td>
+                            </tr>
+                        {% endif %}
                         </tbody>
              </table>
             </div>

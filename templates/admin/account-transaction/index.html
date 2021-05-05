@@ -87,6 +87,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {% if accounts.count > 0  %}
                         {% for el in accounts %}
                         <tr data-href="{% url 'admin_account-transaction-detail'  pk=el.pk %}">
                             <td>{{ el.number }}</td>
@@ -117,6 +118,11 @@
                             </td>
                         </tr>
                         {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="9"><div class="empty">Ничего не найдено.</div></td>
+                        </tr>
+                        {% endif %}
                         </tbody>
                     </table>
             </div>

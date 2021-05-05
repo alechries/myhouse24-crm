@@ -27,6 +27,7 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% if houses.count > 0 %}
                     {% for el in houses %}
                         <tr>
                             <td>{{ el.id }}</td>
@@ -34,16 +35,21 @@
                             <td>{{ el.address }}</td>
                             <td>
                                 <div class="btn-group pull-right">
-                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-transaction-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_house-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a class="btn btn-default btn-sm" href="/admin/account-transaction/delete/110" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_house-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
                         {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4"><div class="empty">Ничего не найдено.</div></td>
+                            </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>

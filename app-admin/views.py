@@ -226,8 +226,11 @@ def user_change_view(request, pk):
                                                       'alerts': alerts})
 
 
-def user_delete_view(request):
-    return render(request, 'admin/user/delete.html')
+def user_delete_view(request, pk):
+    user = get_object_or_404(models.User, id=pk)
+    user.delete()
+    return redirect('admin_user')
+
 
 
 def house_view(request):
@@ -249,12 +252,21 @@ def house_create_view(request):
                                                        'alerts': alerts})
 
 
-def house_change_view(request):
-    return render(request, 'admin/house/change.html')
+def house_change_view(request, pk):
+    alerts = []
+    form = forms.HouseForm(request.POST or None, instance=get_object_or_404(models.House, id=pk))
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            alerts.append('Запись была успешно редактирована!')
+    return render(request, 'admin/house/create.html', {'form': form,
+                                                       'alerts': alerts})
 
 
-def house_delete_view(request):
-    return render(request, 'admin/house/delete.html')
+def house_delete_view(request, pk):
+    house = get_object_or_404(models.House, id=pk)
+    request.delete()
+    return redirect('admin_house')
 
 
 def message_view(request):
@@ -286,7 +298,6 @@ def message_delete_view(request, pk):
     return redirect('admin_message')
 
 
-
 def master_request_view(request):
     requests = models.MasterRequest.objects.all()
     return render(request, 'admin/master-request/index.html', {'requests': requests})
@@ -305,12 +316,21 @@ def master_request_create_view(request):
                                                                 'alerts': alerts})
 
 
-def master_request_change_view(request):
-    return render(request, 'admin/master-request/change.html')
+def master_request_change_view(request, pk):
+    alerts = []
+    form = forms.MasterRequestForm(request.POST or None, instance=get_object_or_404(models.MasterRequest, id=pk))
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            alerts.append('Запись была успешно редактирована!')
+    return render(request, 'admin/master-request/create.html', {'form': form,
+                                                                'alerts': alerts})
 
 
-def master_request_delete_view(request):
-    return render(request, 'admin/master-request/delete.html')
+def master_request_delete_view(request, pk):
+    request = get_object_or_404(models.MasterRequest, id=pk)
+    request.delete()
+    return redirect('admin_master-request')
 
 
 def counters_view(request):
@@ -708,8 +728,9 @@ def user_admin_change_view(request):
     return render(request, 'admin/user-admin/change.html')
 
 
-def user_admin_delete_view(request):
-    return render(request, 'admin/user-admin/delete.html')
+def user_admin_delete_view(request, pk):
+    return redirect('admin_master-request')
+
 
 
 def pay_company_view(request):

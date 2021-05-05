@@ -1,5 +1,8 @@
 {% extends 'cabinet/base.html' %}
 {% block main_content %}
+    <section class="content" style="min-height: 60px">
+       <a href="{% url 'cabinet_master-request-create' %}" class=" btn btn-success pull-right">Сделать заявку</a>
+    </section>
     <section class="content input-form">
          <div class="container-fluid">
             <div class="card card-secondary card-outline table-responsive">
@@ -15,6 +18,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                    {% if requests.count > 0 %}
                     {% for el in requests %}
                         <tr>
                             <td>{{ el.id }}</td>
@@ -25,6 +29,11 @@
                              <td></td>
                         </tr>
                         {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6"><div class="empty">Ничего не найдено.</div></td>
+                        </tr>
+                    {% endif %}
                     </tbody>
                 </table>
             </div>

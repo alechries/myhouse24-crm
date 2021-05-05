@@ -27,14 +27,20 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% if messages.count > 0 %}
                     {% for el in messages %}
                         <tr data-href="{% url 'admin_message-detail'  pk=el.pk %}">
                             <td></td>
                             <td>{{ el.destination }}</td>
                             <td>{{ el.text }}</td>
-                            <td>{{ el.created_date }}</td>
+                            <td>{{ el.created_date|date:"d.m.Y" }}</td>
                         </tr>
-                        {% endfor %}
+                    {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4"><div class="empty">Ничего не найдено.</div></td>
+                        </tr>
+                    {% endif %}
                     </tbody>
                 </table>
             </div>

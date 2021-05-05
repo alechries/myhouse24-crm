@@ -17,6 +17,25 @@ class Model(models.Model):
         app_label = '_db'
 
 
+class UserRole(models.Model):
+    statistic_status = models.BooleanField(default=0)
+    cash_box_status = models.BooleanField(default=0)
+    invoice_status = models.BooleanField(default=0)
+    account_status = models.BooleanField(default=0)
+    apartment = models.BooleanField(default=0)
+    house_user_status = models.BooleanField(default=0)
+    house_status = models.BooleanField(default=0)
+    message_status = models.BooleanField(default=0)
+    master_request_status = models.BooleanField(default=0)
+    meter_status = models.BooleanField(default=0)
+    website_status = models.BooleanField(default=0)
+    service_status = models.BooleanField(default=0)
+    tariffs_status = models.BooleanField(default=0)
+    role_status = models.BooleanField(default=0)
+    user_status = models.BooleanField(default=0)
+    payments_detail_status = models.BooleanField(default=0)
+
+
 class CustomAbstractUser(AbstractBaseUser, PermissionsMixin):
     """
     An abstract base class implementing a fully featured User model with

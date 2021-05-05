@@ -31,6 +31,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {% if apartment.count > 0 %}
                         {% for el in apartment %}
                         <tr data-href="{% url 'admin_apart-detail'  pk=el.pk %}">
                             <td>{{ el.name }}</td>
@@ -51,6 +52,11 @@
                             </td>
                         </tr>
                         {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7"><div class="empty">Ничего не найдено.</div></td>
+                            </tr>
+                        {% endif %}
                         </tbody>
                     </table>
             </div>

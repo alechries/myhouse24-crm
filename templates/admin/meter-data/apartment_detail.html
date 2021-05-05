@@ -39,6 +39,7 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% if counters.count > 0 %}
                     {% for el in counters %}
                         <tr data-href="{% url 'admin_meter-data-detail'  pk=el.pk %}">
                             <td>{{ el.number }}</td>
@@ -70,7 +71,12 @@
                                 </div>
                             </td>
                         </tr>
-                        {% endfor %}
+                    {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="11"><div class="empty">Ничего не найдено.</div></td>
+                        </tr>
+                    {% endif %}
                     </tbody>
                 </table>
             </div>
