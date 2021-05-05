@@ -621,7 +621,7 @@ def tariffs_view(request):
     return render(request, 'admin/tariffs/index.html', context)
 
 
-def tariffs_change_view(request, pk):
+def tariffs_change_view(request, pk=None):
     alerts = []
 
     # Форма тарифа
@@ -647,16 +647,14 @@ def tariffs_change_view(request, pk):
     return render(request, 'admin/tariffs/change.html', context)
 
 
-def tariffs_create_view(request):
-    return tariffs_change_view(request, pk=None)
-
-
 def tariffs_copy_view(request):
     return render(request, 'admin/tariffs/copy.html')
 
 
-def tariffs_delete_view(request):
-    return render(request, 'admin/tariffs/delete.html')
+def tariffs_delete_view(request, pk):
+    entry = models.Rate.objects.get(id=pk)
+    entry.delete()
+    return redirect('admin_tariffs')
 
 
 def user_admin_role_view(request):
