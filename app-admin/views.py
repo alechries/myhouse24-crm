@@ -423,6 +423,12 @@ def website_main_page_view(request):
     return render(request, 'admin/website/main-page.html', context)
 
 
+def website_about_gallery_delete_view(request, pk):
+    entry = models.WebsiteAboutGallery.objects.get(id=pk)
+    entry.delete()
+    return HttpResponse()
+
+
 def website_about_view(request):
 
     alerts = []
@@ -523,6 +529,12 @@ def website_services_view(request):
     }
     return render(
         request, 'admin/website/services.html', context)
+
+
+def website_tariffs_blocks_delete_view(request, pk):
+    entry = models.WebsiteTariffBlocks.objects.get(id=pk)
+    entry.delete()
+    return HttpResponse()
 
 
 def website_tariffs_view(request):
