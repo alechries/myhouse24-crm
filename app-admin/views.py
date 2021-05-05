@@ -313,20 +313,53 @@ def master_request_delete_view(request):
     return render(request, 'admin/master-request/delete.html')
 
 
-def meter_data_view(request):
-    return render(request, 'admin/meter-data/index.html')
+def counters_view(request):
+    counters = models.Meter.objects.all()  # .order_by('service__name').distinct('service__name') POSTGRES
+    print(counters)
+    return render(request, 'admin/meter-data/counters.html', {'counters': counters})
+
+
+def counter_house_view(request, pk):
+    counters = models.Meter.objects.filter(apartment_id=pk)
+    apartment = models.Apartment.objects.get(id=pk)
+    print(counters)
+    return render(request, 'admin/meter-data/apartment_detail.html', {'counters': counters,
+                                                                      'apartment': apartment})
 
 
 def meter_data_create_view(request):
-    return render(request, 'admin/meter-data/create.html')
+    form = forms.CounterForm(request.POST)
+    alerts = []
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            alerts.append('Запись была успешно добавлена!')
+        else:
+            alerts.append('Неуспешно')
+    return render(request, 'admin/meter-data/create.html', {'form': form,
+                                                            'alerts': alerts})
 
 
-def meter_data_change_view(request):
-    return render(request, 'admin/meter-data/change.html')
+def meter_data_change_view(request, pk):
+    alerts = []
+    form = forms.CounterForm(request.POST or None, instance=get_object_or_404(models.Meter, id=pk))
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            alerts.append('Запись была успешно редактирована!')
+    return render(request, 'admin/meter-data/create.html', {'form': form,
+                                                            'alerts': alerts})
 
 
-def meter_data_delete_view(request):
-    return render(request, 'admin/meter-data/delete.html')
+def meter_data_detail_view(request, pk):
+    meter = models.Meter.objects.get(id=pk)
+    return render(request, 'admin/meter-data/detail.html', {'meter': meter})
+
+
+def meter_data_delete_view(request, pk):
+    meter = get_object_or_404(models.Meter, id=pk)
+    meter.delete()
+    return redirect('admin_counters-view')
 
 
 def website_main_page_view(request):

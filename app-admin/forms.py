@@ -450,6 +450,37 @@ class TransactionPurposeForm(forms.ModelForm):
         fields = ['status', 'name']
 
 
+class CounterForm(forms.ModelForm):
+    class Meta:
+        model = models.Meter
+        fields = ['apartment', 'number', 'date', 'service', 'status', 'counter']
+        widgets = {
+            'counter': forms.NumberInput(attrs={
+                'id': 'AmountInput',
+                'class': 'form-control',
+                'placeholder': 'Показания счётчика',
+            }),
+            'comment': forms.Textarea(attrs={
+                'id': 'CommentInput',
+                'class': 'form-control',
+                'rows': '3',
+                'placeholder': 'Введите комментарий',
+            }),
+            'date': forms.DateInput(format=('%Y-%m-%d'), attrs={
+                'type': "date",
+                'value': datetime.now().strftime('%Y-%m-%d'),
+                'class': "form-control",
+            }),
+            'number': forms.TextInput(attrs={
+                'input_type': 'text',
+                 #'value': ,
+                'class': 'form-control',
+                'required': 'false'
+            }),
+        }
+    pass
+
+
 class InvoiceIDCreateForm(forms.ModelForm):
 
     pass

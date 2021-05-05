@@ -143,14 +143,17 @@ class Floor(models.Model):
         return self.name
 
 
-class Measure(models.Model):
+class Measure(models.Model):  # ед измерения
     name = models.CharField(max_length=255)
 
 
-class Service(models.Model):
+class Service(models.Model):   # услуга
     measure = models.ForeignKey(Measure, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Apartment(models.Model):
@@ -173,11 +176,13 @@ class Meter(models.Model):
         ('Учтено и оплаченно', 'Учтено и оплаченно'),
         ('Нулевое', 'Нулевое')
     )
-    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    number = models.CharField(max_length=155)
+    date = models.DateField(default=timezone.now())
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, verbose_name='')
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, verbose_name='')
     counter = models.IntegerField()
-    indication_date = models.DateField()
-    status = models.CharField(choices=STATUS, max_length=255)
+    indication_date = models.DateField(null=True)
+    status = models.CharField(choices=STATUS, max_length=255, blank=True, verbose_name='')
 
 
 class Currency(models.Model):
