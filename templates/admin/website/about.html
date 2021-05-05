@@ -61,7 +61,11 @@
                         <div class="form-area col-md-4">
                             <div class="form-title-line">
                                 <div>Изображение <b class="form-counter">{{ forloop.counter }}</b></div>
-                                <div class="btn btn-danger del-form">DEL</div>
+                                {% if form.instance.id %}
+                                <a class="btn btn-danger del-form" href="{% url 'admin_website-about-gallery-delete' form.instance.id %}">DEL</a>
+                                {% else %}
+                                <a class="btn btn-danger del-form" href="#">DEL</a>
+                                {% endif %}
                             </div>
                             <div>
                                 <div class="blocks-image" style="background: url({% if form.instance.image %}{{ form.instance.image.url }}{% else %}{% static 'no_icon.png' %}{% endif %}) no-repeat;"></div>
@@ -103,6 +107,7 @@
 {% block scripts %}
 <script src="https://cdn.tiny.cloud/1/kra6rmqrjhsjtzn537eqbc98zd4itnaxx3en34fmphnfe00h/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script src="{% static 'base/js/dynamicforms.js' %}"></script>
+<script src="{% static 'base/js/requestwithoutreload.js' %}"></script>
 <script>
 tinymce.init({selector:'textarea'});
 
@@ -115,5 +120,13 @@ let default_image_url = '{% static 'no_icon.png' %}';
 document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(prefix, form, image, default_image_url) }, false);
 $('#add-about-block').click(function() { addForm(prefix, form, counter); });
 $('.del-form').click(function() { delForm(this, prefix, form, counter); });
+</script>
+<script>
+$('.del-form').click(function(){
+    var deleteURL = $(this).attr("href");
+    token = $("input[name='csrfmiddlewaretoken']").val();
+    data = {'csrfmiddlewaretoken':token}
+    if (deleteURL != '#') requestWithoutReload(deleteURL, data);
+});
 </script>
 {% endblock %}

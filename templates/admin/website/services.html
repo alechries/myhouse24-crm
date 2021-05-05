@@ -33,7 +33,7 @@
                             <div class="form-title-line">
                                 <div>Услуга <b class="form-counter">{{ forloop.counter }}</b></div>
                                 {% if form.instance.id %}
-                                <a class="btn btn-danger del-form" href="{% url 'admin_website-services-blocks-delete' form.instance.id %}">({{ form.instance.id }})</a>
+                                <a class="btn btn-danger del-form" href="{% url 'admin_website-services-blocks-delete' form.instance.id %}">DEL</a>
                                 {% else %}
                                 <a class="btn btn-danger del-form" href="#">DEL</a>
                                 {% endif %}
@@ -89,7 +89,7 @@
 <script src="{% static 'base/js/dynamicforms.js' %}"></script>
 <script src="{% static 'base/js/requestwithoutreload.js' %}"></script>
 <script>
-tinymce.init({selector:'textarea'}); // Включить по необходиомости (может не работать динамическое добавление форм)
+// tinymce.init({selector:'textarea'}); // Включить по необходиомости (может не работать динамическое добавление форм)
 
 let prefix = 'service';
 let form = '.form-area';
@@ -103,7 +103,6 @@ $('.del-form').click(function() { delForm(this, prefix, form, counter); });
 <script>
 $('.del-form').click(function(){
     var deleteURL = $(this).attr("href");
-    alert(deleteURL);
     token = $("input[name='csrfmiddlewaretoken']").val();
     data = {'csrfmiddlewaretoken':token}
     if (deleteURL != '#') requestWithoutReload(deleteURL, data);
