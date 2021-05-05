@@ -20,19 +20,32 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">Название тарифа</th>
-                    <th scope="col">Описание тарифа</th>
-                    <th scope="col">Дата редактирования</th>
-                    <th scope="col"></th>
+                    <th width="10%" scope="col">Название тарифа</th>
+                    <th width="40%" scope="col">Описание тарифа</th>
+                    <th width="10%" scope="col">Дата редактирования</th>
+                    <th width="1%" scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for rate in rateservices %}
+                {% for rate in rates %}
                 <tr>
-                    <th scope="row">{{ rates.name }}</th>
-                    <td>{{ rates.description }}</td>
-                    <td>{{ rates.edit_date }}</td>
-                    <td>copy/edit/delete</td>
+                    <th scope="row">{{ rate.name }}</th>
+                    <td>{{ rate.description }}</td>
+                    <td>{{ rate.edit_date }}</td>
+                    <td>
+                        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                <button type="button" class="btn btn-secondary">Copy</button>
+                                {% if rate.id %}
+                                <a class="btn btn-secondary" href="{% url 'admin_tariffs-change' rate.id %}">Edit</a>
+                                {% endif %}
+                                {% if rate.id %}
+                                <a class="btn btn-secondary" href="{% url 'admin_tariffs-delete' rate.id %}">Delete</a>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
                 </tbody>
