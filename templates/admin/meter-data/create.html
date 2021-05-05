@@ -1,3 +1,71 @@
 {% extends 'admin/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block page_title %}
+    <h1 class="m-0">Новое показание</h1>
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_counters-view' %}">
+            Счётчики
+        </a>
+    </li>
+    <li class="breadcrumb-item active">Показания счётчиков</li>
+    <li class="breadcrumb-item active">Новое показание</li>
+{% endblock %}
 {% block main_content %}
+<section class="content input-form">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 d-flex justify-content-center">
+                <div class="col-md-6">
+                    {{ form.number }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.date }}
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="card card-secondary card-outline">
+                    <div class="default-area">
+                            <div class="row">
+                                <div class="col">
+                                    Квартира
+                                    {{ form.apartment|as_crispy_field }}
+                                </div>
+                                <div class="col">
+                                    Статус
+                                    {{ form.status|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Счётчик
+                                    {{ form.service|as_crispy_field }}
+                                </div>
+                                <div class="col">
+                                    Показания
+                                    {{ form.counter }}
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-end">
+                                <a href="{% url 'admin_counters-view' %}" type="button" class="btn btn-default margin-bottom-15">Отмена</a>
+                                <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
+                            </div>
+                        </div>
+                </div>
+            </div><!-- /.container-fluid -->
+    </form>
+</section>
+<script>
+
+</script>
 {% endblock %}

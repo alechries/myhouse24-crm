@@ -1,0 +1,78 @@
+{% extends 'admin/base.html' %}
+{% block page_title %}
+    <h1 class="m-0">Профиль владельца</h1>
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_user' %}">
+            Счётчики
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_user' %}">
+            Показания счётчиков, кв.{{ meter.apartment.name }}
+        </a>
+    </li>
+    <li class="breadcrumb-item active">Показание счётчика № {{ meter.number }}</li>
+{% endblock %}
+{% block main_content %}
+<section class="content input-form">
+    <div class="row">
+        <div class="col-md-6 d-flex justify-content-center">
+            <div class="col-md-6">
+                <input type="text" name="number" value="{{ meter.number }}" class="form-control" required="" maxlength="255" id="id_number" readonly>
+            </div>
+            <div class="col-md-6">
+                <input type="text" name="number" value="{{ meter.date}}" class="form-control" required="" maxlength="255" id="id_number" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="card card-secondary card-outline">
+            <section>
+            <div class="d-flex justify-content-end" style="padding: 0 10px">
+                <a href="{% url 'admin_meter-data-change' pk=meter.id %}" class="btn btn-success">Редактировать показание</a>
+            </div>
+                <div class="default-area">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <td>Счётчик</td>
+                            <td>{{ meter.service.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Дом</td>
+                            <td>{{ meter.apartment.floor.section.house.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Секция</td>
+                            <td>{{ meter.apartment.floor.section.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Квартира</td>
+                            <td>{{ meter.apartment.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Пользователь</td>
+                            <td>{{ meter.apartment.floor.section.house.user }}</td>
+                        </tr>
+                        <tr>
+                            <td>Текущие показания</td>
+                            <td>{{ meter.counter }}</td>
+                        </tr>
+                        <tr>
+                            <td>Еденицы измерения</td>
+                            <td>{{ meter.service.measure.name }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+{% endblock %}
