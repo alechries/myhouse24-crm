@@ -59,7 +59,6 @@ urlpatterns = [
     path('website/tariffs/blocks/delete/<int:pk>', views.website_tariffs_blocks_delete_view, name='admin_website-tariffs-blocks-delete'),
     path('website/contact', views.website_contact_view, name='admin_website-contact'),
     path('services', views.services_view, name='admin_services'),
-    path('services/measurement', views.services_measurement_view, name='admin_services-measurement'),
     path('tariffs', views.tariffs_view, name='admin_tariffs'),
     path('tariffs/create', views.tariffs_change_view, name='admin_tariffs-create'),
     path('tariffs/change/<int:pk>', views.tariffs_change_view, name='admin_tariffs-change'),

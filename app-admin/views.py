@@ -652,19 +652,33 @@ def website_contact_view(request):
 
 
 def services_view(request):
-    return render(request, 'admin/services/services.html')
+    service_count = models.Service.objects.count()
+    MainPageServiceBlocksFormset = modelformset_factory(
+        model=models.Service,
+        form=forms.WebsiteServiceBlocksForm,
+        fields=('image', 'name', 'description'),
+        max_num=service_count if service_count > 0 else 1,
+    )
+
+    alerts = []
+    if request.method == "POST":
+        service_formset = MainPageServiceBlocksFormset(
+            request.POST, request.FILES,
+            prefix='service')
+        utils.form_save(service_formset)
+        alerts.append('Услуги сохранены успешно!')
+    else:
+        service_formset = MainPageServiceBlocksFormset(prefix='service')
+
+    context = {
+        'formset': service_formset,
+        'alerts': alerts,
+    }
+    return render(request, 'admin/services/services.html', context)
 
 
 def services_del_view(request):
     return render(request, 'admin/services/services.html')
-
-
-def services_measurement_view(request):
-    return render(request, 'admin/services/measurement.html')
-
-
-def services_measurement_del_view(request):
-    return render(request, 'admin/services/measurement.html')
 
 
 def tariffs_view(request):

@@ -15,17 +15,51 @@
     <div class="container-fluid">
         <div class="card card-secondary card-outline">
             <div class="default-area">
-                <div class="nav-tabs-custom">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="{% url 'admin_services' %}">Услуги</a></li>
-                        <li><a href="{% url 'admin_services-measurement' %}">Ед. измерения</a></li>
-                    </ul>
-                </div>
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a class="nav-link active" href="#services" data-toggle="tab">Услуги</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#measure" data-toggle="tab">Единицы измерения</a></li>
+                </ul>
             </div>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="default-area">
-                    <div>Model Formset</div>
+                    <div class="tab-content">
+                        <div class="active tab-pane show" id="services">
+                            <div class="container">
+                                Услуга
+                                <div class="row">
+                                    <div class="col-sm">
+                                        1
+                                    </div>
+                                    <div class="col-sm">
+                                        2
+                                    </div>
+                                    <div class="col-sm">
+                                        3
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="measure">
+                            <div class="container">
+                                Ед. изм.
+                                <div class="row">
+                                    <div class="col-sm">
+                                        1
+                                    </div>
+                                    <div class="col-sm">
+                                        2
+                                    </div>
+                                    <div class="col-sm">
+                                        3
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
                 </div>
                 <div class="default-area default-half text-center">
                     <button type="submit" class="btn btn-success">Сохранить</button>
