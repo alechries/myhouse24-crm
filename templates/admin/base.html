@@ -296,6 +296,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       </nav>
       <!-- /.sidebar-menu -->
     </div>
+
     <!-- /.sidebar -->
   </aside>
 
@@ -377,11 +378,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <!-- REQUIRED SCRIPTS -->
-<!-- jQuery -->
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'admin/js/adminlte.min.js' %}"></script>
 <script>
@@ -404,8 +403,9 @@ let menus = document.getElementsByClassName("menu");
 
 for(let i = 0; i < menus.length; i++) {
   menus[i].addEventListener("click", () => {
+    let clicked = menus[i];
+    clicked.children[1].style.display = "block";
     for(let y = 0; y < menus.length; y++) {
-      let clicked = menus[i];
       let current = menus[y];
       if(clicked !== current) {
         current.classList.remove("menu-is-opening");
