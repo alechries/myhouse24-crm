@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include('app-public.urls')),
     path('admin/', include('app-admin.urls')),
     path('cabinet/', include('app-cabinet.urls')),
+    path('api/', include('_api.urls')),
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)

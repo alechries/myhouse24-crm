@@ -13,17 +13,19 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", None)
 ALLOWED_HOSTS = ALLOWED_HOSTS.split(" ") if ALLOWED_HOSTS else ["*"]
 
 INSTALLED_APPS = [
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    '_api.apps.ApiConfig',
     '_db.apps.DbConfig',
     'app-public.apps.PublicConfig',
     'app-admin.apps.AdminConfig',
     'app-cabinet.apps.CabinetConfig',
     'crispy_forms',
     'easy_maps',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'rest_framework',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
