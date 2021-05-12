@@ -725,7 +725,37 @@ def tariffs_delete_view(request, pk):
 
 
 def user_admin_role_view(request):
-    return render(request, 'admin/user-admin/role.html')
+
+    alerts = []
+    UserRoleFormset = modelformset_factory(
+        model=models.UserRole,
+        form=forms.RoleForm,
+        max_num=4,
+        min_num=4
+    )
+
+    if request.method == 'POST':
+
+        user_role_formset = UserRoleFormset(
+            request.POST,
+            prefix='user_role_form',
+        )
+
+        if utils.forms_save([
+            user_role_formset,
+        ]):
+            alerts.append('Данные сохранены успешно!')
+
+    else:
+        user_role_formset = UserRoleFormset(
+            prefix='user_role_form',
+        )
+
+    context = {
+        'alerts': alerts,
+        'user_role_formset': user_role_formset
+    }
+    return render(request, 'admin/user-admin/role.html', context)
 
 
 def user_admin_users_list(request):
