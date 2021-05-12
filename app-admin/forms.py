@@ -488,7 +488,7 @@ class InvoiceForm(forms.ModelForm):
 class RoleForm(forms.ModelForm):
     class Meta:
         model = models.UserRole
-        fields = 'all'
+        fields = '__all__'
         widgets = {
             'id': forms.HiddenInput(),
             'name': forms.TextInput(),
