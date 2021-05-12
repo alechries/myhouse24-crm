@@ -1,0 +1,63 @@
+{% extends 'admin/base.html' %}
+{% block page_title %}
+    <h1 class="m-0">Пользователь</h1>
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_user-users-list' %}">
+            Пользователи
+        </a>
+    </li>
+    <li class="breadcrumb-item active">Пользователь</li>
+{% endblock %}
+{% block main_content %}
+<section class="content input-form">
+    <div class="container-fluid">
+        <div class="card card-secondary card-outline">
+            <section>
+            <div class="d-flex justify-content-end" style="padding: 0 10px">
+                <a href="#" class="btn btn-success ">Редактировать пользователя</a>
+            </div>
+                <div class="default-area">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <td>Пользователь</td>
+                            <td>{{ user }}</td>
+                        </tr>
+                        <tr>
+                            <td>Роль</td>
+                            <td>{{ user.role}}</td>
+                        </tr>
+                        <tr>
+                            <td>Телефон</td>
+                            <td>{{ user.number }}м2</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Статус</td>
+                            {% if user.status == 'Активен' %}
+                                <td style="color: #00ba13"><small class="label label-success">{{ user.status }}</small></td>
+                            {% elif user.status == 'Новый' %}
+                                <td style="color: #00ba13"><small class="label label-warning">{{ user.status }}</small></td>
+                            {% elif user.status == 'Отключен' %}
+                                <td style="color: #00ba13"><small class="label label-danger">{{ user.status }}</small></td>
+                            {% else %}
+                                <td>None</td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+{% endblock %}
