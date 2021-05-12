@@ -200,7 +200,7 @@ class Meter(models.Model):
         ('Нулевое', 'Нулевое')
     )
     number = models.CharField(max_length=155)
-    date = models.DateField(default=timezone.now())
+    date = models.DateField(default=timezone.now)
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, verbose_name='')
     service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, verbose_name='')
     counter = models.IntegerField()
