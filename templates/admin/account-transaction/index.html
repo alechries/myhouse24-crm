@@ -55,14 +55,14 @@
             </div>
             <div class="col-xs-12 col-lg-3">
                 <div class="dropdown pull-right">
-                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Выберите действие
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="{% url 'admin_account-transaction-create_in' %}">Создать приход</a></li>
-                        <li><a class="dropdown-item" href="{% url 'admin_account-transaction-create_out' %}">Создать расход</a></li>
-                        <li><a class="dropdown-item" href="#">Выгрузить в Exel</a></li>
-                    </ul>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url 'admin_account-transaction-create_in' %}">Создать приход</a>
+                        <a class="dropdown-item" href="{% url 'admin_account-transaction-create_out' %}">Создать расход</a>
+                        <a class="dropdown-item" href="#">Выгрузить в Exel</a>
+                    </div>
                 </div>
             </div>
         </div>
