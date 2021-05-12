@@ -117,7 +117,7 @@ class User(CustomAbstractUser):
         ('Управляющий домом', 'Управляющий домом')
     )
 
-    role = models.ForeignKey(UserRole, on_delete=models.CASCADE, verbose_name='', blank=True)
+    role = models.ForeignKey(UserRole, on_delete=models.CASCADE, verbose_name='', blank=True, null=True)
     status = models.CharField('', choices=STATUS, max_length=55, blank=True)
     avatar = models.FileField('Аватар', upload_to='images/user/', null=True)
     middle_name = models.CharField('Отчество', max_length=150, null=True)
@@ -199,9 +199,9 @@ class Meter(models.Model):
         ('Учтено и оплаченно', 'Учтено и оплаченно'),
         ('Нулевое', 'Нулевое')
     )
-    number = models.CharField(max_length=155)
+    number = models.CharField(max_length=155, null=True)
     date = models.DateField(default=timezone.now)
-    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, verbose_name='')
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, blank=True, verbose_name='')
     counter = models.IntegerField()
     indication_date = models.DateField(null=True)
@@ -280,7 +280,7 @@ class Invoice(models.Model):
     )
 
     # Добавить модель Тарифа и сделать связь
-    number = models.CharField('', max_length=255)
+    number = models.CharField('', max_length=255, null=True)
     tariff = models.CharField('', choices=TARIFF, null=True, max_length=55)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, null=True)
