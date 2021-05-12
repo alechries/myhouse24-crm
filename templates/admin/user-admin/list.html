@@ -34,7 +34,7 @@
                         <tbody>
                         {% if users_list.count > 0 %}
                         {% for el in users_list %}
-                        <tr data-href="{% url 'admin_user-detail'  pk=el.pk %}">
+                        <tr data-href="{% url 'admin_user-admin-detail'  pk=el.pk %}">
                             <td>{{ el.id }}</td>
                             <td>{{ el.first_name }} {{ el.last_name }}</td>
                             <td>{{ el.role }}</td>
@@ -51,7 +51,7 @@
                             {% endif %}
                             <td>
                                 <div class="btn-group pull-right">
-                                    <a class="btn btn-default btn-sm" href="{% url 'admin_user-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_user-admin-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
                                     <a class="btn btn-default btn-sm" href="{% url 'admin_user-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
@@ -71,4 +71,11 @@
             </div>
          </div>
     </section>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $('tr[data-href]').on("click", function() {
+    document.location = $(this).data('href');
+    });
+    </script>
 {% endblock %}
