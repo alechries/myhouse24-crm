@@ -11,4 +11,64 @@
     <li class="breadcrumb-item active">Роли</li>
 {% endblock %}
 {% block main_content %}
+    <section class="content input-form">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container-fluid">
+            <div class="card card-secondary card-outline table-responsive">
+                <table class="table table-bordered table-hover table-striped linkedRow">
+                    <thead>
+                    <tr>
+                        <th>Роль</th>
+                        <th>Статистика</th>
+                        <th>Касса</th>
+                        <th>Квитанции на оплату</th>
+                        <th>Лицевые счета</th>
+                        <th>Квартиры</th>
+                        <th>Владельцы квартир</th>
+                        <th>Дома</th>
+                        <th>Сообщения</th>
+                        <th>Заявки вызова мастера</th>
+                        <th>Счётчики</th>
+                        <th>Управление сайтом</th>
+                        <th>Услуги</th>
+                        <th>Тарифы</th>
+                        <th>Роли</th>
+                        <th>Пользователи</th>
+                        <th>Платёжные реквизиты</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for form in user_role_formset %}
+                        {{ form.id }}
+                        <tr>
+                            <td>{{ form.name }}</td>
+                            <td>{{ form.statistic_status }}</td>
+                            <td>{{ form.cash_box_status }}</td>
+                            <td>{{ form.invoice_status }}</td>
+                            <td>{{ form.account_status }}</td>
+                            <td>{{ form.apartment }}</td>
+                            <td>{{ form.house_user_status }}</td>
+                            <td>{{ form.house_status }}</td>
+                            <td>{{ form.message_status }}</td>
+                            <td>{{ form.master_request_status }}</td>
+                            <td>{{ form.meter_status }}</td>
+                            <td>{{ form.website_status }}</td>
+                            <td>{{ form.service_status }}</td>
+                            <td>{{ form.tariffs_status }}</td>
+                            <td>{{ form.role_status }}</td>
+                            <td>{{ form.user_status }}</td>
+                            <td>{{ form.payments_detail_status }}</td>
+                        </tr>
+                    {% endfor %}
+                    {{ user_role_formset.management_form }}
+                    </tbody>
+                </table>
+            </div>
+            <div class="default-area text-center">
+                <button type="submit" class="btn btn-success">Сохранить</button>
+            </div>
+        </div>
+    </form>
+</section>
 {% endblock %}
