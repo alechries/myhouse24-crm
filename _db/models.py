@@ -280,6 +280,7 @@ class Invoice(models.Model):
     )
 
     # Добавить модель Тарифа и сделать связь
+    number = models.CharField('', max_length=255)
     tariff = models.CharField('', choices=TARIFF, null=True, max_length=55)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, null=True)
