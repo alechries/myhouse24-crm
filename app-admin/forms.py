@@ -1,6 +1,29 @@
 from django import forms
 from _db import models
+from django.forms import TextInput, CharField, Form
 from datetime import datetime
+from django.contrib.auth import (
+    authenticate, get_user_model, password_validation,
+)
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext, gettext_lazy as _
+from django.contrib.auth import forms as django_forms
+
+
+class LoginForm(Form):
+    class Meta:
+        model = models.User
+
+    email = CharField(widget=TextInput(attrs={
+        'type': 'text',
+        'class': 'form-control',
+        'placeholder': 'Email',
+    }))
+    password = CharField(widget=TextInput(attrs={
+        'type': 'password',
+        'class': 'form-control',
+        'placeholder': 'Password',
+    }))
 
 
 class SEOForm(forms.ModelForm):
@@ -538,8 +561,83 @@ class RoleForm(forms.ModelForm):
         }
 
 
-class InvoiceForm(forms.ModelForm):
+class UserCreateForm(forms.ModelForm):
+    class Meta:
+        model = models.User
+        fields = ['email', 'first_name', 'last_name', 'number', 'role', 'status', 'password', 'is_superuser']
+        field_classes = {
+            'email': django_forms.UsernameField
+        }
+        widgets = {
+            'password': forms.PasswordInput(attrs={
+                'class': 'form-control',
+            }),
+            'number': TextInput(attrs={
+                'placeholder': "Номер телефона",
+                'class': 'form-control',
+            }),
+            'email': forms.EmailInput(attrs={
+                'placeholder': "Почта",
+                'class': 'form-control',
+            }),
+            'first_name': TextInput(attrs={
+                'placeholder': "Имя",
+                'class': 'form-control',
+            }),
+            'last_name': TextInput(attrs={
+                'placeholder': "Фамилия",
+                'class': 'form-control',
+            }),
+        }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self._meta.model.USERNAME_FIELD in self.fields:
+            self.fields[self._meta.model.USERNAME_FIELD].widget.attrs['autofocus'] = True
+
+    def _post_clean(self):
+        super()._post_clean()
+        # Validate the password after self.instance is updated with form data
+        # by super().
+        password = self.cleaned_data.get('password2')
+        if password:
+            try:
+                password_validation.validate_password(password, self.instance)
+            except ValidationError as error:
+                self.add_error('password2', error)
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
+
+class PaymentCompany(forms.ModelForm):
+    class Meta:
+        model = models.Requisites
+        fields = ['company_name', 'information']
+        widgets = {
+            'company_name': forms.TextInput(attrs={
+                'placeholder': 'Введите название компании',
+                'type': 'text',
+                'class': 'form-control',
+            }),
+            'information': forms.Textarea(attrs={
+                'placeholder': 'Введите дополнительную информацию',
+                'class': 'form-control',
+                'rows': '5',
+            }),
+        }
+    pass
+
+
+class InvoiceIDCreateForm(forms.ModelForm):
+    pass
+
+
+class InvoiceForm(forms.ModelForm):
     house = forms.ModelChoiceField(
         queryset=models.House.objects.all(),
         empty_label='Сделайте выбор ... ',

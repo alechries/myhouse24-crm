@@ -53,15 +53,9 @@
                 </div>
             </div>
             <div class="col-xs-12 col-lg-3">
-                <div class="dropdown pull-right">
-                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Выберите действие
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <a class="dropdown-item" href="{% url 'admin_invoice-create' %}">Создать квитанцию</a>
-                        <a class="dropdown-item" href="#">Удалить</a>
-                    </div>
-                </div>
+                <section class="content" style="min-height: 60px">
+                    <a href="{% url 'admin_invoice-create' %}" class=" btn btn-success pull-right">Создать квитанцию</a>
+                </section>
             </div>
         </div>
     </section>

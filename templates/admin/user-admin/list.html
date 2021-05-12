@@ -11,4 +11,64 @@
     <li class="breadcrumb-item active">Пользователи</li>
 {% endblock %}
 {% block main_content %}
+    <section class="content" style="min-height: 60px">
+        <a href="{% url 'admin_user-admin-create' %}" class=" btn btn-success pull-right">Создать пользователя</a>
+    </section>
+    <section class="content input-form">
+         <div class="container-fluid">
+            <div class="card card-secondary card-outline table-responsive">
+                    <table class="table table-bordered table-hover table-striped linkedRow">
+                        <thead>
+                            <tr>
+                                <th style="width: 125px; min-width: 125px">ID</th>
+                                <th style="width: 125px; min-width: 150px">
+                                    <a>Пользователь</a>
+                                </th>
+                                <th style="width: 120px; min-width: 120px">Роль</th>
+                                <th style="width:auto">Телефон</th>
+                                <th style="min-width: 200px">Email(логин)</th>
+                                <th style="min-width: 160px">Статус</th>
+                                <th style="width: 80px; min-width: 80px">&nbsp;</th></tr>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% if users_list.count > 0 %}
+                        {% for el in users_list %}
+                        <tr data-href="{% url 'admin_user-detail'  pk=el.pk %}">
+                            <td>{{ el.id }}</td>
+                            <td>{{ el.first_name }} {{ el.last_name }}</td>
+                            <td>{{ el.role }}</td>
+                            <td>{{ el.number }}</td>
+                            <td>{{ el.email }}</td>
+                            {% if el.status == 'Активен' %}
+                                <td style="color: #00ba13"><small class="label label-success">{{ el.status }}</small></td>
+                            {% elif el.status == 'Новый' %}
+                                <td style="color: #00ba13"><small class="label label-warning">{{ el.status }}</small></td>
+                            {% elif el.status == 'Отключен' %}
+                                <td style="color: #00ba13"><small class="label label-danger">{{ el.status }}</small></td>
+                            {% else %}
+                                <td>None</td>
+                            {% endif %}
+                            <td>
+                                <div class="btn-group pull-right">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_user-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_user-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="10"><div class="empty">Ничего не найдено.</div></td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+             </table>
+            </div>
+         </div>
+    </section>
 {% endblock %}

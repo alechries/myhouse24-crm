@@ -13,15 +13,15 @@
 {% block main_content %}
     <section class="content" style="min-height: 60px">
         <div class="dropdown pull-right">
-                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        Выберите действие
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="{% url 'admin_user-create' %}">Добавить владельца квартиры</a></li>
-                        <li><a class="dropdown-item" href="{% url 'admin_message-create' %}">Отправить сообщение должникам</a></li>
-                        <li><a class="dropdown-item" href="#">Отправить приглашение</a></li>
-                    </ul>
-                </div>
+            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Выберите действие
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="margin-right: 90px">
+                <a class="dropdown-item" href="{% url 'admin_user-create' %}">Добавить владельца квартиры</a>
+                <a class="dropdown-item" href="{% url 'admin_message-create' %}">Отправить сообщение должникам</a>
+                <a class="dropdown-item" href="#">Отправить приглашение</a>
+            </div>
+        </div>
     </section>
     <section class="content input-form">
          <div class="container-fluid">

@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from _db import models, utils
+from _db import models, utils, auth
+from django.contrib.auth import authenticate, login, logout
 from . import forms
 from django.forms import modelformset_factory
 from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -7,7 +8,10 @@ from django.http import HttpResponse, HttpResponseNotFound
 
 
 def index_view(request):
-    return render(request, 'admin/index.html')
+    username = None
+    if request.user.is_authenticated:
+        username = f'{request.user.first_name} {request.user.last_name}'
+    return render(request, 'admin/index.html', {'user': username})
 
 
 def update_me_view(request):
@@ -15,11 +19,32 @@ def update_me_view(request):
 
 
 def login_view(request):
-    return render(request, 'admin/login.html')
+    alerts = []
+    if request.method == 'POST':
+        form = forms.LoginForm(request.POST)
+        print(form.data)
+        print(form.is_valid())
+        if form.is_valid():
+            user = auth.EmailAuthBackend.authenticate(email=form.cleaned_data['email'],
+                                                      password=form.cleaned_data['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect('admin_index')
+                else:
+                    alerts.append('User is not active')
+            else:
+                alerts.append('User does not exist')
+        else:
+            alerts.append('Data is incorrect')
+    else:
+        alerts.append('Please, Sign in')
+    return render(request, 'admin/login.html', {'form': forms.LoginForm(), 'alerts': alerts})
 
 
 def logout_view(request):
-    return render(request, 'admin/logout.html')
+    logout(request)
+    return redirect('public_index')
 
 
 def account_transaction_view(request):
@@ -764,11 +789,19 @@ def user_admin_role_view(request):
 
 
 def user_admin_users_list(request):
-    return render(request, 'admin/user-admin/list.html')
+    users_list = models.User.objects.filter(is_superuser=1)
+    print(users_list)
+    return render(request, 'admin/user-admin/list.html', {'users_list': users_list})
 
 
 def user_admin_create_view(request):
-    return render(request, 'admin/user-admin/create.html')
+    form = forms.UserCreateForm(request.POST or None)
+    form.instance.is_superuser = 1
+    if request.method == 'POST' and form.is_valid():
+        form.instance.is_superuser = 1
+        form.save()
+        return redirect('admin_user-users-list')
+    return render(request, 'admin/user-admin/create.html', {'form': form})
 
 
 def user_admin_change_view(request):
@@ -779,9 +812,12 @@ def user_admin_delete_view(request, pk):
     return redirect('admin_master-request')
 
 
-
 def pay_company_view(request):
-    return render(request, 'admin/pay-company.html')
+    form = forms.PaymentCompany(request.POST or None, instance=models.Requisites.get_solo())
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('admin_pay-company')
+    return render(request, 'admin/pay-company.html', {'form': form})
 
 
 def transaction_purpose_view(request):

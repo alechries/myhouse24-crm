@@ -11,4 +11,33 @@
     <li class="breadcrumb-item active">Платежные реквизиты</li>
 {% endblock %}
 {% block main_content %}
+     <section class="content input-form">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container-fluid">
+                <div class="card card-secondary card-outline">
+                    <div class="default-area">
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-7">
+                                <div class="row">
+                                    <label>Название компании</label>
+                                    {{ form.company_name }}
+                                </div>
+                                <div class="row">
+                                    <label>Информация</label>
+                                    {{ form.information }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                            <a href="{% url 'admin_pay-company' %}" class="btn btn-default margin-bottom-15">Отменить</a>
+                            <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+     </section>
 {% endblock %}
