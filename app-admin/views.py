@@ -117,7 +117,12 @@ def invoice_view(request):
 
 
 def invoice_create_view(request):
-    return render(request, 'admin/invoice/create.html')
+    form = forms.InvoiceForm(request.POST or None)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'admin/invoice/change.html', context)
 
 
 def invoice_copy_view(request):

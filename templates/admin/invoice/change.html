@@ -1,3 +1,33 @@
 {% extends 'admin/base.html' %}
+{% block page_title %}
+    <h1 class="m-0">Квитанции на оплату</h1>
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная</a>
+    </li>
+    <li class="breadcrumb-item active">Квитанции на оплату</li>
+{% endblock %}
 {% block main_content %}
+<section class="content input-form">
+        <div class="container-fluid">
+            <div class="card card-secondary card-outline">
+                <div class="default-area">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div id="select-house">{{ form.house }}</div>
+                    <div id="select-section">{{ form.section }}</div>
+                    <div id="select-apartment">{{ form.apartment }}</div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %}
+<script>
+
+</script>
 {% endblock %}
