@@ -18,6 +18,7 @@ class Model(models.Model):
 
 
 class UserRole(models.Model):
+    name = models.CharField(max_length=255)
     statistic_status = models.BooleanField(default=0)
     cash_box_status = models.BooleanField(default=0)
     invoice_status = models.BooleanField(default=0)
@@ -35,6 +36,8 @@ class UserRole(models.Model):
     user_status = models.BooleanField(default=0)
     payments_detail_status = models.BooleanField(default=0)
 
+    def __str__(self):
+        return self.name
 
 class CustomAbstractUser(AbstractBaseUser, PermissionsMixin):
     """
@@ -114,6 +117,7 @@ class User(CustomAbstractUser):
         ('Управляющий домом', 'Управляющий домом')
     )
 
+    role = models.ForeignKey(UserRole, on_delete=models.CASCADE, verbose_name='', blank=True)
     status = models.CharField('', choices=STATUS, max_length=55, blank=True)
     avatar = models.FileField('Аватар', upload_to='images/user/', null=True)
     middle_name = models.CharField('Отчество', max_length=150, null=True)
