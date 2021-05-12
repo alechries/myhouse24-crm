@@ -481,14 +481,8 @@ class CounterForm(forms.ModelForm):
     pass
 
 
-class InvoiceIDCreateForm(forms.ModelForm):
-
+class InvoiceForm(forms.ModelForm):
     pass
 
-
-class InvoiceTitleCreateForm(forms.ModelForm):
-    pass
-
-
-class InvoiceServicesCreateForm(forms.ModelForm):
+class InvoiceServicesForm(forms.ModelForm):
     pass

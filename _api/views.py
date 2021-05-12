@@ -16,3 +16,15 @@ class HouseDetail(generics.RetrieveAPIView):
     model = models.House
     queryset = models.House.objects.all()
     serializer_class = serializers.HouseSerializer
+
+
+class SectionList(generics.ListAPIView):
+    model = models.House
+    queryset = models.Section.objects.all()
+    serializer_class = serializers.SectionSerializer
+
+
+class SectionDetail(generics.RetrieveAPIView):
+    model = models.Section
+    queryset = models.Section.objects.all()
+    serializer_class = serializers.SectionSerializer

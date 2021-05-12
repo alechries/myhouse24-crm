@@ -92,7 +92,7 @@ def invoice_view(request):
 
 
 def invoice_create_view(request):
-    return render(request, 'admin/invoice/create.html')
+    return render(request, 'admin/invoice/change.html')
 
 
 def invoice_copy_view(request):
