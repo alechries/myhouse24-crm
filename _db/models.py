@@ -279,7 +279,7 @@ class Invoice(models.Model):
     tariff = models.CharField('', choices=TARIFF, null=True, max_length=55)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, null=True)
-    house = models.ForeignKey(House, on_delete=models.CASCADE)
+    house = models.ForeignKey(House, on_delete=models.CASCADE, )
     period_from = models.DateField("Дата с", null=True)
     period_to = models.DateField("Дата по", null=True)
 
