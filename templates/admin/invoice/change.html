@@ -1,4 +1,6 @@
 {% extends 'admin/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 {% block page_title %}
     <h1 class="m-0">Квитанции на оплату</h1>
 {% endblock %}
@@ -17,9 +19,11 @@
                 <div class="default-area">
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div id="select-house">{{ form.house }}</div>
-                    <div id="select-section">{{ form.section }}</div>
-                    <div id="select-apartment">{{ form.apartment }}</div>
+                    <div class="row">
+                        <div class="col-md-3" id="select-house">{{ form.house|as_crispy_field }}</div>
+                        <div class="col-md-3" id="select-section">{{ form.section|as_crispy_field }}</div>
+                        <div class="col-md-3" id="select-apartment">{{ form.apartment|as_crispy_field }}</div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -28,6 +32,14 @@
 {% endblock %}
 {% block scripts %}
 <script>
+let selects = $('select');
 
+for(let i = 0; i < selects.length; i++) {
+  selects[i].addEventListener("change", () => {
+    var sel = selects[i].selectedIndex;
+    var options = selects[i].options;
+    alert('Выбрана опция '+options[sel].text+' - '+options[sel].value);
+  });
+}
 </script>
 {% endblock %}

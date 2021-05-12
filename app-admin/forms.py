@@ -640,19 +640,19 @@ class InvoiceIDCreateForm(forms.ModelForm):
 class InvoiceForm(forms.ModelForm):
     house = forms.ModelChoiceField(
         queryset=models.House.objects.all(),
-        empty_label=None,
+        empty_label='Сделайте выбор ... ',
     )
     section = forms.ModelChoiceField(
-        queryset=models.Section.objects.all(),
-        empty_label=None,
+        queryset=models.Section.objects.none(),
+        empty_label='Сделайте выбор ... ',
     )
     apartment = forms.ModelChoiceField(
-        queryset=models.Apartment.objects.all(),
-        empty_label=None,
+        queryset=models.Apartment.objects.none(),
+        empty_label='Сделайте выбор ... ',
     )
 
     class Meta:
-        model = models.MasterRequest
+        model = models.Invoice
         fields = ['house', 'section', 'apartment', ]
         widgets = {
             'house': forms.HiddenInput(),
