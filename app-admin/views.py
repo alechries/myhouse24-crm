@@ -775,6 +775,7 @@ def user_admin_role_view(request):
             user_role_formset,
         ]):
             alerts.append('Данные сохранены успешно!')
+        return redirect('admin_user-admin-role')
 
     else:
         user_role_formset = UserRoleFormset(
@@ -804,8 +805,22 @@ def user_admin_create_view(request):
     return render(request, 'admin/user-admin/create.html', {'form': form})
 
 
-def user_admin_change_view(request):
-    return render(request, 'admin/user-admin/change.html')
+def user_admin_change_view(request, pk):
+    user = models.User.objects.get(id=pk)
+    alerts = []
+    form = forms.UserCreateForm(request.POST or None, instance=user)
+    print(form.is_valid())
+    if request.method == 'POST' and form.is_valid():
+        form.instance.is_superuser = 1
+        form.save()
+        alerts.append('Успех')
+    return render(request, 'admin/user-admin/create.html', {'form': form,
+                                                            'alerts': alerts})
+
+
+def user_admin_detail_view(request, pk):
+    user = models.User.objects.get(id=pk)
+    return render(request, 'admin/user-admin/detail.html', {'user': user})
 
 
 def user_admin_delete_view(request, pk):
