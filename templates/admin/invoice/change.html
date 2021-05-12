@@ -17,10 +17,17 @@
                 <div class="default-area">
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-
+                    <div id="select-house">{{ form.house }}</div>
+                    <div id="select-section">{{ form.section }}</div>
+                    <div id="select-apartment">{{ form.apartment }}</div>
                 </form>
             </div>
         </div>
         </div>
     </section>
+{% endblock %}
+{% block scripts %}
+<script>
+
+</script>
 {% endblock %}

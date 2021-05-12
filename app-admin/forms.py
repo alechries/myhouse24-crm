@@ -478,11 +478,6 @@ class CounterForm(forms.ModelForm):
                 'required': 'false'
             }),
         }
-    pass
-
-
-class InvoiceForm(forms.ModelForm):
-    pass
 
 
 class RoleForm(forms.ModelForm):
@@ -543,8 +538,32 @@ class RoleForm(forms.ModelForm):
         }
 
 
-class InvoiceIDCreateForm(forms.ModelForm):
-    pass
+class InvoiceForm(forms.ModelForm):
+
+    house = forms.ModelChoiceField(
+        queryset=models.House.objects.all(),
+        empty_label=None,
+    )
+    section = forms.ModelChoiceField(
+        queryset=models.Section.objects.all(),
+        empty_label=None,
+    )
+    apartment = forms.ModelChoiceField(
+        queryset=models.Apartment.objects.all(),
+        empty_label=None,
+    )
+
+    class Meta:
+        model = models.MasterRequest
+        fields = ['house', 'section', 'apartment', ]
+        widgets = {
+            'house': forms.HiddenInput(),
+            'name': forms.TextInput(),
+            'statistic_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+        }
+
 
 
 class InvoiceServicesForm(forms.ModelForm):
