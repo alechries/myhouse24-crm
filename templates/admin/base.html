@@ -70,7 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <!--<img src="/app-admin/dist/img/user2-160x160.jpg" class="user-image" alt="Михаил Поляков">-->
                         <i class="fas fa-user-circle text-purple"></i>
-                        <span class="hidden-xs">Михаил Поляков</span>
+                        <span class="hidden-xs">{{ user }}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
@@ -85,7 +85,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <a class="btn btn-default btn-flat" href="/admin/user-admin/update-my">Профиль</a>
                             </div>
                             <div class="pull-right">
-                                <a class="btn btn-default btn-flat" href="/admin/site/logout" data-method="post">Выход</a>
+                                <a class="btn btn-default btn-flat" href="{% url 'admin_logout' %}" data-method="post">Выход</a>
                             </div>
                         </li>
                     </ul>
