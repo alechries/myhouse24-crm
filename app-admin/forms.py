@@ -481,6 +481,64 @@ class CounterForm(forms.ModelForm):
     pass
 
 
+class RoleForm(forms.ModelForm):
+    class Meta:
+        model = models.UserRole
+        fields = '__all__'
+        widgets = {
+            'id': forms.HiddenInput(),
+            'name': forms.TextInput(),
+            'statistic_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'cash_box_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'invoice_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'account_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'apartment': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'house_user_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'house_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'message_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'master_request_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'meter_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'website_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'service_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'tariffs_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'role_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'user_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+            'payments_detail_status': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+            }),
+        }
+
+
 class InvoiceIDCreateForm(forms.ModelForm):
 
     pass
