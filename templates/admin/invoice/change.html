@@ -19,6 +19,10 @@
                 <div class="default-area">
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+                    <div class="col-md-3">
+                        <div>Дом</div>
+                        {{ form.type }}
+                    </div>
                     <div class="col-md-3" id="select-house">
                         <div>Дом</div>
                         {{ form.house }}
