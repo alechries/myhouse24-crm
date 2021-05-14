@@ -20,8 +20,14 @@ class HouseDetail(generics.RetrieveAPIView):
 
 class SectionList(generics.ListAPIView):
     model = models.House
-    queryset = models.Section.objects.all()
     serializer_class = serializers.SectionSerializer
+
+    def get_queryset(self):
+        queryset = models.Section.objects.all()
+        house = self.request.query_params.get('house')
+        if house is not None:
+            queryset = queryset.filter(house=house)
+        return queryset
 
 
 class SectionDetail(generics.RetrieveAPIView):
@@ -32,8 +38,14 @@ class SectionDetail(generics.RetrieveAPIView):
 
 class FloorList(generics.ListAPIView):
     model = models.Floor
-    queryset = models.Floor.objects.all()
     serializer_class = serializers.FloorSerializer
+
+    def get_queryset(self):
+        queryset = models.Floor.objects.all()
+        section = self.request.query_params.get('section')
+        if section is not None:
+            queryset = queryset.filter(section=section)
+        return queryset
 
 
 class FloorDetail(generics.RetrieveAPIView):
@@ -44,8 +56,14 @@ class FloorDetail(generics.RetrieveAPIView):
 
 class ApartmentList(generics.ListAPIView):
     model = models.Apartment
-    queryset = models.Apartment.objects.all()
     serializer_class = serializers.ApartmentSerializer
+
+    def get_queryset(self):
+        queryset = models.Apartment.objects.all()
+        apartment = self.request.query_params.get('apartment')
+        if apartment is not None:
+            queryset = queryset.filter(apartment=apartment)
+        return queryset
 
 
 class ApartmentDetail(generics.RetrieveAPIView):

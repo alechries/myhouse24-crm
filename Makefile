@@ -1,5 +1,6 @@
 init: build up db
-update: down pull build up db
+update: pull build up db
+update_h: down pull build up db
 up: build docker-up
 down: docker-down
 restart: down build up
