@@ -22,7 +22,7 @@
         <div class="card card-secondary card-outline">
             <section>
             <div class="d-flex justify-content-end" style="padding: 0 10px">
-                <a href="#" class="btn btn-success ">Редактировать пользователя</a>
+                <a href="{% url 'admin_user-admin-change' pk=user.pk %}" class="btn btn-success ">Редактировать пользователя</a>
             </div>
                 <div class="default-area">
                     <table class="table table-bordered table-striped">

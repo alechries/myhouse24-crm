@@ -59,4 +59,63 @@
             </div>
         </div>
     </section>
+    <section class="content input-form">
+         <div class="container-fluid">
+            <div class="card card-secondary card-outline table-responsive">
+                <section>
+                    <table class="table table-bordered table-hover table-striped linkedRow">
+                        <thead>
+                            <tr>
+                                <th style="width: 125px; min-width: 125px">№ квитанции</th>
+                                <th style="width: 120px; min-width: 120px">Статус</th>
+                                <th style="width:auto">Дата</th>
+                                <th style="min-width: 200px">Месяц</th>
+                                <th style="min-width: 160px">Квартира</th>
+                                <th style="min-width: 200px">Владелец</th>
+                                <th style="width: 110px; min-width: 130px">Проведена</th>
+                                <th style="width: 110px; min-width: 130px">Сумма</th>
+                                <th style="width: 80px; min-width: 80px">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% if invoice > 0 %} <!-- Итерируемый объект квитанций на оплату -->
+                        {% for el in invoice %} <!-- Итерируемый объект квитанций на оплату -->
+                        <tr data-href="{% url 'admin_account-detail'  pk=el.pk %}">
+                            <td>{{ el.number }}</td>
+                            {% if el.status == 'Оплачена' %}
+                                <td style="color: #00ba13"><small class="label label-success">Оплачена</small></td>
+                            {% elif el.status == 'Частично оплачена' %}
+                                <td style="color: #00ba13"><small class="label label-warning">Частично оплачена</small></td>
+                            {% else %}
+                                <td style="color: #c62232"><small class="label label-danger">Неоплачена</small></td>
+                            {% endif %}
+                            <td>{{ el.period_from|date:"d.m.Y" }}</td>
+                            <td>{{ el.period_from|date:"M Y" }}</td>
+                            <td>{{ el.apartment.name }}</td>
+                            <td>{{ el.apartment.floor.section.house.user}}</td>
+                            <td>{{ el.apartment.floor.section.house.user }}</td>
+                            <td></td>
+                            <td>
+                                <div class="btn-group pull-right">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                            <tr>
+                            <td colspan="8"><div class="empty">Ничего не найдено.</div></td>
+                        </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+         </div>
+    </section>
 {% endblock %}

@@ -252,8 +252,6 @@ class TransferType(models.Model):
 
 
 class Transfer(models.Model):
-
-
     number = models.CharField('Номер транзакции', max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name='transfer_user', verbose_name='', null=True)
     manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name='transfer_manager', verbose_name='')
@@ -261,7 +259,7 @@ class Transfer(models.Model):
     transfer_type = models.ForeignKey(TransferType, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
     amount = models.IntegerField(verbose_name='', blank=True)
     comment = models.TextField('', null=True, blank=True)
-    #статус платежа
+    # статус платежа
     payment_made = models.BooleanField(verbose_name='', null=True)
     #
     created_date = models.DateField(default=timezone.now, null=True)
@@ -284,7 +282,7 @@ class Invoice(models.Model):
     tariff = models.CharField('', choices=TARIFF, null=True, max_length=55)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, null=True)
-    house = models.ForeignKey(House, on_delete=models.CASCADE, )
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
     period_from = models.DateField("Дата с", null=True)
     period_to = models.DateField("Дата по", null=True)
 

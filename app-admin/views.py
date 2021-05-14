@@ -262,7 +262,6 @@ def user_delete_view(request, pk):
     return redirect('admin_user')
 
 
-
 def house_view(request):
     houses = models.House.objects.all()
     return render(request, 'admin/house/index.html', {'houses': houses})
@@ -760,8 +759,8 @@ def user_admin_role_view(request):
     UserRoleFormset = modelformset_factory(
         model=models.UserRole,
         form=forms.RoleForm,
-        max_num=4,
-        min_num=4
+        max_num=5,
+        min_num=5
     )
 
     if request.method == 'POST':
