@@ -63,7 +63,7 @@ $('#select-section').find('select').each(function() {
                 select_apartment.append(new Option(select_plug, ""));
                 $.get("/api/floor/?section="+options[selected_section].value, function(data) {
                     data_floor = data;
-                    for(var i=0; i < data.length; i++) {
+                    for(var i=0; i < data_floor.length; i++) {
                         $.get("/api/apartment/?floor="+data_floor[i]['id'], function(data) {
                             data_apartment = data;
                             for(var i=0; i < data.length; i++) {
