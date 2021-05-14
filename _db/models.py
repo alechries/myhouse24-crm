@@ -147,7 +147,7 @@ class House(models.Model):
     image5 = models.ImageField(upload_to='images/')
 
     def __str__(self):
-        return f'ул. {self.address}'
+        return f'{self.name}, ул. {self.address}'
 
 
 class Section(models.Model):
