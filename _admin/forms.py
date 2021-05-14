@@ -653,11 +653,11 @@ class InvoiceForm(forms.ModelForm):
 
     class Meta:
         model = models.Invoice
-        fields = ['house', 'section', 'apartment', ]
+        fields = ['number', 'house', 'section', 'apartment', 'type']
         widgets = {
-            'house': forms.HiddenInput(),
-            'name': forms.TextInput(),
-            'statistic_status': forms.CheckboxInput(attrs={
+            'number': forms.TextInput(attrs={
+                'placeholder': 'Введите название компании',
+                'type': 'text',
                 'class': 'form-control',
             }),
         }

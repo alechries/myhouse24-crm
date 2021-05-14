@@ -19,10 +19,21 @@
                 <div class="default-area">
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-3" id="select-house">{{ form.house|as_crispy_field }}</div>
-                        <div class="col-md-3" id="select-section">{{ form.section|as_crispy_field }}</div>
-                        <div class="col-md-3" id="select-apartment">{{ form.apartment|as_crispy_field }}</div>
+                    <div class="col-md-3">
+                        <div>Дом</div>
+                        {{ form.type }}
+                    </div>
+                    <div class="col-md-3" id="select-house">
+                        <div>Дом</div>
+                        {{ form.house }}
+                    </div>
+                    <div class="col-md-3" id="select-section">
+                        <div>Секция</div>
+                        {{ form.section }}
+                    </div>
+                    <div class="col-md-3" id="select-apartment">
+                        <div>Квартира</div>
+                        {{ form.apartment }}
                     </div>
                 </form>
             </div>
@@ -40,7 +51,7 @@ $('#select-house').find('select').each(function() {
             var options = select_house.prop('options');
             $('#select-section').find('select').each(function() {
                 var select_section = $(this);
-                var select_plug = "Сделайте выбор ...";
+                var select_plug = "Сделайте выбор ... ";
                 select_section.find('option').remove().end();
                 select_section.append(new Option(select_plug, ""));
                 $.get("/api/section/?house="+options[selected_house].value, function(data) {
