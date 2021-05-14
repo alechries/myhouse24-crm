@@ -655,11 +655,7 @@ class InvoiceForm(forms.ModelForm):
         model = models.Invoice
         fields = ['house', 'section', 'apartment', ]
         widgets = {
-            'house': forms.HiddenInput(),
-            'name': forms.TextInput(),
-            'statistic_status': forms.CheckboxInput(attrs={
-                'class': 'form-control',
-            }),
+
         }
 
 

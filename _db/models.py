@@ -150,6 +150,7 @@ class House(models.Model):
         return f'{self.name}, ул. {self.address}'
 
 
+
 class Section(models.Model):
     house = models.ForeignKey(House, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
