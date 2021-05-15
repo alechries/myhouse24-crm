@@ -663,6 +663,38 @@ class InvoiceForm(forms.ModelForm):
         }
 
 
+class ServiceForm(forms.ModelForm):
+    class Meta:
+        model = models.Service
+        fields = '__all__'
+        widgets = {
+            'id': forms.HiddenInput(),
+            'name': forms.TextInput(attrs={
+                'placeholder': 'Введите название услуги',
+                'type': 'text',
+                'style': 'margin-top: 5px; margin-bottom: 5px',
+                'class': 'form-control'
+            }),
+            'active': forms.CheckboxInput(attrs={
+                'class': 'form-control',
+                'id': 'PaymentMadeInput',
+            }),
+        }
+
+
+class MeasureForm(forms.ModelForm):
+    class Meta:
+        model = models.Service
+        fields = '__all__'
+        widgets = {
+            'id': forms.HiddenInput(),
+            'name': forms.TextInput(attrs={
+                'placeholder': 'Введите еденицу измерения',
+                'type': 'text',
+                'class': 'form-control',
+            }),
+        }
+
 
 class InvoiceServicesForm(forms.ModelForm):
     pass

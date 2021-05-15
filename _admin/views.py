@@ -14,6 +14,10 @@ def index_view(request):
     return render(request, 'admin/index.html', {'user': username})
 
 
+def test_view(request):
+    return render(request, 'admin/test.html')
+
+
 def update_me_view(request):
     return render(request, 'admin/update-me.html')
 
@@ -681,27 +685,50 @@ def website_contact_view(request):
 
 
 def services_view(request):
-    service_count = models.Service.objects.count()
-    MainPageServiceBlocksFormset = modelformset_factory(
+    alerts = []
+    ServiceFormset = modelformset_factory(
         model=models.Service,
-        form=forms.WebsiteServiceBlocksForm,
-        fields=('image', 'name', 'description'),
-        max_num=service_count if service_count > 0 else 1,
+        form=forms.ServiceForm,
+        max_num=5,
+        min_num=0
+    )
+    MeasureFormset = modelformset_factory(
+        model=models.Measure,
+        form=forms.MeasureForm,
+        max_num=5,
+        min_num=0
     )
 
-    alerts = []
-    if request.method == "POST":
-        service_formset = MainPageServiceBlocksFormset(
-            request.POST, request.FILES,
-            prefix='service')
-        utils.form_save(service_formset)
-        alerts.append('Услуги сохранены успешно!')
+    if request.method == 'POST':
+
+        service_formset = ServiceFormset(
+            request.POST,
+            prefix='service_form',
+        )
+        measure_formset = MeasureFormset(
+            request.POST,
+            prefix='measure_form'
+        )
+
+        if utils.forms_save([
+            measure_formset,
+            service_formset,
+        ]):
+            alerts.append('Данные сохранены успешно!')
+        return redirect('admin_services')
+
     else:
-        service_formset = MainPageServiceBlocksFormset(prefix='service')
+        service_formset = ServiceFormset(
+            prefix='service_form',
+        )
+        measure_formset = MeasureFormset(
+            prefix='measure_form'
+        )
 
     context = {
-        'formset': service_formset,
         'alerts': alerts,
+        'service_formset': service_formset,
+        'measure_formset': measure_formset,
     }
     return render(request, 'admin/services/services.html', context)
 
@@ -869,3 +896,4 @@ def transaction_purpose_delete_view(request, pk):
     transfer_type = get_object_or_404(models.TransferType, id=pk)
     transfer_type.delete()
     return redirect('admin_transaction-purpose')
+

@@ -168,13 +168,16 @@ class Floor(models.Model):
 
 
 class Measure(models.Model):  # ед измерения
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Service(models.Model):   # услуга
-    measure = models.ForeignKey(Measure, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    active = models.BooleanField(default=True)
+    measure = models.ForeignKey(Measure, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
+    name = models.CharField(max_length=255, null=True)
+    active = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return self.name

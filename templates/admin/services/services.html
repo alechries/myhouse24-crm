@@ -1,71 +1,73 @@
 {% extends 'admin/base.html' %}
+{% load crispy_forms_tags %}
 {% block page_title %}
     <h1 class="m-0">Редактирование услуг</h1>
 {% endblock %}
-{% block pagination_link %}
-    <li class="breadcrumb-item">
-        <a href="{% url 'admin_index' %}">
-            <i class="fas fa-home"></i>
-            Главная</a>
-    </li>
-    <li class="breadcrumb-item active">Редактирование услуг</li>
-{% endblock %}
 {% block main_content %}
-<section class="content">
-    <div class="container-fluid">
-        <div class="card card-secondary card-outline">
-            <div class="default-area">
-                <ul class="nav nav-pills">
-                    <li class="nav-item"><a class="nav-link active" href="#services" data-toggle="tab">Услуги</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#measure" data-toggle="tab">Единицы измерения</a></li>
-                </ul>
-            </div>
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+    <section class="content input-form">
+        <div class="container-fluid">
+            <div class="card card-secondary card-outline">
                 <div class="default-area">
-                    <div class="tab-content">
-                        <div class="active tab-pane show" id="services">
-                            <div class="container">
-                                Услуга
-                                <div class="row">
-                                    <div class="col-sm">
-                                        1
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#services" type="button" role="tab" aria-controls="home" aria-selected="true" style="padding: .5rem 1rem; outline: none;">Услуги</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#measures" type="button" role="tab" aria-controls="profile" aria-selected="false" style="padding: .5rem 1rem; outline: none;">Еденицы измерения</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="services" role="tabpanel" aria-labelledby="services">
+                                <div class="col-xs-12 col-lg-7">
+                                {% for form in service_formset %}
+                                    {{ form.id }}
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Услуга</label>
+                                            {{ form.name }}
+                                        </div>
+                                        <div class="col">
+                                            <label>Еденица измерения</label>
+                                            {{ form.measure|as_crispy_field }}
+                                        </div>
                                     </div>
-                                    <div class="col-sm">
-                                        2
+                                    <div class="form-check d-flex justify-content-start input-form-height-20">
+                                        {{ form.active }}
+                                        <label>Показывать в счётчиках</label>
                                     </div>
-                                    <div class="col-sm">
-                                        3
-                                    </div>
+                                {% endfor %}
+                                {{ service_formset.management_form }}
+                                </div>
+                                <div class="row d-flex justify-content-start">
+                                    <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="measures" role="tabpanel" aria-labelledby="measures">
+                                <div class="col-xs-12 col-lg-7">
+                                    {% for form in measure_formset %}
+                                        {{ form.id }}
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Еденица измерения</label>
+                                                {{ form.name }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    {{ measure_formset.management_form }}
+                                </div>
+                                <div class="default-area text-left">
+                                    <button type="submit" class="btn btn-success">Сохранить</button>
                                 </div>
                             </div>
                         </div>
-                        <!-- /.tab-pane -->
-                        <div class="tab-pane" id="measure">
-                            <div class="container">
-                                Ед. изм.
-                                <div class="row">
-                                    <div class="col-sm">
-                                        1
-                                    </div>
-                                    <div class="col-sm">
-                                        2
-                                    </div>
-                                    <div class="col-sm">
-                                        3
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.tab-pane -->
-                    </div>
-                    <!-- /.tab-content -->
+                    </form>
                 </div>
-                <div class="default-area default-half text-center">
-                    <button type="submit" class="btn btn-success">Сохранить</button>
-                </div>
-            </form>
+            </div>
         </div>
-    </div><!-- /.container-fluid -->
-</section>
+    </section>
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 {% endblock %}
