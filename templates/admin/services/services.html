@@ -1,5 +1,6 @@
 {% extends 'admin/base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block page_title %}
     <h1 class="m-0">Редактирование услуг</h1>
 {% endblock %}
@@ -23,22 +24,40 @@
                                 <div class="col-xs-12 col-lg-7">
                                 {% for form in service_formset %}
                                     {{ form.id }}
-                                    <div class="row">
-                                        <div class="col">
-                                            <label>Услуга</label>
-                                            {{ form.name }}
+                                    <div class="service-form-area">
+                                        <div class="row">
+                                            <div class="col-5">
+                                                <label>Услуга</label>
+                                                {{ form.name }}
+                                            </div>
+                                            <div class="col-5">
+                                                <label>Еденица измерения</label>
+                                                {{ form.measure|as_crispy_field }}
+                                            </div>
+                                            <div class="col-2 d-flex" style="margin-top: 42px; margin-bottom: 10px">
+                                                {% if form.instance.id %}
+                                                <a class="btn btn-default btn-sm del-service-form" href="{% url 'admin_service-delete' form.instance.id %}" title="Удалить" style="padding: .5rem">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                                {% else %}
+                                                <a class="btn btn-default btn-sm del-service-form" href="#" title="Удалить" style="padding: .5rem">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                        <div class="col">
-                                            <label>Еденица измерения</label>
-                                            {{ form.measure|as_crispy_field }}
+                                        <div class="form-check d-flex justify-content-start input-form-height-20">
+                                            {{ form.active }}
+                                            <label>Показывать в счётчиках</label>
                                         </div>
-                                    </div>
-                                    <div class="form-check d-flex justify-content-start input-form-height-20">
-                                        {{ form.active }}
-                                        <label>Показывать в счётчиках</label>
                                     </div>
                                 {% endfor %}
                                 {{ service_formset.management_form }}
+                                <b class="service-form-counter">{{ forloop.counter }}</b>
+                                <div class="text-left">
+                                    <button type="button" class="btn btn-secondary" id="add-service-form">Добавить услугу</button>
+                                </div>
+                                <hr/>
                                 </div>
                                 <div class="row d-flex justify-content-start">
                                     <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
@@ -48,17 +67,35 @@
                                 <div class="col-xs-12 col-lg-7">
                                     {% for form in measure_formset %}
                                         {{ form.id }}
-                                        <div class="row">
-                                            <div class="col">
-                                                <label>Еденица измерения</label>
-                                                {{ form.name }}
+                                        <div class="measure-form-area">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label>Еденица измерения</label>
+                                                    {{ form.name }}
+                                                </div>
+                                                <div class="col-2 d-flex" style="margin-top: 37px; margin-bottom: 15px">
+                                                    {% if form.instance.id %}
+                                                    <a class="btn btn-default btn-sm del-measure-form" href="{% url 'admin_measure-delete' form.instance.id %}" title="Удалить" style="padding: .5rem">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                    {% else %}
+                                                    <a class="btn btn-default btn-sm del-measure-form" href="#" title="Удалить" style="padding: .5rem">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                    {% endif %}
+                                                </div>
                                             </div>
                                         </div>
                                     {% endfor %}
                                     {{ measure_formset.management_form }}
                                 </div>
-                                <div class="default-area text-left">
-                                    <button type="submit" class="btn btn-success">Сохранить</button>
+                                <b class="measure-form-counter">{{ forloop.counter }}</b>
+                                <div class="text-left">
+                                    <button type="button" class="btn btn-secondary" id="add-measure-form">Добавить еденицу измерения</button>
+                                </div>
+                                <hr/>
+                                <div class="row d-flex justify-content-start">
+                                    <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
                                 </div>
                             </div>
                         </div>
@@ -70,4 +107,43 @@
 {% endblock %}
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script src="{% static 'base/js/dynamicforms.js' %}"></script>
+    <script src="{% static 'base/js/requestwithoutreload.js' %}"></script>
+
+    <script>
+
+    let prefix = 'service_form';
+    let form = '.service-form-area';
+    let counter = '.service-form-counter';
+
+    document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(prefix, form) }, false);
+    $('#add-service-form').click(function() { addForm(prefix, form, counter); });
+    $('.del-service-form').click(function() { delForm(this, prefix, form, counter); });
+    </script>
+    <script>
+    $('.del-service-form').click(function(){
+        var deleteURL = $(this).attr("href");
+        token = $("input[name='csrfmiddlewaretoken']").val();
+        data = {'csrfmiddlewaretoken':token}
+        if (deleteURL != '#') requestWithoutReload(deleteURL, data);
+    });
+    </script>
+    <script>
+
+    let measure_prefix = 'measure_form';
+    let measure_form = '.measure-form-area';
+    let measure_counter = '.measure-form-counter';
+
+    document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(measure_prefix, measure_form) }, false);
+    $('#add-measure-form').click(function() { addForm(measure_prefix, measure_form, measure_counter); });
+    $('.del-measure-form').click(function() { delForm(this, measure_prefix, measure_form, measure_counter); });
+    </script>
+    <script>
+    $('.del-measure-form').click(function(){
+        var deleteURL = $(this).attr("href");
+        token = $("input[name='csrfmiddlewaretoken']").val();
+        data = {'csrfmiddlewaretoken':token}
+        if (deleteURL != '#') requestWithoutReload(deleteURL, data);
+    });
+    </script>
 {% endblock %}

@@ -686,17 +686,18 @@ def website_contact_view(request):
 
 def services_view(request):
     alerts = []
+    service_count = models.Service.objects.all().count()
+    measure_count = models.Measure.objects.all().count()
     ServiceFormset = modelformset_factory(
         model=models.Service,
         form=forms.ServiceForm,
-        max_num=5,
-        min_num=0
+        max_num=service_count if service_count > 0 else 1,
+
     )
     MeasureFormset = modelformset_factory(
         model=models.Measure,
         form=forms.MeasureForm,
-        max_num=5,
-        min_num=0
+        max_num=measure_count if measure_count > 0 else 1,
     )
 
     if request.method == 'POST':
@@ -733,15 +734,38 @@ def services_view(request):
     return render(request, 'admin/services/services.html', context)
 
 
-def services_del_view(request):
-    return render(request, 'admin/services/services.html')
+def services_del_view(request, pk):
+    entry = models.Service.objects.get(id=pk)
+    entry.delete()
+    return HttpResponse()
+
+
+def measure_del_view(request, pk):
+    entry = models.Measure.objects.get(id=pk)
+    entry.delete()
+    return HttpResponse()
 
 
 def tariffs_view(request):
     context = {
-        'rates': models.Rate.objects.all(),
+        'tariff': models.Tariff.objects.all(),
     }
     return render(request, 'admin/tariffs/index.html', context)
+
+
+def tariffs_create_view(request):
+    form = forms.TariffCreateForm(request.POST)
+    alerts = []
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            alerts.append('Форма создана успешно')
+        else:
+            alerts.append('Произошла ошибка')
+
+    return render(request, 'admin/tariffs/create.html', {'form': form,
+                                                         'alerts': alerts})
+    pass
 
 
 def tariffs_change_view(request, pk=None):
@@ -752,14 +776,14 @@ def tariffs_change_view(request, pk=None):
 
     if request.method == "POST":
 
-        form = forms.RateForm(request.POST, prefix='tariffs')
+        form = forms.TariffForm(request.POST, prefix='tariffs')
         if utils.forms_save([
             form,
         ]):
             alerts.append('Данные сохранены успешно!')
 
     else:
-        form = forms.RateForm(
+        form = forms.TariffForm(
             instance=get_object_or_404(models.Rate, pk) if pk else None,
             prefix='tariffs',
         )

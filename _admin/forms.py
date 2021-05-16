@@ -293,10 +293,10 @@ class AccountForm(forms.ModelForm):
         }
 
 
-class RateForm(forms.ModelForm):
+class TariffCreateForm(forms.ModelForm):
 
     class Meta:
-        model = models.Rate
+        model = models.Tariff
         fields = ['name', 'description']
         widgets = {
             'name': forms.TextInput(attrs={
@@ -676,7 +676,7 @@ class ServiceForm(forms.ModelForm):
                 'class': 'form-control'
             }),
             'active': forms.CheckboxInput(attrs={
-                'class': 'form-control',
+                'class': 'form-control custom-checkbox-formset',
                 'id': 'PaymentMadeInput',
             }),
         }

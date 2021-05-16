@@ -174,7 +174,21 @@ class Measure(models.Model):  # ед измерения
         return self.name
 
 
+class Tariff(models.Model):
+    name = models.CharField(max_length=155)
+    description = models.CharField(max_length=155)
+    price = models.CharField(max_length=155, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class TariffToService(models.Model):
+    tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True)
+
+
 class Service(models.Model):   # услуга
+    tariffs = models.ForeignKey(TariffToService, on_delete=models.CASCADE, null=True)
     measure = models.ForeignKey(Measure, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
     name = models.CharField(max_length=255, null=True)
     active = models.BooleanField(default=False, null=True)
@@ -210,23 +224,6 @@ class Meter(models.Model):
     counter = models.IntegerField()
     indication_date = models.DateField(null=True)
     status = models.CharField(choices=STATUS, max_length=255, blank=True, verbose_name='')
-
-
-class Currency(models.Model):
-    name = models.CharField(max_length=255)
-
-
-class Rate(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    edit_date = models.DateField(default=timezone.now, blank=True)
-
-
-class RateService(models.Model):
-    rate = models.ForeignKey(Rate, on_delete=models.CASCADE)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    currency = models.ForeignKey(Currency, on_delete=models.CASCADE)
-    price = models.FloatField()
 
 
 class Account(models.Model):
@@ -275,15 +272,10 @@ class Invoice(models.Model):
         ('Частично оплачена', 'Частично оплачена'),
         ('Неоплачена', 'Неоплачена')
     )
-    TARIFF = (
-        ('Основной', 'Основной'),
-        ('Пенсионный', 'Пенсионный'),
-        ('Дополнительный', 'Дополнительный')
-    )
 
     # Добавить модель Тарифа и сделать связь
     number = models.CharField('', max_length=255, null=True)
-    tariff = models.CharField('', choices=TARIFF, null=True, max_length=55)
+    tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, null=True)
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)

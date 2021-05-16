@@ -27,20 +27,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for rate in rates %}
+                {% for el in tariff %}
                 <tr>
-                    <th scope="row">{{ rate.name }}</th>
-                    <td>{{ rate.description }}</td>
-                    <td>{{ rate.edit_date }}</td>
+                    <th scope="row">{{ el.name }}</th>
+                    <td>{{ el.description }}</td>
+                    <td>{{ el.edit_date }}</td>
                     <td>
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group mr-2" role="group" aria-label="Second group">
                                 <button type="button" class="btn btn-secondary">Copy</button>
-                                {% if rate.id %}
-                                <a class="btn btn-secondary" href="{% url 'admin_tariffs-change' rate.id %}">Edit</a>
+                                {% if el.id %}
+                                <a class="btn btn-secondary" href="{% url 'admin_tariffs-change' el.id %}">Edit</a>
                                 {% endif %}
                                 {% if rate.id %}
-                                <a class="btn btn-secondary" href="{% url 'admin_tariffs-delete' rate.id %}">Delete</a>
+                                <a class="btn btn-secondary" href="{% url 'admin_tariffs-delete' el.id %}">Delete</a>
                                 {% endif %}
 
                             </div>
