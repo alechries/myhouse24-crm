@@ -281,6 +281,7 @@ class Invoice(models.Model):
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
     period_from = models.DateField("Дата с", null=True)
     period_to = models.DateField("Дата по", null=True)
+    date = models.DateField(null=True)
 
 
 class SEO(models.Model):

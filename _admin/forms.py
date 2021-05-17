@@ -653,12 +653,31 @@ class InvoiceForm(forms.ModelForm):
 
     class Meta:
         model = models.Invoice
-        fields = ['number', 'house', 'section', 'apartment', 'type']
+        fields = ['number', 'house', 'section', 'apartment', 'type', 'date', 'period_from', 'period_to']
         widgets = {
             'number': forms.TextInput(attrs={
                 'placeholder': 'Введите название компании',
                 'type': 'text',
                 'class': 'form-control',
+            }),
+            'type': forms.CheckboxInput(attrs={
+                'class': 'form-control custom-checkbox-formset',
+                'id': 'PaymentMadeInput',
+            }),
+            'date': forms.DateInput(format=('%Y-%m-%d'), attrs={
+                'type': "date",
+                'value': datetime.now().strftime('%Y-%m-%d'),
+                'class': "form-control",
+            }),
+            'period_from': forms.DateInput(format=('%Y-%m-%d'), attrs={
+                'type': "date",
+                'value': datetime.now().strftime('%Y-%m-%d'),
+                'class': "form-control",
+            }),
+            'period_to': forms.DateInput(format=('%Y-%m-%d'), attrs={
+                'type': "date",
+                'value': datetime.now().strftime('%Y-%m-%d'),
+                'class': "form-control",
             }),
         }
 
