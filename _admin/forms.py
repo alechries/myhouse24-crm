@@ -655,9 +655,7 @@ class InvoiceForm(forms.ModelForm):
         model = models.Invoice
         fields = ['number', 'house', 'section', 'apartment', 'type']
         widgets = {
-            'number': forms.TextInput(attrs={
-                'placeholder': 'Введите название компании',
-                'type': 'text',
+            'house': forms.TextInput(attrs={
                 'class': 'form-control',
             }),
         }
