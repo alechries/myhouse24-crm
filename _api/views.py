@@ -70,3 +70,21 @@ class ApartmentDetail(generics.RetrieveAPIView):
     model = models.Apartment
     queryset = models.Apartment.objects.all()
     serializer_class = serializers.ApartmentSerializer
+
+
+class ServiceList(generics.ListAPIView):
+    model = models.Service
+    serializer_class = serializers.ServiceSerializer
+
+    def get_queryset(self):
+        queryset = models.Service.objects.all()
+        measure = self.request.query_params.get('measure')
+        if measure is not None:
+            queryset = queryset.filter(measure=measure)
+        return queryset
+
+
+class ServiceDetail(generics.RetrieveAPIView):
+    model = models.Service
+    queryset = models.Service.objects.all()
+    serializer_class = serializers.ServiceSerializer

@@ -183,18 +183,18 @@ class Tariff(models.Model):
         return self.name
 
 
-class TariffToService(models.Model):
-    tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True)
-
-
 class Service(models.Model):   # услуга
-    tariffs = models.ForeignKey(TariffToService, on_delete=models.CASCADE, null=True)
     measure = models.ForeignKey(Measure, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
     name = models.CharField(max_length=255, null=True)
     active = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return self.name
+
+
+class TariffToService(models.Model):
+    tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True)
 
 
 class Apartment(models.Model):
