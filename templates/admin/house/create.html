@@ -1,4 +1,6 @@
 {% extends 'admin/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 {% block page_title %}
     <h1 class="m-0">Новый дом</h1>
 {% endblock %}
@@ -26,19 +28,19 @@
                     <div class="row">
                         <div class="col-xs-12 col-lg-4">
                             <label>Название</label>
-                            {{ form.name }}
+                            {{ house_form.name }}
                             <label>Адрес</label>
-                            {{ form.address }}
+                            {{ house_form.address }}
                             <label>Изображение #1. Размер: (522x350)</label>
-                            {{ form.image1 }}
+                            {{ house_form.image1 }}
                             <label>Изображение #2. Размер: (248x160)</label>
-                            {{ form.image2 }}
+                            {{ house_form.image2 }}
                             <label>Изображение #3. Размер: (248x160)</label>
-                            {{ form.image3 }}
+                            {{ house_form.image3 }}
                             <label>Изображение #4. Размер: (248x160)</label>
-                            {{ form.image4 }}
+                            {{ house_form.image4 }}
                             <label>Изображение #5. Размер: (248x160)</label>
-                            {{ form.image5   }}
+                            {{ house_form.image5 }}
                         </div>
                         <div class="col-xs-12 col-lg-8">
                             <div class="row">
@@ -60,8 +62,32 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row d-flex justify-content-end">
-                        <a href="{% url 'admin_house' %}" type="button" class="btn btn-default margin-bottom-15">Отмена</a>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#section" type="button" role="tab" aria-controls="home" aria-selected="true" style="padding: .5rem 1rem; outline: none;">Секции</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="section" role="tabpanel" aria-labelledby="section">
+                            <div class="col-xs-12 col-lg-7">
+                                {{ section_formset.management_form }}
+                                {% for form in section_formset %}
+                                    <div class="section-form-area">
+                                        {{ form.id }}
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form.name }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="text-left">
+                            <button type="button" class="btn btn-secondary" id="add-section-form">Добавить секцию</button>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-start">
                         <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
                     </div>
                 </form>
@@ -69,4 +95,26 @@
         </div>
         </div>
     </section>
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script src="{% static 'base/js/dynamicforms.js' %}"></script>
+    <script src="{% static 'base/js/requestwithoutreload.js' %}"></script>
+    <script>
+    let section_prefix = 'section_form';
+    let section_form = '.section-form-area';
+    let section_counter = '.section-form-counter';
+
+    document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(section_prefix, section_form) }, false);
+    $('#add-section-form').click(function() { addForm(section_prefix, section_form, section_counter); });
+    $('.del-section-form').click(function() { delForm(this, section_prefix, section_form, section_counter); });
+    </script>
+    <script>
+    $('.del-section-form').click(function(){
+        var deleteURL = $(this).attr("href");
+        token = $("input[name='csrfmiddlewaretoken']").val();
+        data = {'csrfmiddlewaretoken':token}
+        if (deleteURL != '#') requestWithoutReload(deleteURL, data);
+    });
+    </script>
 {% endblock %}

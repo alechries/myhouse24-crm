@@ -137,7 +137,7 @@ class User(CustomAbstractUser):
 
 class House(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name='', blank=True)
     address = models.CharField(max_length=255)
     number = models.IntegerField('', null=True)
     image1 = models.ImageField(upload_to='images/')
@@ -152,8 +152,8 @@ class House(models.Model):
 
 
 class Section(models.Model):
-    house = models.ForeignKey(House, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    house = models.ForeignKey(House, on_delete=models.CASCADE, verbose_name='', blank=True)
+    name = models.CharField(max_length=255, verbose_name='', blank=True)
 
     def __str__(self):
         return self.name
@@ -274,6 +274,7 @@ class Invoice(models.Model):
     )
 
     # Добавить модель Тарифа и сделать связь
+    status = models.BooleanField(default=False)
     number = models.CharField('', max_length=255, null=True)
     tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)

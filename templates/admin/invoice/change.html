@@ -13,32 +13,68 @@
     <li class="breadcrumb-item active">Квитанции на оплату</li>
 {% endblock %}
 {% block main_content %}
-<section class="content input-form">
-        <div class="container-fluid">
-            <div class="card card-secondary card-outline">
-                <div class="default-area">
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="col-md-3">
-                        <div>Статус</div>
-                        {{ form.type }}
-                    </div>
-                    <div class="col-md-3" id="select-house">
-                        <div>Дом</div>
-                        {{ form.house }}
-                    </div>
-                    <div class="col-md-3" id="select-section">
-                        <div>Секция</div>
-                        {{ form.section }}
-                    </div>
-                    <div class="col-md-3" id="select-apartment">
-                        <div>Квартира</div>
-                        {{ form.apartment }}
-                    </div>
-                </form>
+    <section class="content input-form">
+        <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            <div class="row">
+            <div class="col-md-6 d-flex justify-content-center">
+                <div class="col-md-6">
+                    {{ form.number }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.date }}
+                </div>
             </div>
-        </div>
-        </div>
+            </div>
+            <div class="container-fluid">
+                <div class="card card-secondary card-outline">
+                    <div class="default-area">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="row" id="select-house" style="display: block; margin-top: 35px">
+                                    <label>Дом</label>
+                                    {{ form.house|as_crispy_field }}
+                                </div>
+                                <div class="row" id="select-section" style="display: block">
+                                    <label>Секция</label>
+                                    {{ form.section|as_crispy_field }}
+                                </div>
+                                <div class="row" id="select-apartment" style="display: block">
+                                    <label>Квартира</label>
+                                    {{ form.apartment|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="form-check d-flex justify-content-start input-form-height-20">
+                                    {{ form.status }}
+                                    <label>Проведена</label>
+                                </div>
+                                <div class="row" style="display: block">
+                                    <label>Статус</label>
+                                    {{ form.type|as_crispy_field }}
+                                </div>
+                                <div class="row" style="display: block">
+                                    <label>Тариф</label>
+                                    {{ form.tariff|as_crispy_field }}
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label>Период с</label>
+                                        {{ form.period_from }}
+                                    </div>
+                                    <div class="col">
+                                        <label>Период по</label>
+                                        {{ form.period_to }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </section>
 {% endblock %}
 {% block scripts %}

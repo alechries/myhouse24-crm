@@ -2,6 +2,7 @@ from django import forms
 from _db import models
 from django.forms import TextInput, CharField, Form
 from datetime import datetime
+from crispy_forms.helper import FormHelper
 from django.contrib.auth import (
     authenticate, get_user_model, password_validation,
 )
@@ -640,25 +641,34 @@ class InvoiceIDCreateForm(forms.ModelForm):
 class InvoiceForm(forms.ModelForm):
     house = forms.ModelChoiceField(
         queryset=models.House.objects.all(),
-        empty_label='Сделайте выбор ... ',
+        empty_label='Выберите...',
     )
     section = forms.ModelChoiceField(
         queryset=models.Section.objects.none(),
-        empty_label='Сделайте выбор ... ',
+        empty_label='Выберите...',
     )
     apartment = forms.ModelChoiceField(
         queryset=models.Apartment.objects.none(),
-        empty_label='Сделайте выбор ... ',
+        empty_label='Выберите...',
     )
+
+    def __init__(self, *args, **kwargs):
+        super(InvoiceForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+
 
     class Meta:
         model = models.Invoice
-        fields = ['number', 'house', 'section', 'apartment', 'type', 'date', 'period_from', 'period_to']
+        fields = ['number', 'house', 'section', 'apartment', 'type', 'date', 'period_from', 'period_to', 'status', 'tariff']
         widgets = {
+            'number': forms.TextInput(attrs={
+                'class': 'form-control',
+            }),
             'house': forms.TextInput(attrs={
                 'class': 'form-control',
             }),
-            'type': forms.CheckboxInput(attrs={
+            'status': forms.CheckboxInput(attrs={
                 'class': 'form-control custom-checkbox-formset',
                 'id': 'PaymentMadeInput',
             }),
@@ -678,6 +688,8 @@ class InvoiceForm(forms.ModelForm):
                 'class': "form-control",
             }),
         }
+
+
 
 
 class ServiceForm(forms.ModelForm):
@@ -712,6 +724,40 @@ class MeasureForm(forms.ModelForm):
             }),
         }
 
+
+class FloorForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(FloorForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+
+    class Meta:
+        model = models.Floor
+        fields = '__all__'
+        widgets = {
+            'id': forms.HiddenInput(),
+            'name': forms.TextInput(attrs={
+                'placeholder': 'Введите название',
+                'type': 'text',
+                'class': 'form-control',
+                'style': 'margin: 0.25rem 0',
+            }),
+        }
+
+
+class SectionForm(forms.ModelForm):
+    class Meta:
+        model = models.Section
+        fields = '__all__'
+        widgets = {
+            'id': forms.HiddenInput(),
+            'name': forms.TextInput(attrs={
+                'placeholder': 'Введите название',
+                'type': 'text',
+                'class': 'form-control',
+                'style': 'margin: 0.25rem 0',
+            }),
+        }
 
 class InvoiceServicesForm(forms.ModelForm):
     pass
