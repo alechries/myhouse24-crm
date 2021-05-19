@@ -129,7 +129,7 @@ class User(CustomAbstractUser):
     user_type = models.CharField(choices=TYPE, default='Управляющий домом', max_length=155, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'{self.first_name} {self.last_name} - {self.role.name}'
 
     class Meta:
         app_label = '_db'
@@ -150,13 +150,17 @@ class House(models.Model):
         return f'{self.name}, ул. {self.address}'
 
 
+class UserHouse(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    house = models.ForeignKey(House, on_delete=models.CASCADE)
+
 
 class Section(models.Model):
     house = models.ForeignKey(House, on_delete=models.CASCADE, verbose_name='', blank=True)
     name = models.CharField(max_length=255, verbose_name='', blank=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name} - {self.house.name}'
 
 
 class Floor(models.Model):

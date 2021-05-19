@@ -737,7 +737,7 @@ class FloorForm(forms.ModelForm):
         widgets = {
             'id': forms.HiddenInput(),
             'name': forms.TextInput(attrs={
-                'placeholder': 'Введите название',
+                'placeholder': 'Введите этаж',
                 'type': 'text',
                 'class': 'form-control',
                 'style': 'margin: 0.25rem 0',
@@ -758,6 +758,21 @@ class SectionForm(forms.ModelForm):
                 'style': 'margin: 0.25rem 0',
             }),
         }
+
+
+class UserHouseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserHouseForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+
+    class Meta:
+        model = models.UserHouse
+        fields = '__all__'
+        widgets = {
+            'id': forms.HiddenInput(),
+        }
+
 
 class InvoiceServicesForm(forms.ModelForm):
     pass

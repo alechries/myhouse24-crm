@@ -1,0 +1,179 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block page_title %}
+    <h1 class="m-0">Новый дом</h1>
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            Дома
+        </a>
+    </li>
+    <li class="breadcrumb-item">Новый дом</li>
+{% endblock %}
+{% block main_content %}
+    <section class="content input-form">
+        <div class="container-fluid">
+            <div class="card card-secondary card-outline">
+                <div class="default-area">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-4">
+                            <label>Название</label>
+                            {{ house_form.name }}
+                            <label>Адрес</label>
+                            {{ house_form.address }}
+                            <label>Изображение #1. Размер: (522x350)</label>
+                            {{ house_form.image1 }}
+                            <label>Изображение #2. Размер: (248x160)</label>
+                            {{ house_form.image2 }}
+                            <label>Изображение #3. Размер: (248x160)</label>
+                            {{ house_form.image3 }}
+                            <label>Изображение #4. Размер: (248x160)</label>
+                            {{ house_form.image4 }}
+                            <label>Изображение #5. Размер: (248x160)</label>
+                            {{ house_form.image5 }}
+                        </div>
+                        <div class="col-xs-12 col-lg-8">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=522&amp;h=350&amp;fit=crop" class="img-responsive largeImg margin-bottom-30" alt="Изображение #1. Размер: (522x350)">
+                                </div>
+                                <div class="col-xs-6 col-md-3">
+                                    <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="Изображение #2. Размер: (248x160)">
+                                </div>
+                                <div class="col-xs-6 col-md-3">
+                                    <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="Изображение #3. Размер: (248x160)">
+                                </div>
+                                <div class="col-xs-6 col-md-3">
+                                    <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="Изображение #4. Размер: (248x160)">
+                                </div>
+                                <div class="col-xs-6 col-md-3">
+                                    <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="Изображение #5. Размер: (248x160)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#section" type="button" role="tab" aria-controls="home" aria-selected="true" style="padding: .5rem 1rem; outline: none;">Секции</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#floor" type="button" role="tab" aria-controls="floor" aria-selected="true" style="padding: .5rem 1rem; outline: none;">Этажи</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab" aria-controls="user" aria-selected="true" style="padding: .5rem 1rem; outline: none;">Пользователи</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="section" role="tabpanel" aria-labelledby="section">
+                            <div class="col-xs-12 col-lg-7">
+                                {{ section_formset.management_form }}
+                                {% for form in section_formset %}
+                                    <div class="section-form-area">
+                                        {{ form.id }}
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form.name }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="text-left">
+                                <button type="button" class="btn btn-secondary" id="add-section-form">Добавить секцию</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="floor" role="tabpanel" aria-labelledby="floor">
+                            <div class="col-xs-12 col-lg-7">
+                                {{ floor_formset.management_form }}
+                                {% for form in floor_formset %}
+                                    <div class="floor-form-area">
+                                        {{ form.id }}
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form.name }}
+                                            </div>
+                                            <div class="col">
+                                                {{ form.section|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="text-left">
+                                <button type="button" class="btn btn-secondary" id="add-floor-form">Добавить этаж</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="user" role="tabpanel" aria-labelledby="user">
+                            <div class="col-xs-12 col-lg-7">
+                                {{ user_house_formset.management_form }}
+                                {% for form in user_house_formset %}
+                                    <div class="user-form-area">
+                                        {{ form.id }}
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form.user|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="text-left">
+                                <button type="button" class="btn btn-secondary" id="add-user-form">Добавить пользователя</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-start">
+                        <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script src="{% static 'base/js/dynamicforms.js' %}"></script>
+    <script src="{% static 'base/js/requestwithoutreload.js' %}"></script>
+    <script>
+    let section_prefix = 'section_form';
+    let section_form = '.section-form-area';
+    let section_counter = '.section-form-counter';
+    let floor_prefix = 'floor_form';
+    let floor_form = '.floor-form-area';
+    let floor_counter = '.floor-form-counter';
+    let user_prefix = 'user_form';
+    let user_form = '.user-form-area';
+    let user_counter = '.user-form-counter';
+
+    document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(section_prefix, section_form) }, false);
+    $('#add-section-form').click(function() { addForm(section_prefix, section_form, section_counter); });
+    $('.del-section-form').click(function() { delForm(this, section_prefix, section_form, section_counter); });
+
+    document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(floor_prefix, floor_form) }, false);
+    $('#add-floor-form').click(function() { addForm(floor_prefix, floor_form, floor_counter); });
+    $('.del-floor-form').click(function() { delForm(this, floor_prefix, floor_form, floor_counter); });
+
+    document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(user_prefix, user_form) }, false);
+    $('#add-user-form').click(function() { addForm(user_prefix, user_form, user_counter); });
+    $('.del-user-form').click(function() { delForm(this, user_prefix, user_form, user_counter); });
+    </script>
+    <script>
+    $('.del-section-form').click(function(){
+        var deleteURL = $(this).attr("href");
+        token = $("input[name='csrfmiddlewaretoken']").val();
+        data = {'csrfmiddlewaretoken':token}
+        if (deleteURL != '#') requestWithoutReload(deleteURL, data);
+    });
+    </script>
+{% endblock %}

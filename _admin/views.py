@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from _db import models, utils, auth
+from django import forms
 from django.contrib.auth import authenticate, login, logout
 from . import forms
+from django.db.models import Count
 from django.forms import modelformset_factory
 from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseNotFound
@@ -272,36 +274,63 @@ def house_view(request):
     return render(request, 'admin/house/index.html', {'houses': houses})
 
 
-def house_edit_view(request):
+def house_edit_view(request, pk):
+    house = models.House.objects.get(id=pk)
+    floor = models.Floor.objects.filter(section__house=house)
+    FloorFormset = modelformset_factory(
+        model=models.Floor,
+        form=forms.FloorForm,
+        max_num=floor.count() if floor.count() > 0 else 1
+    )
+    UserFormset = inlineformset_factory(
+        parent_model=models.House,
+        model=models.UserHouse,
+        form=forms.UserHouseForm,
+        max_num=1
+    )
     SectionFormset = inlineformset_factory(
         parent_model=models.House,
         model=models.Section,
-        fields=('name',),
         form=forms.SectionForm,
         max_num=1
     )
     aletrs = []
     if request.method == 'POST':
 
-        house_form = forms.HouseForm(request.POST, request.FILES, prefix='house_form')
-        section_formset = SectionFormset(request.POST, prefix='section_form')
-        if house_form.is_valid() and section_formset.is_valid():
+        floor_formset = FloorFormset(request.POST, prefix='floor_form', queryset=models.Floor.objects.filter(section__house=house))
+        user_house_formset = UserFormset(request.POST, prefix='user_form', instance=house)
+        house_form = forms.HouseForm(request.POST, request.FILES, prefix='house_form', instance=house)
+        section_formset = SectionFormset(request.POST, prefix='section_form', instance=house)
+        if house_form.is_valid() and section_formset.is_valid() and user_house_formset.is_valid() and floor_formset.is_valid():
             house = house_form.save()
             section_queryset = section_formset.save(commit=False)
+            user_house_queryset = user_house_formset.save(commit=False)
 
             for section in section_queryset:
                 section.house.id = house.id
                 section.save()
 
-            aletrs = ['Формы сохранены']
+            for user_form in user_house_queryset:
+                user_form.house.id = house.id
+                user_form.save()
+
+            if utils.forms_save([
+                floor_formset
+            ]):
+
+                aletrs = ['Формы сохранены']
 
     else:
-        house_form = forms.HouseForm(prefix='house_form')
-        section_formset = SectionFormset( prefix='section_form')
+        floor_formset = FloorFormset(prefix='floor_form', queryset=models.Floor.objects.filter(section__house=house))
+        house_form = forms.HouseForm(prefix='house_form', instance=house)
+        section_formset = SectionFormset(prefix='section_form', instance=house)
+        user_house_formset = UserFormset(prefix='user_form', instance=house)
 
     return render(
         request, 'admin/house/edit.html',
         context={
+            'floor_formset': floor_formset,
+            'user_house_formset': user_house_formset,
             'house_form': house_form,
             'section_formset': section_formset,
             'alerts': aletrs
