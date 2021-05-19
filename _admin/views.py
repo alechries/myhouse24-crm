@@ -375,20 +375,9 @@ def house_create_view(request):
     )
 
 
-def house_change_view(request, pk):
-    alerts = []
-    form = forms.HouseForm(request.POST or None, instance=get_object_or_404(models.House, id=pk))
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            alerts.append('Запись была успешно редактирована!')
-    return render(request, 'admin/house/edit.html', {'form': form,
-                                                       'alerts': alerts})
-
-
 def house_delete_view(request, pk):
     house = get_object_or_404(models.House, id=pk)
-    request.delete()
+    house.delete()
     return redirect('admin_house')
 
 
