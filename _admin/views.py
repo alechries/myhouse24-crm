@@ -348,7 +348,6 @@ def house_create_view(request):
     )
     aletrs = []
     if request.method == 'POST':
-
         house_form = forms.HouseForm(request.POST, request.FILES, prefix='house_form')
         section_formset = SectionFormset(request.POST, prefix='section_form')
         if house_form.is_valid() and section_formset.is_valid():
@@ -833,18 +832,48 @@ def tariffs_view(request):
 
 
 def tariffs_create_view(request):
-    form = forms.TariffCreateForm(request.POST)
-    alerts = []
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            alerts.append('Форма создана успешно')
-        else:
-            alerts.append('Произошла ошибка')
+    TariffServiceFormset = inlineformset_factory(
+        parent_model=models.Tariff,
+        model=models.TariffService,
+        fields=('price', 'service'),
+        widgets={
+            'price': forms.TextInput(attrs={
+                'placeholder': 'Введите цену',
+                'type': 'text',
+                'class': 'form-control',
+                'style': 'margin: 0.25rem 0',
+            }),
 
-    return render(request, 'admin/tariffs/create.html', {'form': form,
-                                                         'alerts': alerts})
-    pass
+        },
+        form=forms.TariffServiceForm,
+        max_num=1
+    )
+    aletrs = []
+    if request.method == 'POST':
+        tariff_form = forms.TariffCreateForm(request.POST, prefix='tariff_form')
+        tariff_service_formset = TariffServiceFormset(request.POST, prefix='tariff_service_form')
+        if tariff_form.is_valid() and tariff_service_formset.is_valid():
+            tariff = tariff_form.save()
+            tariff_service_queryset = tariff_service_formset.save(commit=False)
+
+            for tariff_section_form in tariff_service_queryset:
+                tariff_section_form.tariff.id = tariff.id
+                tariff_section_form.save()
+
+            aletrs = ['Формы сохранены']
+
+    else:
+        tariff_form = forms.TariffCreateForm(prefix='tariff_form')
+        tariff_service_formset = TariffServiceFormset(prefix='tariff_service_form')
+
+    return render(
+        request, 'admin/tariffs/create.html',
+        context={
+            'tariff_form': tariff_form,
+            'tariff_service_formset': tariff_service_formset,
+            'alerts': aletrs
+        }
+    )
 
 
 def tariffs_change_view(request, pk=None):
@@ -882,6 +911,11 @@ def tariffs_delete_view(request, pk):
     entry.delete()
     return redirect('admin_tariffs')
 
+
+def tariffs_service_delete_view(request, pk):
+    entry = models.TariffService.objects.get(id=pk)
+    entry.delete()
+    return HttpResponse()
 
 def user_admin_role_view(request):
 

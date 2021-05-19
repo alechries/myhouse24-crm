@@ -67,6 +67,7 @@ urlpatterns = [
     path('tariffs/change/<int:pk>', views.tariffs_change_view, name='admin_tariffs-change'),
     path('tariffs/copy', views.tariffs_copy_view, name='admin_tariffs-copy'),
     path('tariffs/delete/<int:pk>', views.tariffs_delete_view, name='admin_tariffs-delete'),
+    path('tariffs-service/delete/<int:pk>', views.tariffs_service_delete_view, name='admin_tariffs-service-delete'),
     path('user-app-admin/role', views.user_admin_role_view, name='admin_user-admin-role'),
     path('user-app-admin/users/list', views.user_admin_users_list, name='admin_user-users-list'),
     path('user-app-admin/create', views.user_admin_create_view, name='admin_user-admin-create'),

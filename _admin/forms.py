@@ -313,6 +313,21 @@ class TariffCreateForm(forms.ModelForm):
         }
 
 
+class TariffServiceForm(forms.ModelForm):
+    model = models.TariffService
+    fields = ['price', 'service']
+    widgets = {
+        'id': forms.HiddenInput(),
+        'price': forms.Textarea(attrs={
+            'placeholder': 'Введите цену',
+            'type': 'text',
+            'class': 'form-control',
+            'style': 'margin: 0.25rem 0',
+        }),
+
+    }
+
+
 class ApartmentForm(forms.ModelForm):
 
     class Meta:
