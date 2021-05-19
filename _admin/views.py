@@ -226,7 +226,7 @@ def apartment_delete_view(request, pk):
 
 
 def user_view(request):
-    users = models.User.objects.all()
+    users = models.User.objects.filter(is_superuser=0)
     return render(request, 'admin/user/index.html', {'users': users})
 
 
@@ -386,14 +386,15 @@ def message_view(request):
 
 
 def message_create_view(request):
-    form = forms.MessageCreateForm(request.POST)
     alerts = []
     if request.method == 'POST':
+        form = forms.MessageCreateForm(request.POST)
         if form.is_valid():
             form.save()
             alerts.append('Сообщение отправлено')
         else:
             alerts.append('Произошла ошибка')
+    form = forms.MessageCreateForm()
     return render(request, 'admin/message/create.html', {'form': form,
                                                          'alerts': alerts})
 

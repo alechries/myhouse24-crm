@@ -129,7 +129,7 @@ class User(CustomAbstractUser):
     user_type = models.CharField(choices=TYPE, default='Управляющий домом', max_length=155, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} - {self.role.name}'
+        return f'{self.first_name} {self.last_name} - {self.role}'
 
     class Meta:
         app_label = '_db'
@@ -361,7 +361,7 @@ class WebsiteContacts(SingletonModel):
 
 
 class Message(models.Model):
-    destination = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, verbose_name='')
+    destination = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
     addressee = models.CharField(default='Админ', max_length=255, null=True, blank=True)
     title = models.CharField(max_length=255)
     text = models.TextField()
