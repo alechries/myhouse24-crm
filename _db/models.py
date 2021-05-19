@@ -179,6 +179,7 @@ class Measure(models.Model):  # ед измерения
 
 
 class Tariff(models.Model):
+    edit_date = models.DateTimeField(auto_now_add=True, null=True)
     name = models.CharField(max_length=155)
     description = models.CharField(max_length=155)
 
@@ -196,7 +197,6 @@ class Service(models.Model):   # услуга
 
 
 class TariffService(models.Model):
-    edit_date = models.DateTimeField(auto_created=timezone.now())
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True, verbose_name='')
     tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True, blank=True)
     price = models.CharField(max_length=255, blank=True)

@@ -877,33 +877,63 @@ def tariffs_create_view(request):
 
 
 def tariffs_change_view(request, pk=None):
-    alerts = []
+    tariff = models.Tariff.objects.get(id=pk)
+    tariff_service_count = models.TariffService.objects.filter(tariff=tariff).count()
+    TariffServiceFormset = inlineformset_factory(
+        parent_model=models.Tariff,
+        model=models.TariffService,
+        fields=('price', 'service'),
+        widgets={
+            'price': forms.TextInput(attrs={
+                'placeholder': 'Введите цену',
+                'type': 'text',
+                'class': 'form-control',
+                'style': 'margin: 0.25rem 0',
+            }),
 
-    # Форма тарифа
-    # Формсет услуги
+        },
+        form=forms.TariffServiceForm,
+        max_num=tariff_service_count if tariff_service_count > 0 else 1
+    )
+    aletrs = []
+    if request.method == 'POST':
+        tariff_form = forms.TariffCreateForm(request.POST, prefix='tariff_form', instance=tariff)
+        tariff_service_formset = TariffServiceFormset(request.POST, prefix='tariff_service_form', instance=tariff)
+        if tariff_form.is_valid() and tariff_service_formset.is_valid():
+            tariff = tariff_form.save()
+            tariff_service_queryset = tariff_service_formset.save(commit=False)
 
-    if request.method == "POST":
+            for tariff_section_form in tariff_service_queryset:
+                tariff_section_form.tariff.id = tariff.id
+                tariff_section_form.save()
 
-        form = forms.TariffCreateForm(request.POST, prefix='tariffs')
-        if utils.forms_save([
-            form,
-        ]):
-            alerts.append('Данные сохранены успешно!')
+            aletrs = ['Формы сохранены']
 
     else:
-        form = forms.TariffCreateForm(
-            instance=get_object_or_404(models.Tariff, pk) if pk else None,
-            prefix='tariffs',
-        )
-    context = {
-        'form': form,
-        'alerts': alerts,
-    }
-    return render(request, 'admin/tariffs/change.html', context)
+        tariff_form = forms.TariffCreateForm(prefix='tariff_form', instance=tariff)
+        tariff_service_formset = TariffServiceFormset(prefix='tariff_service_form', instance=tariff)
+
+    return render(
+        request, 'admin/tariffs/create.html',
+        context={
+            'tariff_form': tariff_form,
+            'tariff_service_formset': tariff_service_formset,
+            'alerts': aletrs
+        }
+    )
 
 
 def tariffs_copy_view(request):
     return render(request, 'admin/tariffs/copy.html')
+
+
+def tariff_detail_view(request, pk):
+    tariff = models.Tariff.objects.get(id=pk)
+    tariff_service = models.TariffService.objects.filter(tariff=tariff)
+    print(tariff_service)
+    return render(request, 'admin/tariffs/detail.html', {'tariff': tariff,
+                                                         'tariff_service': tariff_service
+                                                         })
 
 
 def tariffs_delete_view(request, pk):

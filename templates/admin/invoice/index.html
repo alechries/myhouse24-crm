@@ -11,7 +11,7 @@
     <li class="breadcrumb-item active">Квитанции на оплату</li>
 {% endblock %}
 {% block main_content %}
-    <section class="content">
+    <section class="content" style="min-height: auto">
         <div class="row">
             <div class="col-xs-12 col-lg-9">
                 <div class="row">
@@ -53,16 +53,13 @@
                 </div>
             </div>
             <div class="col-xs-12 col-lg-3">
-                <section class="content" style="min-height: 60px">
                     <a href="{% url 'admin_invoice-create' %}" class=" btn btn-success pull-right">Создать квитанцию</a>
-                </section>
             </div>
         </div>
     </section>
     <section class="content input-form">
          <div class="container-fluid">
             <div class="card card-secondary card-outline table-responsive">
-                <section>
                     <table class="table table-bordered table-hover table-striped linkedRow">
                         <thead>
                             <tr>
@@ -109,12 +106,11 @@
                         {% endfor %}
                         {% else %}
                             <tr>
-                            <td colspan="8"><div class="empty">Ничего не найдено.</div></td>
+                            <td colspan="9"><div class="empty">Ничего не найдено.</div></td>
                         </tr>
                         {% endif %}
                         </tbody>
                     </table>
-                </section>
             </div>
          </div>
     </section>

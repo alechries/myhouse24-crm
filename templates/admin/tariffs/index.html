@@ -27,30 +27,39 @@
                 </tr>
                 </thead>
                 <tbody>
+                {% if tariff.count > 0 %}
                 {% for el in tariff %}
-                <tr>
+                <tr data-href="{% url 'admin_tariff-detail'  pk=el.pk %}">
                     <th scope="row">{{ el.name }}</th>
                     <td>{{ el.description }}</td>
                     <td>{{ el.edit_date }}</td>
                     <td>
-                        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                            <div class="btn-group mr-2" role="group" aria-label="Second group">
-                                <button type="button" class="btn btn-secondary">Copy</button>
-                                {% if el.id %}
-                                <a class="btn btn-secondary" href="{% url 'admin_tariffs-change' el.id %}">Edit</a>
-                                {% endif %}
-                                {% if rate.id %}
-                                <a class="btn btn-secondary" href="{% url 'admin_tariffs-delete' el.id %}">Delete</a>
-                                {% endif %}
-
-                            </div>
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-default btn-sm" href="{% url 'admin_tariffs-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                            <a class="btn btn-default btn-sm" href="{% url 'admin_tariffs-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
+                                <i class="fas fa-trash"></i>
+                            </a>
                         </div>
                     </td>
                 </tr>
                 {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4"><div class="empty">Ничего не найдено.</div></td>
+                    </tr>
+                {% endif %}
                 </tbody>
             </table>
         </div>
     </div><!-- /.container-fluid -->
 </section>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $('tr[data-href]').on("click", function() {
+    document.location = $(this).data('href');
+    });
+    </script>
 {% endblock %}
