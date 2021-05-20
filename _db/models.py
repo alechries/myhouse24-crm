@@ -129,7 +129,7 @@ class User(CustomAbstractUser):
     user_type = models.CharField(choices=TYPE, default='Управляющий домом', max_length=155, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'{self.first_name} {self.last_name} - {self.role}'
 
     class Meta:
         app_label = '_db'
@@ -137,7 +137,7 @@ class User(CustomAbstractUser):
 
 class House(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name='', blank=True)
     address = models.CharField(max_length=255)
     number = models.IntegerField('', null=True)
     image1 = models.ImageField(upload_to='images/')
@@ -150,13 +150,17 @@ class House(models.Model):
         return f'{self.name}, ул. {self.address}'
 
 
+class UserHouse(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    house = models.ForeignKey(House, on_delete=models.CASCADE)
+
 
 class Section(models.Model):
-    house = models.ForeignKey(House, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    house = models.ForeignKey(House, on_delete=models.CASCADE, verbose_name='', blank=True)
+    name = models.CharField(max_length=255, verbose_name='', blank=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name} - {self.house.name}'
 
 
 class Floor(models.Model):
@@ -175,9 +179,9 @@ class Measure(models.Model):  # ед измерения
 
 
 class Tariff(models.Model):
+    edit_date = models.DateTimeField(auto_now_add=True, null=True)
     name = models.CharField(max_length=155)
     description = models.CharField(max_length=155)
-    price = models.CharField(max_length=155, null=True)
 
     def __str__(self):
         return self.name
@@ -192,9 +196,10 @@ class Service(models.Model):   # услуга
         return self.name
 
 
-class TariffToService(models.Model):
-    tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True)
+class TariffService(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True, verbose_name='')
+    tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True, blank=True)
+    price = models.CharField(max_length=255, blank=True)
 
 
 class Apartment(models.Model):
@@ -274,6 +279,7 @@ class Invoice(models.Model):
     )
 
     # Добавить модель Тарифа и сделать связь
+    status = models.BooleanField(default=False)
     number = models.CharField('', max_length=255, null=True)
     tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
@@ -281,6 +287,7 @@ class Invoice(models.Model):
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
     period_from = models.DateField("Дата с", null=True)
     period_to = models.DateField("Дата по", null=True)
+    date = models.DateField(null=True)
 
 
 class SEO(models.Model):
@@ -354,7 +361,7 @@ class WebsiteContacts(SingletonModel):
 
 
 class Message(models.Model):
-    destination = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, verbose_name='')
+    destination = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
     addressee = models.CharField(default='Админ', max_length=255, null=True, blank=True)
     title = models.CharField(max_length=255)
     text = models.TextField()

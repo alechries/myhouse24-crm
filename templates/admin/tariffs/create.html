@@ -1,38 +1,99 @@
 {% extends 'admin/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 {% block page_title %}
-    <h1 class="m-0">Тарифы</h1>
+    <h1 class="m-0">Новый тариф</h1>
 {% endblock %}
 {% block pagination_link %}
     <li class="breadcrumb-item">
         <a href="{% url 'admin_index' %}">
             <i class="fas fa-home"></i>
-            Главная</a>
+            Главная
+        </a>
     </li>
-    <li class="breadcrumb-item active">Тарифы</li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_tariffs' %}">
+            Тарифы
+        </a>
+    </li>
+    <li class="breadcrumb-item">Новый тариф</li>
 {% endblock %}
 {% block main_content %}
-<section class="content">
-    <div class="container-fluid">
-        <div class="card card-secondary card-outline">
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+    <section class="content input-form">
+        <div class="container-fluid">
+            <div class="card card-secondary card-outline">
                 <div class="default-area">
-                    <h4>Информация</h4>
-                    <hr/>
-                    <div class="default-half">
-                        Название
-                        {{ form.name }}
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-6">
+                            <label>Название</label>
+                            {{ tariff_form.name }}
+                            <label>Короткое описание</label>
+                            {{ tariff_form.description }}
+                        </div>
                     </div>
-                    <div class="default-half">
-                        Краткий текст
-                        {{ form.description }}
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-7">
+                            {{ tariff_service_formset.management_form }}
+                            {% for form in tariff_service_formset %}
+                                <div class="tariff-service-form-area">
+                                    {{ form.id }}
+                                    <div class="row">
+                                        <div class="col-7">
+                                            <label>Услуга</label>
+                                            {{ form.service|as_crispy_field }}
+                                        </div>
+                                        <div class="col-3">
+                                            <label>Цена</label>
+                                            {{ form.price }}
+                                        </div>
+                                        <div class="col-2 d-flex" style="margin-top: 42px; margin-bottom: 10px">
+                                            {% if form.instance.id %}
+                                                <a class="btn btn-default btn-sm del-tariff-service-form" href="{% url 'admin_tariffs-service-delete' form.instance.id %}" title="Удалить" style="padding: .5rem">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            {% else %}
+                                                <a class="btn btn-default btn-sm del-tariff-service-form" href="#" title="Удалить" style="padding: .5rem">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-                <div class="default-area default-half text-center">
-                    <button type="submit" class="btn btn-success">Сохранить</button>
-                </div>
-            </form>
+                    <div class="text-left">
+                        <button type="button" class="btn btn-secondary" id="add-tariff-service-form">Добавить тариф</button>
+                    </div>
+                    <div class="row d-flex justify-content-start">
+                        <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
+                    </div>
+                </form>
+            </div>
         </div>
-    </div><!-- /.container-fluid -->
-</section>
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'base/js/dynamicforms.js' %}"></script>
+    <script src="{% static 'base/js/requestwithoutreload.js' %}"></script>
+    <script>
+    let tariff_service_prefix = 'tariff_service_form';
+    let tariff_service_form = '.tariff-service-form-area';
+    let tariff_service_counter = '.tariff_service-form-counter';
+
+    document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(tariff_service_prefix, tariff_service_form) }, false);
+    $('#add-tariff-service-form').click(function() { addForm(tariff_service_prefix, tariff_service_form, tariff_service_counter); });
+    $('.del-tariff-service-form').click(function() { delForm(this, tariff_service_prefix, tariff_service_form, tariff_service_counter); });
+    </script>
+    <script>
+    $('.del-tariff-service-form').click(function(){
+        var deleteURL = $(this).attr("href");
+        token = $("input[name='csrfmiddlewaretoken']").val();
+        data = {'csrfmiddlewaretoken':token}
+        if (deleteURL != '#') requestWithoutReload(deleteURL, data);
+    });
+    </script>
 {% endblock %}

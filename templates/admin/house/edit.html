@@ -66,6 +66,12 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#section" type="button" role="tab" aria-controls="home" aria-selected="true" style="padding: .5rem 1rem; outline: none;">Секции</button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#floor" type="button" role="tab" aria-controls="floor" aria-selected="true" style="padding: .5rem 1rem; outline: none;">Этажи</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab" aria-controls="user" aria-selected="true" style="padding: .5rem 1rem; outline: none;">Пользователи</button>
+                        </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="section" role="tabpanel" aria-labelledby="section">
@@ -82,9 +88,48 @@
                                     </div>
                                 {% endfor %}
                             </div>
+                            <div class="text-left">
+                                <button type="button" class="btn btn-secondary" id="add-section-form">Добавить секцию</button>
+                            </div>
                         </div>
-                        <div class="text-left">
-                            <button type="button" class="btn btn-secondary" id="add-section-form">Добавить секцию</button>
+                        <div class="tab-pane fade show" id="floor" role="tabpanel" aria-labelledby="floor">
+                            <div class="col-xs-12 col-lg-7">
+                                {{ floor_formset.management_form }}
+                                {% for form in floor_formset %}
+                                    <div class="floor-form-area">
+                                        {{ form.id }}
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form.name }}
+                                            </div>
+                                            <div class="col">
+                                                {{ form.section|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="text-left">
+                                <button type="button" class="btn btn-secondary" id="add-floor-form">Добавить этаж</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="user" role="tabpanel" aria-labelledby="user">
+                            <div class="col-xs-12 col-lg-7">
+                                {{ user_house_formset.management_form }}
+                                {% for form in user_house_formset %}
+                                    <div class="user-form-area">
+                                        {{ form.id }}
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form.user|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="text-left">
+                                <button type="button" class="btn btn-secondary" id="add-user-form">Добавить пользователя</button>
+                            </div>
                         </div>
                     </div>
                     <div class="row d-flex justify-content-start">
@@ -104,10 +149,24 @@
     let section_prefix = 'section_form';
     let section_form = '.section-form-area';
     let section_counter = '.section-form-counter';
+    let floor_prefix = 'floor_form';
+    let floor_form = '.floor-form-area';
+    let floor_counter = '.floor-form-counter';
+    let user_prefix = 'user_form';
+    let user_form = '.user-form-area';
+    let user_counter = '.user-form-counter';
 
     document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(section_prefix, section_form) }, false);
     $('#add-section-form').click(function() { addForm(section_prefix, section_form, section_counter); });
     $('.del-section-form').click(function() { delForm(this, section_prefix, section_form, section_counter); });
+
+    document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(floor_prefix, floor_form) }, false);
+    $('#add-floor-form').click(function() { addForm(floor_prefix, floor_form, floor_counter); });
+    $('.del-floor-form').click(function() { delForm(this, floor_prefix, floor_form, floor_counter); });
+
+    document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(user_prefix, user_form) }, false);
+    $('#add-user-form').click(function() { addForm(user_prefix, user_form, user_counter); });
+    $('.del-user-form').click(function() { delForm(this, user_prefix, user_form, user_counter); });
     </script>
     <script>
     $('.del-section-form').click(function(){

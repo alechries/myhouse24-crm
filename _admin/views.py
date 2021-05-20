@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from _db import models, utils, auth
+from django import forms
 from django.contrib.auth import authenticate, login, logout
 from . import forms
+from django.db.models import Count
 from django.forms import modelformset_factory
 from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseNotFound
+from django.forms import inlineformset_factory
 
 
 def index_view(request):
@@ -223,7 +226,7 @@ def apartment_delete_view(request, pk):
 
 
 def user_view(request):
-    users = models.User.objects.all()
+    users = models.User.objects.filter(is_superuser=0)
     return render(request, 'admin/user/index.html', {'users': users})
 
 
@@ -271,34 +274,109 @@ def house_view(request):
     return render(request, 'admin/house/index.html', {'houses': houses})
 
 
+def house_edit_view(request, pk):
+    house = models.House.objects.get(id=pk)
+    floor = models.Floor.objects.filter(section__house=house)
+    FloorFormset = modelformset_factory(
+        model=models.Floor,
+        form=forms.FloorForm,
+        max_num=floor.count() if floor.count() > 0 else 1
+    )
+    UserFormset = inlineformset_factory(
+        parent_model=models.House,
+        model=models.UserHouse,
+        form=forms.UserHouseForm,
+        max_num=1
+    )
+    SectionFormset = inlineformset_factory(
+        parent_model=models.House,
+        model=models.Section,
+        form=forms.SectionForm,
+        max_num=1
+    )
+    aletrs = []
+    if request.method == 'POST':
+
+        floor_formset = FloorFormset(request.POST, prefix='floor_form', queryset=models.Floor.objects.filter(section__house=house))
+        user_house_formset = UserFormset(request.POST, prefix='user_form', instance=house)
+        house_form = forms.HouseForm(request.POST, request.FILES, prefix='house_form', instance=house)
+        section_formset = SectionFormset(request.POST, prefix='section_form', instance=house)
+        if house_form.is_valid() and section_formset.is_valid() and user_house_formset.is_valid() and floor_formset.is_valid():
+            house = house_form.save()
+            section_queryset = section_formset.save(commit=False)
+            user_house_queryset = user_house_formset.save(commit=False)
+
+            for section in section_queryset:
+                section.house.id = house.id
+                section.save()
+
+            for user_form in user_house_queryset:
+                user_form.house.id = house.id
+                user_form.save()
+
+            if utils.forms_save([
+                floor_formset
+            ]):
+
+                aletrs = ['Формы сохранены']
+
+    else:
+        floor_formset = FloorFormset(prefix='floor_form', queryset=models.Floor.objects.filter(section__house=house))
+        house_form = forms.HouseForm(prefix='house_form', instance=house)
+        section_formset = SectionFormset(prefix='section_form', instance=house)
+        user_house_formset = UserFormset(prefix='user_form', instance=house)
+
+    return render(
+        request, 'admin/house/edit.html',
+        context={
+            'floor_formset': floor_formset,
+            'user_house_formset': user_house_formset,
+            'house_form': house_form,
+            'section_formset': section_formset,
+            'alerts': aletrs
+        }
+    )
+
+
 def house_create_view(request):
-    form = forms.HouseForm(request.POST, request.FILES)
-    alerts = []
+    SectionFormset = inlineformset_factory(
+        parent_model=models.House,
+        model=models.Section,
+        fields=('name',),
+        form=forms.SectionForm,
+        max_num=1
+    )
+    aletrs = []
     if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            alerts.append('Форма сохранена успешно')
-        else:
-            alerts.append('Произошла ошибка')
+        house_form = forms.HouseForm(request.POST, request.FILES, prefix='house_form')
+        section_formset = SectionFormset(request.POST, prefix='section_form')
+        if house_form.is_valid() and section_formset.is_valid():
+            house = house_form.save()
+            section_queryset = section_formset.save(commit=False)
 
-    return render(request, 'admin/house/create.html', {'form': form,
-                                                       'alerts': alerts})
+            for section in section_queryset:
+                section.house.id = house.id
+                section.save()
 
+            aletrs = ['Формы сохранены']
 
-def house_change_view(request, pk):
-    alerts = []
-    form = forms.HouseForm(request.POST or None, instance=get_object_or_404(models.House, id=pk))
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            alerts.append('Запись была успешно редактирована!')
-    return render(request, 'admin/house/create.html', {'form': form,
-                                                       'alerts': alerts})
+    else:
+        house_form = forms.HouseForm(prefix='house_form')
+        section_formset = SectionFormset(prefix='section_form')
+
+    return render(
+        request, 'admin/house/create.html',
+        context={
+            'house_form': house_form,
+            'section_formset': section_formset,
+            'alerts': aletrs
+        }
+    )
 
 
 def house_delete_view(request, pk):
     house = get_object_or_404(models.House, id=pk)
-    request.delete()
+    house.delete()
     return redirect('admin_house')
 
 
@@ -308,14 +386,15 @@ def message_view(request):
 
 
 def message_create_view(request):
-    form = forms.MessageCreateForm(request.POST)
     alerts = []
     if request.method == 'POST':
+        form = forms.MessageCreateForm(request.POST)
         if form.is_valid():
             form.save()
             alerts.append('Сообщение отправлено')
         else:
             alerts.append('Произошла ошибка')
+    form = forms.MessageCreateForm()
     return render(request, 'admin/message/create.html', {'form': form,
                                                          'alerts': alerts})
 
@@ -754,55 +833,120 @@ def tariffs_view(request):
 
 
 def tariffs_create_view(request):
-    form = forms.TariffCreateForm(request.POST)
-    alerts = []
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            alerts.append('Форма создана успешно')
-        else:
-            alerts.append('Произошла ошибка')
+    TariffServiceFormset = inlineformset_factory(
+        parent_model=models.Tariff,
+        model=models.TariffService,
+        fields=('price', 'service'),
+        widgets={
+            'price': forms.TextInput(attrs={
+                'placeholder': 'Введите цену',
+                'type': 'text',
+                'class': 'form-control',
+                'style': 'margin: 0.25rem 0',
+            }),
 
-    return render(request, 'admin/tariffs/create.html', {'form': form,
-                                                         'alerts': alerts})
-    pass
+        },
+        form=forms.TariffServiceForm,
+        max_num=1
+    )
+    aletrs = []
+    if request.method == 'POST':
+        tariff_form = forms.TariffCreateForm(request.POST, prefix='tariff_form')
+        tariff_service_formset = TariffServiceFormset(request.POST, prefix='tariff_service_form')
+        if tariff_form.is_valid() and tariff_service_formset.is_valid():
+            tariff = tariff_form.save()
+            tariff_service_queryset = tariff_service_formset.save(commit=False)
+
+            for tariff_section_form in tariff_service_queryset:
+                tariff_section_form.tariff.id = tariff.id
+                tariff_section_form.save()
+
+            aletrs = ['Формы сохранены']
+
+    else:
+        tariff_form = forms.TariffCreateForm(prefix='tariff_form')
+        tariff_service_formset = TariffServiceFormset(prefix='tariff_service_form')
+
+    return render(
+        request, 'admin/tariffs/create.html',
+        context={
+            'tariff_form': tariff_form,
+            'tariff_service_formset': tariff_service_formset,
+            'alerts': aletrs
+        }
+    )
 
 
 def tariffs_change_view(request, pk=None):
-    alerts = []
+    tariff = models.Tariff.objects.get(id=pk)
+    tariff_service_count = models.TariffService.objects.filter(tariff=tariff).count()
+    TariffServiceFormset = inlineformset_factory(
+        parent_model=models.Tariff,
+        model=models.TariffService,
+        fields=('price', 'service'),
+        widgets={
+            'price': forms.TextInput(attrs={
+                'placeholder': 'Введите цену',
+                'type': 'text',
+                'class': 'form-control',
+                'style': 'margin: 0.25rem 0',
+            }),
 
-    # Форма тарифа
-    # Формсет услуги
+        },
+        form=forms.TariffServiceForm,
+        max_num=tariff_service_count if tariff_service_count > 0 else 1
+    )
+    aletrs = []
+    if request.method == 'POST':
+        tariff_form = forms.TariffCreateForm(request.POST, prefix='tariff_form', instance=tariff)
+        tariff_service_formset = TariffServiceFormset(request.POST, prefix='tariff_service_form', instance=tariff)
+        if tariff_form.is_valid() and tariff_service_formset.is_valid():
+            tariff = tariff_form.save()
+            tariff_service_queryset = tariff_service_formset.save(commit=False)
 
-    if request.method == "POST":
+            for tariff_section_form in tariff_service_queryset:
+                tariff_section_form.tariff.id = tariff.id
+                tariff_section_form.save()
 
-        form = forms.TariffForm(request.POST, prefix='tariffs')
-        if utils.forms_save([
-            form,
-        ]):
-            alerts.append('Данные сохранены успешно!')
+            aletrs = ['Формы сохранены']
 
     else:
-        form = forms.TariffForm(
-            instance=get_object_or_404(models.Rate, pk) if pk else None,
-            prefix='tariffs',
-        )
-    context = {
-        'form': form,
-        'alerts': alerts,
-    }
-    return render(request, 'admin/tariffs/change.html', context)
+        tariff_form = forms.TariffCreateForm(prefix='tariff_form', instance=tariff)
+        tariff_service_formset = TariffServiceFormset(prefix='tariff_service_form', instance=tariff)
+
+    return render(
+        request, 'admin/tariffs/create.html',
+        context={
+            'tariff_form': tariff_form,
+            'tariff_service_formset': tariff_service_formset,
+            'alerts': aletrs
+        }
+    )
 
 
 def tariffs_copy_view(request):
     return render(request, 'admin/tariffs/copy.html')
 
 
+def tariff_detail_view(request, pk):
+    tariff = models.Tariff.objects.get(id=pk)
+    tariff_service = models.TariffService.objects.filter(tariff=tariff)
+    print(tariff_service)
+    return render(request, 'admin/tariffs/detail.html', {'tariff': tariff,
+                                                         'tariff_service': tariff_service
+                                                         })
+
+
 def tariffs_delete_view(request, pk):
-    entry = models.Rate.objects.get(id=pk)
+    entry = models.Tariff.objects.get(id=pk)
     entry.delete()
     return redirect('admin_tariffs')
 
+
+def tariffs_service_delete_view(request, pk):
+    entry = models.TariffService.objects.get(id=pk)
+    entry.delete()
+    return HttpResponse()
 
 def user_admin_role_view(request):
 

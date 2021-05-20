@@ -26,6 +26,7 @@
                 </tr>
                 </thead>
                 <tbody>
+                {% if transfer_type.count > 0 %}
                 {% for el in transfer_type %}
                     <tr data-href="{% url 'admin_transaction-purpose-change'  pk=el.pk %}">
                         <td>{{ el.name }}</td>
@@ -46,6 +47,11 @@
                         </td>
                     </tr>
                 {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3"><div class="empty">Ничего не найдено.</div></td>
+                    </tr>
+                {% endif %}
                 </tbody>
             </table>
         </div>

@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index_view, name='admin_index'),
-    path('test', views.test_view, name='test'),
+    path('test', views.house_edit_view, name='test'),
     path('update-me', views.update_me_view, name='admin_update-me'),
     path('login', views.login_view, name='admin_login'),
     path('logout', views.logout_view, name='admin_logout'),
@@ -35,7 +35,7 @@ urlpatterns = [
     path('user/delete/<int:pk>', views.user_delete_view, name='admin_user-delete'),
     path('house', views.house_view, name='admin_house'),
     path('house/create', views.house_create_view, name='admin_house-create'),
-    path('house/change/<int:pk>', views.house_change_view, name='admin_house-change'),
+    path('house/change/<int:pk>', views.house_edit_view, name='admin_house-change'),
     path('house/delete/<int:pk>', views.house_delete_view, name='admin_house-delete'),
     path('message', views.message_view, name='admin_message'),
     path('message/create', views.message_create_view, name='admin_message-create'),
@@ -66,7 +66,9 @@ urlpatterns = [
     path('tariffs/create', views.tariffs_create_view, name='admin_tariffs-create'),
     path('tariffs/change/<int:pk>', views.tariffs_change_view, name='admin_tariffs-change'),
     path('tariffs/copy', views.tariffs_copy_view, name='admin_tariffs-copy'),
+    path('tariff/detail/<int:pk>', views.tariff_detail_view, name='admin_tariff-detail'),
     path('tariffs/delete/<int:pk>', views.tariffs_delete_view, name='admin_tariffs-delete'),
+    path('tariffs-service/delete/<int:pk>', views.tariffs_service_delete_view, name='admin_tariffs-service-delete'),
     path('user-app-admin/role', views.user_admin_role_view, name='admin_user-admin-role'),
     path('user-app-admin/users/list', views.user_admin_users_list, name='admin_user-users-list'),
     path('user-app-admin/create', views.user_admin_create_view, name='admin_user-admin-create'),
