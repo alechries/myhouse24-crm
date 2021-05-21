@@ -292,8 +292,5 @@ th{
 img {
     vertical-align: middle;
 }
-.carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {
-    display: block;
-    max-width: 100%;
-    height: calc(2.25rem + 2px)
-}
+
+

@@ -197,6 +197,7 @@ def apartment_detail_view(request, pk):
 
 def apartment_create_view(request):
     form = forms.ApartmentForm(request.POST)
+    form.fields['user'].queryset = models.User.objects.filter(is_superuser=0)
     alerts = []
     if request.method == 'POST' and form.is_valid():
         form.save()
