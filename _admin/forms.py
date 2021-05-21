@@ -268,22 +268,7 @@ class AccountForm(forms.ModelForm):
 
     class Meta:
         model = models.Account
-        house = forms.ModelChoiceField(
-            queryset=models.House.objects.all(),
-            empty_label=None,
-        )
-
-        section = forms.ModelChoiceField(
-            queryset=models.Section.objects.all(),
-            empty_label=None,
-        )
-
-        floor = forms.ModelChoiceField(
-            queryset=models.Floor.objects.all(),
-            empty_label=None,
-        )
-
-        fields = ['status', 'apartment', 'wallet']
+        fields = ['status', 'wallet']
         widgets = {
             'wallet': forms.TextInput(attrs={
                 'input_type': 'text',
@@ -329,11 +314,14 @@ class TariffServiceForm(forms.ModelForm):
 
 
 class ApartmentForm(forms.ModelForm):
-
+    def __init__(self, *args, **kwargs):
+        super(ApartmentForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
     class Meta:
         model = models.Apartment
         self_account = forms.TextInput()
-        fields = ['apartment_area', 'name', 'floor', 'self_account']
+        fields = ['apartment_area', 'name', 'floor', 'account', 'user', 'tariff']
         widgets = {
             'name': forms.TextInput(attrs={
                 'input_type': 'text',
@@ -391,7 +379,7 @@ class UserForm(forms.ModelForm):
 class HouseForm(forms.ModelForm):
     class Meta:
         model = models.House
-        fields = ['user', 'name', 'address', 'image1', 'image2', 'image3', 'image4', 'image5']
+        fields = [ 'name', 'address', 'image1', 'image2', 'image3', 'image4', 'image5']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',

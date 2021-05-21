@@ -197,6 +197,7 @@ def apartment_detail_view(request, pk):
 
 def apartment_create_view(request):
     form = forms.ApartmentForm(request.POST)
+    form.fields['user'].queryset = models.User.objects.filter(is_superuser=0)
     alerts = []
     if request.method == 'POST' and form.is_valid():
         form.save()
@@ -372,6 +373,24 @@ def house_create_view(request):
             'alerts': aletrs
         }
     )
+
+
+def section_delete_view(request, pk):
+    section = get_object_or_404(models.Section, id=pk)
+    section.delete()
+    return HttpResponse()
+
+
+def user_house_delete_view(request, pk):
+    user = get_object_or_404(models.UserHouse, id=pk)
+    user.delete()
+    return HttpResponse()
+
+
+def floor_delete_view(request, pk):
+    floor = get_object_or_404(models.Floor, id=pk)
+    floor.delete()
+    return HttpResponse()
 
 
 def house_delete_view(request, pk):

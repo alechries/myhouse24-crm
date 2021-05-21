@@ -129,6 +129,9 @@ class User(CustomAbstractUser):
     user_type = models.CharField(choices=TYPE, default='Управляющий домом', max_length=155, null=True, blank=True)
 
     def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
+    def get_name_and_role(self):
         return f'{self.first_name} {self.last_name} - {self.role}'
 
     class Meta:
@@ -136,7 +139,6 @@ class User(CustomAbstractUser):
 
 
 class House(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=255, verbose_name='', blank=True)
     address = models.CharField(max_length=255)
     number = models.IntegerField('', null=True)
@@ -202,11 +204,26 @@ class TariffService(models.Model):
     price = models.CharField(max_length=255, blank=True)
 
 
+class Account(models.Model):
+    STATUS = (
+        ('Active', 'Активен'),
+        ('Inactive','Неактивен')
+    )
+    wallet = models.CharField('Номер лицевого счёта', max_length=255, null=True)
+    money = models.FloatField(default=0)
+    status = models.CharField('', choices=STATUS, max_length=55, blank=True)
+
+    def __str__(self):
+        return self.wallet
+
+
 class Apartment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, verbose_name='')
     name = models.CharField('Номер квартиры', max_length=255)
     apartment_area = models.FloatField('Площадь квартиры', max_length=255)
-    self_account = models.CharField('', max_length=255, null=True, blank=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True)
+    tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, blank=True)
 
     def __str__(self):
         return self.name
@@ -229,20 +246,6 @@ class Meter(models.Model):
     counter = models.IntegerField()
     indication_date = models.DateField(null=True)
     status = models.CharField(choices=STATUS, max_length=255, blank=True, verbose_name='')
-
-
-class Account(models.Model):
-    STATUS = (
-        ('Active', 'Активен'),
-        ('Inactive','Неактивен')
-    )
-    wallet = models.CharField('Номер лицевого счёта', max_length=255, null=True)
-    money = models.FloatField(default=0)
-    status = models.CharField('',choices=STATUS, max_length=55, blank=True)
-    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, null=True, verbose_name='')
-
-    def __str__(self):
-        return self.wallet
 
 
 class TransferType(models.Model):

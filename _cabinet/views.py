@@ -6,7 +6,7 @@ from . import forms
 def index_view(request):
     user = models.User.objects.filter(id=1)[0]
     houses = models.House.objects.filter(user=user)
-    apartments = models.Apartment.objects.filter(floor__section__house__user=user)
+    apartments = models.Apartment.objects.filter(user=user)
     return render(request, 'cabinet/index.html', {'user': user,
                                                   'houses': houses,
                                                   'apartments': apartments})
@@ -43,7 +43,7 @@ def tariffs_view_view(request):
 def messages_index(request):
     user = models.User.objects.filter(id=1)[0]
     houses = models.House.objects.filter(user=user)
-    apartments = models.Apartment.objects.filter(floor__section__house__user=user)
+    apartments = models.Apartment.objects.filter(user=user)
     messages = models.Message.objects.filter(destination_id=user)[::-1]
     return render(request, 'cabinet/messages/index.html', {'user': user,
                                                            'houses': houses,
@@ -66,14 +66,14 @@ def messages_delete_view(request):
 
 def master_request_view(request):
     user = models.User.objects.filter(id=1)[0]
-    requests = models.MasterRequest.objects.filter(apartment__floor__section__house__user=user)
+    requests = models.MasterRequest.objects.filter(apartment__user=user)
     return render(request, 'cabinet/master-request/index.html', {'requests': requests})
 
 
 def master_request_create_view(request):
     user = models.User.objects.filter(id=1)[0]
     houses = models.House.objects.filter(user=user)
-    apartments = models.Apartment.objects.filter(floor__section__house__user=user)
+    apartments = models.Apartment.objects.filter(user=user)
     form = forms.MasterRequestForm(request.POST)
     form.owner = 1
     alerts = []
