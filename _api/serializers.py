@@ -35,4 +35,4 @@ class ServiceSerializer(serializers.ModelSerializer):
 class TariffServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TariffService
-        fields = ('id', 'service',  'tariff', 'place')
+        fields = ('id', 'service',  'tariff', 'price')
