@@ -13,6 +13,8 @@ urlpatterns = [
     path('apartment/<int:pk>', views.ApartmentDetail.as_view(), name='apartment-detail'),
     path('service/', views.ServiceList.as_view(), name='service-list'),
     path('service/<int:pk>', views.ServiceDetail.as_view(), name='service-detail'),
+    path('tariffservice/', views.TariffServiceList.as_view(), name='tariffservice-list'),
+    path('tariffservice/<int:pk>', views.TariffServiceDetail.as_view(), name='tariffservice-detail'),
 
 ]
 

@@ -36,7 +36,8 @@
                                             </div>
                                             <div class="col-2 d-flex" style="margin-top: 42px; margin-bottom: 10px">
                                                 {% if form.instance.id %}
-                                                <a class="btn btn-default btn-sm del-service-form" href="{% url 'admin_service-delete' form.instance.id %}" title="Удалить" style="padding: .5rem">
+                                                <a class="btn btn-default btn-sm del-service-form del-service-try-check" href="{% url 'admin_service-delete' form.instance.id %}" title="Удалить" style="padding: .5rem">
+                                                    <div style="display:none" class="service-pk">{{ form.instance.id }}</div>
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                                 {% else %}
@@ -75,7 +76,7 @@
                                                 </div>
                                                 <div class="col-2 d-flex" style="margin-top: 37px; margin-bottom: 15px">
                                                     {% if form.instance.id %}
-                                                    <a class="btn btn-default btn-sm del-measure-form" href="{% url 'admin_measure-delete' form.instance.id %}" title="Удалить" style="padding: .5rem">
+                                                    <a class="btn btn-default btn-sm del-measure-form del-measure-try-check" href="{% url 'admin_measure-delete' form.instance.id %}" title="Удалить" style="padding: .5rem">
                                                         <div style="display:none" class="measure-pk">{{ form.instance.id }}</div>
                                                         <i class="fas fa-trash"></i>
                                                     </a>
@@ -148,24 +149,22 @@
     });
     </script>
     <script>
-    function check() {
-    const btns = document.getElementsByClassName('del-measure-form')
+    function check(btn, request) {
+    const btns = document.getElementsByClassName(btn)
 
     for(let i = 0; i < btns.length; i++) {
         const item = btns[i];
         const [text] = item.children;
-        //console.log(text.innerText)
-
-        $.get("/api/service/?measure="+text.innerText, function(data) {
-        //console.log(data)
+        console.log(text.innerText)
+        $.get(request+text.innerText, function(data) {
             if(data.length !== 0) {
-            console.log(item)
                 item.classList.add('disabled');
             }
         });
     }
-}
+    }
 
-check()
+    check('del-measure-try-check', '/api/service/?measure=')
+    check('del-service-try-check', '/api/tariffservice/?service=')
     </script>
 {% endblock %}

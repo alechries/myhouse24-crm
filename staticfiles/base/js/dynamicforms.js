@@ -29,7 +29,7 @@ function addForm(prefix, form, counter) {
     let total = $('#id_' + prefix + '-TOTAL_FORMS').val();
     let i = 0;
 
-    newElement.find(':input').each(function() {
+    newElement.find('input, textarea').each(function() {
         let name = prefix + '-' + total + '-' + $(this).attr('name');
         let id = 'id_' + name;
         $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
@@ -40,6 +40,10 @@ function addForm(prefix, form, counter) {
     $('#id_' + prefix + '-TOTAL_FORMS').val(total);
     if (counter) newElement.find(counter).each(function() { $(this).text(total); });
     $(selector_last).after(newElement);
+
+    let attr_id = newElement.find('textarea').attr('id');
+
+    tinymce.init({selector:'#'+attr_id});
 }
 
 function addHiddenForm(prefix, form_class, image_class, default_image_url){
@@ -52,8 +56,9 @@ function addHiddenForm(prefix, form_class, image_class, default_image_url){
         $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
     });
     if (default_image_url) element.find(image_class).each(function() {
-        $(this).css('background', 'url(' + default_image_url + ') no-repeat')
+        $(this).css('background', 'url(' + default_image_url + ') no-repeat');
     });
+    element.find('textarea').addClass('hidden_textarea');
     element.css('display', 'none');
     $(selector).before(element);
 }
