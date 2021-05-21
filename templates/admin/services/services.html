@@ -31,7 +31,7 @@
                                                 {{ form.name }}
                                             </div>
                                             <div class="col-5">
-                                                <label>Еденица измерения</label>
+                                                <label>Единица измерения</label>
                                                 {{ form.measure|as_crispy_field }}
                                             </div>
                                             <div class="col-2 d-flex" style="margin-top: 42px; margin-bottom: 10px">
@@ -76,6 +76,7 @@
                                                 <div class="col-2 d-flex" style="margin-top: 37px; margin-bottom: 15px">
                                                     {% if form.instance.id %}
                                                     <a class="btn btn-default btn-sm del-measure-form" href="{% url 'admin_measure-delete' form.instance.id %}" title="Удалить" style="padding: .5rem">
+                                                        <div style="display:none" class="measure-pk">{{ form.instance.id }}</div>
                                                         <i class="fas fa-trash"></i>
                                                     </a>
                                                     {% else %}
@@ -145,5 +146,26 @@
         data = {'csrfmiddlewaretoken':token}
         if (deleteURL != '#') requestWithoutReload(deleteURL, data);
     });
+    </script>
+    <script>
+    function check() {
+    const btns = document.getElementsByClassName('del-measure-form')
+
+    for(let i = 0; i < btns.length; i++) {
+        const item = btns[i];
+        const [text] = item.children;
+        //console.log(text.innerText)
+
+        $.get("/api/service/?measure="+text.innerText, function(data) {
+        //console.log(data)
+            if(data.length !== 0) {
+            console.log(item)
+                item.classList.add('disabled');
+            }
+        });
+    }
+}
+
+check()
     </script>
 {% endblock %}

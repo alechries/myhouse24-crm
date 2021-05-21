@@ -29,4 +29,4 @@ class ApartmentSerializer(serializers.ModelSerializer):
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Service
-        fields = ('name',  'active', 'measure')
+        fields = ('id', 'name',  'active', 'measure')
