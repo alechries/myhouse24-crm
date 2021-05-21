@@ -88,3 +88,26 @@ class ServiceDetail(generics.RetrieveAPIView):
     model = models.Service
     queryset = models.Service.objects.all()
     serializer_class = serializers.ServiceSerializer
+
+
+class TariffServiceList(generics.ListAPIView):
+    model = models.TariffService
+    serializer_class = serializers.TariffServiceSerializer
+
+    def get_queryset(self):
+        queryset = models.TariffService.objects.all()
+
+        tariff = self.request.query_params.get('tariff')
+        service = self.request.query_params.get('service')
+        if tariff is not None:
+            queryset = queryset.filter(tariff=tariff)
+        elif service is not None:
+            queryset = queryset.filter(service=service)
+
+        return queryset
+
+
+class TariffServiceDetail(generics.RetrieveAPIView):
+    model = models.TariffService
+    queryset = models.TariffService.objects.all()
+    serializer_class = serializers.TariffServiceSerializer

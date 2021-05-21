@@ -30,3 +30,9 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Service
         fields = ('id', 'name',  'active', 'measure')
+
+
+class TariffServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TariffService
+        fields = ('id', 'service',  'tariff', 'place')
