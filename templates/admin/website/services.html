@@ -89,8 +89,6 @@
 <script src="{% static 'base/js/dynamicforms.js' %}"></script>
 <script src="{% static 'base/js/requestwithoutreload.js' %}"></script>
 <script>
-// tinymce.init({selector:'textarea'}); // Включить по необходиомости (может не работать динамическое добавление форм)
-
 let prefix = 'service';
 let form = '.form-area';
 let counter = '.form-counter';
@@ -99,6 +97,8 @@ let default_image_url = '{% static 'no_icon.png' %}';
 document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(prefix, form, default_image_url) }, false);
 $('#add-service-block').click(function() { addForm(prefix, form, counter); });
 $('.del-form').click(function() { delForm(this, prefix, form, counter); });
+
+tinymce.init({selector:'textarea:not(".hidden_textarea")'}); // Включить по необходиомости (может не работать динамическое добавление форм)
 </script>
 <script>
 $('.del-form').click(function(){
