@@ -85,17 +85,18 @@
                         <tbody>
                         {% if account.count > 0 %}
                         {% for el in account %}
-                        <tr data-href="{% url 'admin_account-detail'  pk=el.pk %}">
+                        <tr class="el-table" data-href="{% url 'admin_account-detail'  pk=el.pk %}">
+                            <div class="el-id">{{ el.id }}</div>
                             <td>{{ el.wallet }}</td>
                             {% if el.status == 'Active' %}
                                 <td style="color: #00ba13"><small class="label label-success">Активен</small></td>
                              {% else %}
                                 <td style="color: #c62232"><small class="label label-danger">Неактивен</small></td>
                             {% endif %}
-                            <td>{{ el }}</td>
-                            <td>{{ el.apartment.floor.section.house.name }}</td>
-                            <td>{{ el.apartment.floor.section }}</td>
-                            <td>{{ el.apartment.user }}</td>
+                            <td class="el-apartment-name">{{ el }}</td>
+                            <td class="el-house-name">{{ el.apartment.floor.section.house.name }}</td>
+                            <td class="el-section-name">{{ el.apartment.floor.section }}</td>
+                            <td class="el.user-name">{{ el.apartment.user }}</td>
                             <td></td>
                             <td>
                                 <div class="btn-group pull-right">

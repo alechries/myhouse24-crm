@@ -5,7 +5,7 @@ from . import forms
 
 def index_view(request):
     user = models.User.objects.filter(id=1)[0]
-    houses = models.House.objects.filter(user=user)
+    houses = models.House.objects.filter(section__floor__apartment__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     return render(request, 'cabinet/index.html', {'user': user,
                                                   'houses': houses,
