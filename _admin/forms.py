@@ -668,9 +668,6 @@ class InvoiceForm(forms.ModelForm):
             'number': forms.TextInput(attrs={
                 'class': 'form-control',
             }),
-            'house': forms.TextInput(attrs={
-                'class': 'form-control',
-            }),
             'status': forms.CheckboxInput(attrs={
                 'class': 'form-control custom-checkbox-formset',
                 'id': 'PaymentMadeInput',

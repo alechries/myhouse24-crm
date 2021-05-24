@@ -23,7 +23,7 @@ class FloorSerializer(serializers.ModelSerializer):
 class ApartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Apartment
-        fields = ('id', 'floor', 'name', 'apartment_area', 'self_account')
+        fields = ('id', 'floor', 'name', 'apartment_area', 'user', 'tariff', 'account')
 
 
 class ServiceSerializer(serializers.ModelSerializer):

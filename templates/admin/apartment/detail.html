@@ -43,7 +43,7 @@
                         </tr>
                         <tr>
                             <td>Площадь</td>
-                            <td>{{ apartment.apartment_area }}м2</td>
+                            <td>{{ apartment.apartment_area }}</td>
                         </tr>
                         <tr>
                             <td>Дом</td>
@@ -59,11 +59,20 @@
                         </tr>
                         <tr>
                             <td>Владелец</td>
-                            <td>{{ apartment.user}}</td>
+                            {% if apartment.user == None %}
+                            <td>Не задано</td>
+                            {% else %}
+                            <td>{{ apartment.user }}</td>
+                            {% endif %}
+
                         </tr>
                         <tr>
                             <td>Тариф</td>
-                            <td>не указано</td>
+                            {% if apartment.tariff == None %}
+                            <td>Не задано</td>
+                            {% else %}
+                            <td>{{ apartment.tariff }}</td>
+                            {% endif %}
                         </tr>
                     </table>
                     <div class="col">
