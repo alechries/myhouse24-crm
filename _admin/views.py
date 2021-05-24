@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from _db import models, utils, auth
-from django import forms
 from django.contrib.auth import authenticate, login, logout
 from . import forms
 from django.db.models import Count
