@@ -17,37 +17,29 @@
         </div>
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="{% url 'cabinet_login' %}" data-toggle="tab" aria-expanded="true">Для жильца</a></li>
-                <li><a href="{% url 'admin_login' %}">Для администрации</a></li>
+                <li class="active"><a href="{% url 'cabinet_login' %}">Для жильца</a></li>
+                <li><a href="{% url 'admin_login' %}" data-toggle="tab" aria-expanded="true">Для администрации</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_1">
                     <div class="login-box-body">
-                        <p class="login-box-msg">Вход в личный кабинет</p>
-                        <form id="login-form" action="/cabinet/site/login" method="post">
-                            <input type="hidden" name="_csrf-cabinet" value="Q8bVsWHmEQ0H3JP8by5Yoa4G6l-ZlpgLpbRvrjUTi7sho4SAUZBiXmSL57RaGA_nmnTTE9H96mDMmSzCT3Ln6g==">
+                        {{ alerts }}
+                        <form action="{% url 'admin_login' %}" method="post">
+                            {% csrf_token %}
+                            <p class="login-box-msg">Вход в личный кабинет</p>
                             <div class="form-group has-feedback field-loginform-username required">
-                                <input type="text" id="loginform-username" class="form-control" name="LoginForm[username]" placeholder="E-mail или ID" aria-required="true">
+                                {{ form.email }}
                                 <i class="fas fa-envelope form-control-feedback"></i>
                             </div>
                             <div class="form-group has-feedback field-loginform-password required">
-                                <input type="password" id="loginform-password" class="form-control" name="LoginForm[password]" placeholder="Пароль" aria-required="true">
+                                {{ form.password }}
                                 <i class="fas fa-lock form-control-feedback"></i>
                             </div>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <div class="checkbox icheck">
-                                        <input type="hidden" name="LoginForm[rememberMe]" value="0">
-                                        <label>
-                                            <div class="icheckbox_flat-blue checked" aria-checked="false" aria-disabled="false" style="position: relative;">
-                                                <input type="checkbox" id="loginform-rememberme" name="LoginForm[rememberMe]" value="1" checked="" style="position: absolute; opacity: 0;">
-                                            </div> Запомнить меня
-                                        </label>
-                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block">Вход</button>
                                 </div>
-                                <div class="col-xs-12">
-                                    <button type="submit" class="btn btn-primary btn-block" name="login-button">Вход</button>                            </div>
-                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

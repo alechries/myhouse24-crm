@@ -1,7 +1,23 @@
 from django import forms
 from _db import models
+from django.forms import TextInput, CharField, Form
 from datetime import datetime
 
+
+class LoginForm(Form):
+    class Meta:
+        model = models.User
+
+    email = CharField(widget=TextInput(attrs={
+        'type': 'text',
+        'class': 'form-control',
+        'placeholder': 'Email',
+    }))
+    password = CharField(widget=TextInput(attrs={
+        'type': 'password',
+        'class': 'form-control',
+        'placeholder': 'Password',
+    }))
 
 class MasterRequestForm(forms.ModelForm):
     class Meta:

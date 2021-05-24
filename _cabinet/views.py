@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from _db import models
 from . import forms
+from _db import models, utils, auth
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, get_object_or_404, redirect
 
 
 def index_view(request):
@@ -13,7 +16,27 @@ def index_view(request):
 
 
 def login_view(request):
-    return render(request, 'cabinet/login.html')
+    alerts = []
+    if request.method == 'POST':
+        form = forms.LoginForm(request.POST)
+        print(form.data)
+        print(form.is_valid())
+        if form.is_valid():
+            user = auth.EmailAuthBackend.authenticate(email=form.cleaned_data['email'],
+                                                      password=form.cleaned_data['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect('cabinet_index')
+                else:
+                    alerts.append('User is not active')
+            else:
+                alerts.append('User does not exist')
+        else:
+            alerts.append('Data is incorrect')
+    else:
+        alerts.append('Please, Sign in')
+    return render(request, 'cabinet/login.html', {'form': forms.LoginForm(), 'alerts': alerts})
 
 
 def logout_view(request):
