@@ -19,8 +19,6 @@ def login_view(request):
     alerts = []
     if request.method == 'POST':
         form = forms.LoginForm(request.POST)
-        print(form.data)
-        print(form.is_valid())
         if form.is_valid():
             user = auth.EmailAuthBackend.authenticate(email=form.cleaned_data['email'],
                                                       password=form.cleaned_data['password'])
@@ -40,7 +38,8 @@ def login_view(request):
 
 
 def logout_view(request):
-    return render(request, 'cabinet/logout.html')
+    logout(request)
+    return redirect('cabinet_login')
 
 
 def statistic_view(request):

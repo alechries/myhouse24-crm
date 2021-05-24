@@ -34,14 +34,13 @@ AUTH_USER_MODEL = '_db.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    '_admin.middleware.AdminCookieSessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # '_admin.middleware.AccessCheckMiddleware',
-    '_admin.middleware.AdminCookieSessionMiddleware'
 ]
 
 ROOT_URLCONF = 'project.urls'

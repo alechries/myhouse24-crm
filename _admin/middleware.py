@@ -1,10 +1,14 @@
-from django.shortcuts import redirect
-import importlib
-from django.utils.cache import patch_vary_headers
 import time
+from importlib import import_module
+from django.conf import settings
+from django.contrib.sessions.backends.base import UpdateError
+from django.core.exceptions import SuspiciousOperation
 from django.utils.cache import patch_vary_headers
-from django.utils.module_loading import import_string
+from django.utils.deprecation import MiddlewareMixin
+from django.utils.http import http_date
+from django.shortcuts import redirect
 from django.contrib.sessions.middleware import SessionMiddleware
+from django.contrib.auth.middleware import AuthenticationMiddleware
 
 
 class AccessCheckMiddleware:
@@ -28,6 +32,10 @@ class AccessCheckMiddleware:
 class AdminCookieSessionMiddleware(SessionMiddleware):
 
     def cookie_name(self, request):
-        if request.path.startswith(u'/admin'):
-            return 'admin_session_cookie'
-        return 'user_session_cookie'
+        name = settings.SESSION_COOKIE_NAME
+        return 'admin_' + name if request.path.startswith('/admin') else 'cabinet_' + name
+
+    def process_request(self, request):
+        print(self.cookie_name(request))
+        session_key = request.COOKIES.get(self.cookie_name(request))
+        request.session = self.SessionStore(session_key)
