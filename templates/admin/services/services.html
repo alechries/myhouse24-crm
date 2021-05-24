@@ -54,7 +54,6 @@
                                     </div>
                                 {% endfor %}
                                 {{ service_formset.management_form }}
-                                <b class="service-form-counter">{{ forloop.counter }}</b>
                                 <div class="text-left">
                                     <button type="button" class="btn btn-secondary" id="add-service-form">Добавить услугу</button>
                                 </div>
@@ -119,7 +118,7 @@
     let counter = '.service-form-counter';
 
     document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(prefix, form) }, false);
-    $('#add-service-form').click(function() { addForm(prefix, form, counter); });
+    $('#add-service-form').click(function() { addChoiseForm(prefix, form, counter); });
     $('.del-service-form').click(function() { delForm(this, prefix, form, counter); });
     </script>
     <script>

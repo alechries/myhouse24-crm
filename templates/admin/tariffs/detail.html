@@ -53,7 +53,7 @@
                         {% if tariff_service.count > 0 %}
                         {% for el in tariff_service %}
                         <tr>
-                            <td></td>
+                            <td>{{ forloop.counter }}</td>
                             <td>{{ el.service }}</td>
                             <td>{{ el.service.measure }}</td>
                             <td>{{ el.price }}</td>

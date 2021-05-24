@@ -203,7 +203,7 @@
     let floor_form = '.floor-form-area';
     let floor_counter = '.floor-form-counter';
     document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(floor_prefix, floor_form) }, false);
-    $('#add-floor-form').click(function() { addForm(floor_prefix, floor_form, floor_counter); });
+    $('#add-floor-form').click(function() { addChoiseForm(floor_prefix, floor_form, floor_counter); });
     $('.del-house-floor-form').click(function() { delForm(this, floor_prefix, floor_form, floor_counter); });
     </script>
     <script>
@@ -219,7 +219,7 @@
     let user_form = '.user-form-area';
     let user_counter = '.user-form-counter';
     document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(user_prefix, user_form) }, false);
-    $('#add-user-form').click(function() { addForm(user_prefix, user_form, user_counter); });
+    $('#add-user-form').click(function() { addChoiseForm(user_prefix, user_form, user_counter); });
     $('.del-house-user-form').click(function() { delForm(this, user_prefix, user_form, user_counter); });
     </script>
     <script>

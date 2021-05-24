@@ -299,18 +299,43 @@ class TariffCreateForm(forms.ModelForm):
 
 
 class TariffServiceForm(forms.ModelForm):
-    model = models.TariffService
-    fields = ['price', 'service']
-    widgets = {
-        'id': forms.HiddenInput(),
-        'price': forms.Textarea(attrs={
-            'placeholder': 'Введите цену',
-            'type': 'text',
-            'class': 'form-control',
-            'style': 'margin: 0.25rem 0',
-        }),
+    class Meta:
+        model = models.TariffService
+        fields = ['id', 'price', 'service']
+        widgets = {
+            'id': forms.HiddenInput(),
+            'price': forms.TextInput(attrs={
+                'placeholder': 'Введите цену',
+                'class': 'form-control',
+                'style': 'margin: 0.25rem 0',
+            }),
 
-    }
+        }
+
+
+class TariffInvoiceForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(TariffInvoiceForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+    class Meta:
+        model = models.TariffService
+        fields = ['id', 'service', 'amount', 'price']
+        widgets = {
+            'id': forms.HiddenInput(),
+            'amount': forms.TextInput(attrs={
+                'placeholder': 'Введите показания',
+                'class': 'form-control',
+                'style': 'margin: 0.25rem 0',
+            }),
+            'price': forms.TextInput(attrs={
+                'placeholder': 'Введите показания',
+                'class': 'form-control',
+                'style': 'margin: 0.25rem 0',
+            }),
+
+        }
+
 
 
 class ApartmentForm(forms.ModelForm):
@@ -663,7 +688,7 @@ class InvoiceForm(forms.ModelForm):
 
     class Meta:
         model = models.Invoice
-        fields = ['number', 'house', 'section', 'apartment', 'type', 'date', 'period_from', 'period_to', 'status', 'tariff']
+        fields = ['number','house', 'section', 'apartment', 'type', 'date', 'period_from', 'period_to', 'status']
         widgets = {
             'number': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -773,6 +798,3 @@ class UserHouseForm(forms.ModelForm):
             'id': forms.HiddenInput(),
         }
 
-
-class InvoiceServicesForm(forms.ModelForm):
-    pass

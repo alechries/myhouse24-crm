@@ -62,3 +62,26 @@ function addHiddenForm(prefix, form_class, image_class, default_image_url){
     element.css('display', 'none');
     $(selector).before(element);
 }
+function addChoiseForm(prefix, form, counter) {
+    let selector_first = form + ":first";
+    let selector_last = form + ":last";
+    let newElement = $(selector_first).clone(true);
+    let total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+    let i = 0;
+
+    newElement.find('input, select').each(function () {
+        let name = prefix + '-' + total + '-' + $(this).attr('name');
+        let id = 'id_' + name;
+        $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+    });
+    newElement.css('display', '')
+
+    total++;
+    $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+    if (counter) newElement.find(counter).each(function () {
+        $(this).text(total);
+    });
+    $(selector_last).after(newElement);
+
+    let attr_id = newElement.find('select').attr('id');
+}

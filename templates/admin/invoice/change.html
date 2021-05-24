@@ -19,10 +19,10 @@
             <div class="row">
             <div class="col-md-6 d-flex justify-content-center">
                 <div class="col-md-6">
-                    {{ form.number }}
+                    {{ invoice_form.number }}
                 </div>
                 <div class="col-md-6">
-                    {{ form.date }}
+                    {{ invoice_form.date }}
                 </div>
             </div>
             </div>
@@ -33,43 +33,80 @@
                             <div class="col-xs-12 col-sm-6">
                                 <div class="row" id="select-house" style="display: block; margin-top: 35px">
                                     <label>Дом</label>
-                                    {{ form.house|as_crispy_field }}
+                                    {{ invoice_form.house }}
                                 </div>
                                 <div class="row" id="select-section" style="display: block">
                                     <label>Секция</label>
-                                    {{ form.section|as_crispy_field }}
+                                    {{ invoice_form.section }}
                                 </div>
                                 <div class="row" id="select-apartment" style="display: block">
                                     <label>Квартира</label>
-                                    {{ form.apartment|as_crispy_field }}
+                                    {{ invoice_form.apartment }}
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6">
                                 <div class="form-check d-flex justify-content-start input-form-height-20">
-                                    {{ form.status }}
+                                    {{ invoice_form.status }}
                                     <label>Проведена</label>
                                 </div>
                                 <div class="row" style="display: block">
                                     <label>Статус</label>
-                                    {{ form.type|as_crispy_field }}
+                                    {{ invoice_form.type|as_crispy_field }}
                                 </div>
                                 <div class="row" style="display: block">
                                     <label>Тариф</label>
-                                    {{ form.tariff|as_crispy_field }}
                                 </div>
                                 <div class="row">
                                     <div class="col">
                                         <label>Период с</label>
-                                        {{ form.period_from }}
+                                        {{ invoice_form.period_from }}
                                     </div>
                                     <div class="col">
                                         <label>Период по</label>
-                                        {{ form.period_to }}
+                                        {{ invoice_form.period_to }}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6">
+                        <div class="row">
+                            <div class="col">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Услуга</th>
+                                            <th>Расход</th>
+                                            <th>Ед. изм.</th>
+                                            <th>Цена за ед., грн.</th>
+                                            <th>Стоимость, грн.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {{ tariff_invoice_formset.management_form }}
+                                    {% for form in tariff_invoice_formset %}
+                                        <tr>
+                                            <div class="tariff-invoice-form-area">
+                                                {{ form.id }}
+                                                <td>{{ form.service|as_crispy_field }}</td>
+                                                <td>{{ form.amount }}</td>
+                                                <td>ЕД ИЗМ</td>
+                                                <td>{{ form.price }}</td>
+                                                <td></td>
+                                        <tr>
+                                        {% endfor %}
+                                            <td colspan="4">
+                                                <div class="text-left">
+                                                    <button type="button" class="btn btn-secondary" id="add-tariff-invoice-form">Добавить услугу</button>
+                                                    <button type="button" class="btn btn-secondary" id="add-tariff-service-form">Установить все услуги согласно тарифу</button>
+                                                    <button type="button" class="btn btn-secondary" id="add-tariff-service-form">Добавить показания счётчиков</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            <div class="row d-flex justify-content-start">
+                                <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -124,4 +161,23 @@ $('#select-section').find('select').each(function() {
 });
 
 </script>
+    <script src="{% static 'base/js/dynamicforms.js' %}"></script>
+    <script src="{% static 'base/js/requestwithoutreload.js' %}"></script>
+    <script>
+    let tariff_invoice_prefix = 'tariff_invoice_form';
+    let tariff_invoice_form = '.tariff-invoice-form-area';
+    let tariff_invoice_counter = '.tariff_invoice-form-counter';
+
+    document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(tariff_invoice_prefix, tariff_invoice_form) }, false);
+    $('#add-tariff-invoice-form').click(function() { addChoiseForm(tariff_invoice_prefix, tariff_invoice_form, tariff_invoice_counter); });
+    $('.del-tariff-invoice-form').click(function() { delForm(this, tariff_invoice_prefix, tariff_invoice_form, tariff_invoice_counter); });
+    </script>
+    <script>
+    $('.del-tariff-service-form').click(function(){
+        var deleteURL = $(this).attr("href");
+        token = $("input[name='csrfmiddlewaretoken']").val();
+        data = {'csrfmiddlewaretoken':token}
+        if (deleteURL != '#') requestWithoutReload(deleteURL, data);
+    });
+    </script>
 {% endblock %}

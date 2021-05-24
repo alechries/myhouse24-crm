@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from _db import models, utils, auth
-from django import forms
 from django.contrib.auth import authenticate, login, logout
 from . import forms
 from django.db.models import Count
@@ -124,10 +123,37 @@ def invoice_view(request):
 
 
 def invoice_create_view(request):
-    form = forms.InvoiceForm(request.POST or None)
+    TaroffInvoiceFormset = inlineformset_factory(
+        parent_model=models.Invoice,
+        model=models.TariffService,
+        form=forms.TariffInvoiceForm,
+        max_num=1
+    )
+    alerts = []
+    if request.method == 'POST':
+        invoice_form = forms.InvoiceForm(request.POST, prefix='invoice_form')
+        tariff_invoice_formset = TaroffInvoiceFormset(request.POST, prefix='tariff_invoice_form')
+        print('invoice: ', invoice_form.is_valid(),invoice_form.data , 'tariff: ', tariff_invoice_formset.is_valid())
+        print(invoice_form.clean())
+        if invoice_form.is_valid() and tariff_invoice_formset.is_valid():
+            invoice = invoice_form.save()
+            tariff_invoice_queryset = tariff_invoice_formset.save(commit=False)
+            total = 0
+            for tariff_invoice_form in tariff_invoice_queryset:
+                tariff_invoice_form.invoice.id = invoice.id
+                total += int(tariff_invoice_form.price) * int(tariff_invoice_form.amount)
+            invoice.total_amount = total
+            invoice.save()
+            alerts.append('Квитанция сохранена')
+
+    else:
+        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form')
+        tariff_invoice_formset = TaroffInvoiceFormset(request.POST or None, prefix='tariff_invoice_form')
 
     context = {
-        'form': form
+        'invoice_form': invoice_form,
+        'tariff_invoice_formset': tariff_invoice_formset,
+        'alerts': alerts
     }
     return render(request, 'admin/invoice/change.html', context)
 
@@ -190,7 +216,7 @@ def apartment_view(request):
 
 def apartment_detail_view(request, pk):
     apartment = get_object_or_404(models.Apartment, id=pk)
-    account = models.Account.objects.filter(apartment=apartment)
+    account = models.Account.objects.filter(appartament_related=apartment)
     return render(request, 'admin/apartment/detail.html', {'apartment': apartment,
                                                            'account': account})
 
@@ -855,16 +881,6 @@ def tariffs_create_view(request):
     TariffServiceFormset = inlineformset_factory(
         parent_model=models.Tariff,
         model=models.TariffService,
-        fields=('price', 'service'),
-        widgets={
-            'price': forms.TextInput(attrs={
-                'placeholder': 'Введите цену',
-                'type': 'text',
-                'class': 'form-control',
-                'style': 'margin: 0.25rem 0',
-            }),
-
-        },
         form=forms.TariffServiceForm,
         max_num=1
     )
@@ -875,6 +891,7 @@ def tariffs_create_view(request):
         if tariff_form.is_valid() and tariff_service_formset.is_valid():
             tariff = tariff_form.save()
             tariff_service_queryset = tariff_service_formset.save(commit=False)
+            print(tariff_form.data)
 
             for tariff_section_form in tariff_service_queryset:
                 tariff_section_form.tariff.id = tariff.id
