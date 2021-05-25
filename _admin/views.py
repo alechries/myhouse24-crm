@@ -10,10 +10,11 @@ from django.forms import inlineformset_factory
 
 
 def index_view(request):
-    username = None
+    user = request.user
+    print(user)
     if request.user.is_authenticated:
         username = f'{request.user.first_name} {request.user.last_name}'
-    return render(request, 'admin/index.html', {'user': username})
+    return render(request, 'admin/index.html', {'user': user})
 
 
 def test_view(request):
@@ -28,8 +29,6 @@ def login_view(request):
     alerts = []
     if request.method == 'POST':
         form = forms.LoginForm(request.POST)
-        print(form.data)
-        print(form.is_valid())
         if form.is_valid():
             user = auth.EmailAuthBackend.authenticate(email=form.cleaned_data['email'],
                                                       password=form.cleaned_data['password'])
@@ -50,7 +49,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('public_index')
+    return redirect('admin_login')
 
 
 def account_transaction_view(request):
