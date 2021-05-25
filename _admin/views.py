@@ -133,8 +133,6 @@ def invoice_create_view(request):
     if request.method == 'POST':
         invoice_form = forms.InvoiceForm(request.POST, prefix='invoice_form')
         tariff_invoice_formset = TaroffInvoiceFormset(request.POST, prefix='tariff_invoice_form')
-        print('invoice: ', invoice_form.is_valid(),invoice_form.data , 'tariff: ', tariff_invoice_formset.is_valid())
-        print(invoice_form.clean())
         if invoice_form.is_valid() and tariff_invoice_formset.is_valid():
             invoice = invoice_form.save()
             tariff_invoice_queryset = tariff_invoice_formset.save(commit=False)

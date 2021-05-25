@@ -219,7 +219,7 @@ class Apartment(models.Model):
     floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, verbose_name='')
     name = models.CharField('Номер квартиры', max_length=255)
     apartment_area = models.FloatField('Площадь квартиры', max_length=255, null=True)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True, related_name="appartament_related")
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True, related_name="appartament_related", unique=True)
     tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
@@ -284,7 +284,7 @@ class Invoice(models.Model):
     paid = models.IntegerField(null=True)
     number = models.CharField('', max_length=255, null=True) #
     type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, null=True, blank=True) #
-    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True) #
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE) #
     period_from = models.DateField("Дата с", null=True) #
     period_to = models.DateField("Дата по", null=True) #
     date = models.DateField(null=True) #
@@ -294,11 +294,11 @@ class Invoice(models.Model):
 
 
 class TariffService(models.Model):
-    amount = models.IntegerField(verbose_name='К-во едениц измерения', default=0)
+    amount = models.FloatField(verbose_name='К-во едениц измерения', default=0)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, null=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True, verbose_name='')
     tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True, blank=True)
-    price = models.TextField(max_length=255, blank=True, null=True, verbose_name='цена за еденицу')
+    price = models.FloatField(max_length=255, blank=True, null=True, verbose_name='цена за еденицу')
 
 
 class SEO(models.Model):
