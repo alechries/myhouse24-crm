@@ -219,7 +219,7 @@ class Apartment(models.Model):
     floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, verbose_name='')
     name = models.CharField('Номер квартиры', max_length=255)
     apartment_area = models.FloatField('Площадь квартиры', max_length=255, null=True)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True, related_name="appartament_related", unique=True)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE, blank=True, null=True, related_name="appartament_related", unique=True)
     tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
