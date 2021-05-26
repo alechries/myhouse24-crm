@@ -49,6 +49,7 @@ def update_me_view(request):
 
 def login_view(request):
     alerts = []
+
     if request.method == 'POST':
         form = forms.LoginForm(request.POST)
         print(form.is_valid())

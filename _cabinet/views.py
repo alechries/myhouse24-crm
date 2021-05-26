@@ -17,6 +17,7 @@ def index_view(request):
 
 def login_view(request):
     alerts = []
+
     if request.method == 'POST':
         form = forms.LoginForm(request.POST)
         if form.is_valid():

@@ -35,7 +35,7 @@
                             </div>
                             <div>
                                 Краткий текст
-                                {{ about_form.description }}
+                                {{ about_form.description|safe }}
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                         <button type="button" class="btn btn-secondary" id="add-about-block">Добавить услугу</button>
                     </div>
                 </div>
-                <div class="default-area">
+                <div class="default-area" style="display:none">
                     <h4>Настройки SEO</h4>
                     <hr/>
                     <div>
@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <div class="default-area text-center">
-                    <button type="submit" class="btn btn-success">Сохранить информацию и настройки SEO</button>
+                    <button type="submit" class="btn btn-success">Сохранить</button>
                 </div>
             </form>
         </div>
