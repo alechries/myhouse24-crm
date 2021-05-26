@@ -7,3 +7,4 @@ django-solo == 1.1.5
 django-crispy-forms == 1.11.1
 django-easy-maps == 1.1.2
 djangorestframework == 3.12.4
+openpyxl == 3.0.7
