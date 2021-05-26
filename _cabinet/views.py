@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 
 def index_view(request):
-    user = models.User.objects.filter(id=1)[0]
+    user = models.User.objects.get(id=1)
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     return render(request, 'cabinet/index.html', {'user': user,
@@ -51,7 +51,7 @@ def invoice_view(request, pk=None):
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     if pk == 0:
-        invoice = models.Invoice.objects.filter(apartment=pk)
+        invoice = models.Invoice.objects.filter(apartment=apartments)
     else:
         invoice = models.Invoice.objects.filter(apartment__user=user)
     return render(request, 'cabinet/invoice/index.html', {'user': user,
@@ -97,7 +97,7 @@ def messages_delete_view(request):
 
 
 def master_request_view(request):
-    user = models.User.objects.filter(id=1)[0]
+    user = models.User.objects.get(id=1)
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     requests = models.MasterRequest.objects.filter(apartment__user=user)
@@ -107,7 +107,7 @@ def master_request_view(request):
 
 
 def master_request_create_view(request):
-    user = models.User.objects.filter(id=1)[0]
+    user = models.User.objects.get(id=1)
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     form = forms.MasterRequestForm(request.POST)
