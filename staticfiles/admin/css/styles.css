@@ -37,6 +37,7 @@ a.nav-link.expand{
 .fas, .far, .fal{
     width: 20px;
 }
+
 .brand-link .brand-image{
     max-height: 40px;
 }
@@ -146,6 +147,15 @@ li.breadcrumb-item>a{
     .col-sm-6 {
         width: 50%;
     }
+}
+p>i.fas{
+    left: 90%
+}
+.icon>i{
+    left: 75%
+}
+a.nav-link>i{
+    left: auto;
 }
 .small-box h3 {
     font-size: 38px;

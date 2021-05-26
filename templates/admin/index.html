@@ -10,8 +10,12 @@
         <div class="col-lg-4 col-sm-6 col-xs-12">
             <div class="small-box bg-primary">
                 <div class="inner">
-                    <h3>%n%</h3>
+                    <h3>{{ houses }}</h3>
+                    {% if houses == 1 %}
+                    <p>Дом</p>
+                    {% else %}
                     <p>Домов</p>
+                    {% endif %}
                 </div>
                 <div class="icon">
                     <i class="fas fa-building"></i>
@@ -24,8 +28,12 @@
         <div class="col-lg-4 col-sm-6 col-xs-12">
             <div class="small-box bg-green">
                 <div class="inner">
-                    <h3>%n%</h3>
-                    <p>Активных владельцев</p>
+                    <h3>{{ active_user }}</h3>
+                    {% if active_user == 1 %}
+                    <p>Активный пользователь</p>
+                    {% else %}
+                    <p>Активных пользователей</p>
+                    {% endif %}
                 </div>
                 <div class="icon">
                     <i class="fas fa-users"></i>
@@ -38,8 +46,12 @@
         <div class="col-lg-4 col-sm-6 col-xs-12">
             <div class="small-box bg-yellow">
                 <div class="inner">
-                    <h3>%n%</h3>
+                    <h3>{{ master_request }}</h3>
+                    {% if master_request == 1 %}
+                    <p>Заявка мастера в работе</p>
+                    {% else %}
                     <p>Заявок мастера в работе</p>
+                    {% endif %}
                 </div>
                 <div class="icon">
                     <i class="fas fa-wrench"></i>
@@ -52,7 +64,7 @@
         <div class="col-lg-4 col-sm-6 col-xs-12">
             <div class="small-box bg-primary">
                 <div class="inner">
-                    <h3>%n%</h3>
+                    <h3>{{ apartment }}</h3>
                     <p>Квартир</p>
                 </div>
                 <div class="icon">
@@ -66,7 +78,7 @@
         <div class="col-lg-4 col-sm-6 col-xs-12">
             <div class="small-box bg-green">
                 <div class="inner">
-                    <h3>%n%</h3>
+                    <h3>{{ account }}</h3>
                     <p>Лицевых счетов</p>
                 </div>
                 <div class="icon">
@@ -80,11 +92,11 @@
         <div class="col-lg-4 col-sm-6 col-xs-12">
             <div class="small-box bg-yellow">
                 <div class="inner">
-                    <h3>%n%</h3>
+                    <h3>{{ master_request_new }}</h3>
                     <p>Новых заявок мастера</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-user-plus"></i>
+                    <i class="fas fa-user-plus"></i>
                 </div>
                 <a href="/admin/master-request/index" class="small-box-footer">
                     Перейти в заявки <i class="fa fa-arrow-circle-right"></i>
@@ -122,21 +134,21 @@
                 <span class="info-box-icon bg-red"><i class="far fa-money-bill-alt"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Задолженность по счетам, грн</span>
-                    <span class="info-box-number">58 644.90</span>
+                    <span class="info-box-number">{{ account_arrears }}</span>
                 </div>
             </div>
             <div class="info-box">
                 <span class="info-box-icon bg-blue"><i class="far fa-money-bill-alt"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Баланс по счетам, грн</span>
-                    <span class="info-box-number">53 559.00</span>
+                    <span class="info-box-number">{{ account_balance }}</span>
                 </div>
             </div>
             <div class="info-box">
                 <span class="info-box-icon bg-green"><i class="far fa-money-bill-alt"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Состояние кассы, грн</span>
-                    <span class="info-box-number">102 985.40</span>
+                    <span class="info-box-number">{{ system_balance }}</span>
                 </div>
             </div>
     <!--        <div class="info-box">

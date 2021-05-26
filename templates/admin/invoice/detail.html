@@ -1,0 +1,114 @@
+{% extends 'admin/base.html' %}
+{% block page_title %}
+    <h1 class="m-0">Квитанция</h1>
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_invoice' %}">
+            Квитанции
+        </a>
+    </li>
+    <li class="breadcrumb-item active">Квитанция №{{ invoice.number }}</li>
+{% endblock %}
+{% block main_content %}
+<section class="content input-form">
+    <div class="container-fluid">
+        <div class="card card-secondary card-outline">
+            <section>
+            <div class="d-flex justify-content-between" style="padding: 0 10px">
+                <h4>Просмотр квитации</h4>
+                <a href="{% url 'admin_invoice-change' pk=invoice.id %}" class="btn btn-success">Редактировать квитанцию</a>
+            </div>
+                <div class="default-area">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <td>Проведена</td>
+                            {% if invoice.status == 1 %}
+                                <td style="color: #00ba13"><small class="label label-success">Проведена</small></td>
+                            {% else %}
+                                <td style="color: #c62232"><small class="label label-danger">Не проведена</small></td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td>Статус</td>
+                            {% if invoice.type == 'Оплачена' %}
+                                <td style="color: #00ba13"><small class="label label-success">Оплачена</small></td>
+                            {% elif invoice.type == 'Неоплачена' %}
+                                <td style="color: #c62232"><small class="label label-danger">Неоплачена</small></td>
+                            {% else %}
+                                <td style="color: #f6ba04"><small class="label label-warning">Частично оплачена</small></td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td>Период</td>
+                            <td>С {{ invoice.period_from }} по {{ invoice.period_to }}</td>
+                        </tr>
+                        <tr>
+                            <td>Владелец</td>
+                            <td>{{ invoice.apartment.user }}</td>
+                        </tr>
+                        <tr>
+                            <td>Лицевой счёт</td>
+                            <td>{{ invoice.apartment.account }}</td>
+                        </tr>
+                        <tr>
+                            <td>Дом</td>
+                            <td>{{ invoice.apartment.floor.section.house.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Квартира</td>
+                            <td>{{ invoice.apartment}}</td>
+                        </tr>
+                        <tr>
+                            <td>Секция</td>
+                            <td>{{ invoice.apartment.floor.section}}</td>
+                        </tr>
+                        <tr>
+                            <td>Тариф</td>
+                            {% if invoice.tariff %}
+                            <td>{{ invoice.tariff}}</td>
+                            {% else %}
+                            <td>Не указан</td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                    <table class="table table-bordered table-hover table-striped linkedRow">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Услуга</th>
+                                <th>Количество потребления (расход)</th>
+                                <th>Ед. изм.</th>
+                                <th>Цена за 1 ед., грн</th>
+                                <th>Стоимость, грн</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for el in service %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ el.service.name }}</td>
+                            <td>{{ el.amount }}</td>
+                            <td>{{ el.service.measure.name }}</td>
+                            <td>{{ el.price }}</td>
+                            <td>{{ el.get_total }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="5"><div class="empty"></div></td>
+                            <td><label>Итого: {{ invoice.total_amount }}</label></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+{% endblock %}

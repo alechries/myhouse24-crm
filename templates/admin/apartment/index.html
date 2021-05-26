@@ -38,7 +38,15 @@
                             <td>{{ el.floor.section.name }}</td>
                             <td>{{ el.floor }}</td>
                             <td>{{ el.user.first_name }} {{ el.user.last_name }}</td>
-                            <td></td>
+                            {% if el.account.money > 0 %}
+                            <td style="color: #00a65a">{{ el.account.money }}</td>
+                            {% elif el.account.money < 0 %}
+                            <td style="color: #791606">{{ el.account.money }}</td>
+                            {% elif el.account.money == 0 %}
+                            <td>{{ el.account.money }}</td>
+                            {% else %}
+                            <td>Нет счёта</td>
+                            {% endif %}
                             <td>
                                 <div class="btn-group pull-right">
                                     <a class="btn btn-default btn-sm" href="{% url 'admin_apart-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">

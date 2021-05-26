@@ -1,3 +1,4 @@
+from _db import models
 """from datetime import datetime
 from _db import models
 
@@ -34,3 +35,31 @@ def serial_number_transfer():
         date = f'{date}001'
     return date
 """
+
+
+def calculate_statistic():
+    system_balance = 0
+    account_balance = 0
+    account_arrears = 0
+    transfer_in_list = models.Transfer.objects.filter(solo_status=True)
+    transfer_out_list = models.Transfer.objects.filter(solo_status=False)
+    invoice_arrears = models.Invoice.objects.filter(type='Неоплачена')
+    transaction_balance = models.Transfer.objects.filter(solo_status=None)
+    for el in invoice_arrears:
+        if el.total_amount is not None:
+            account_arrears += el.total_amount
+
+    for el in transaction_balance:
+        if el.amount is not None:
+            account_balance += el.amount
+    for el in transfer_in_list:
+        if el.amount is not None:
+            system_balance += el.amount
+    for el in transfer_out_list:
+        if el.amount is not None:
+            system_balance -= el.amount
+    return {
+        'system_balance': float(system_balance),
+        'account_balance': float(account_balance),
+        'account_arrears': float(account_arrears)
+    }

@@ -230,9 +230,13 @@ class WebsiteContactsForm(forms.ModelForm):
 
 
 class AccountTransactionForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AccountTransactionForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
     class Meta:
         model = models.Transfer
-        fields = ['user', 'manager', 'account', 'transfer_type', 'amount', 'comment', 'payment_made', 'created_date',
+        fields = ['manager', 'account', 'transfer_type', 'amount', 'comment', 'payment_made', 'created_date',
                   'number']
         widgets = {
             'amount': forms.NumberInput(attrs={
@@ -323,13 +327,15 @@ class TariffInvoiceForm(forms.ModelForm):
         fields = ['id', 'service', 'amount', 'price']
         widgets = {
             'id': forms.HiddenInput(),
-            'amount': forms.TextInput(attrs={
+            'amount': forms.NumberInput(attrs={
                 'placeholder': 'Введите показания',
                 'class': 'form-control',
+                'step': "1",
                 'style': 'margin: 0.25rem 0',
             }),
-            'price': forms.TextInput(attrs={
+            'price': forms.NumberInput(attrs={
                 'placeholder': 'Введите показания',
+                'step': "0.1",
                 'class': 'form-control',
                 'style': 'margin: 0.25rem 0',
             }),
@@ -671,14 +677,7 @@ class InvoiceForm(forms.ModelForm):
         queryset=models.House.objects.all(),
         empty_label='Выберите...',
     )
-    section = forms.ModelChoiceField(
-        queryset=models.Section.objects.none(),
-        empty_label='Выберите...',
-    )
-    apartment = forms.ModelChoiceField(
-        queryset=models.Apartment.objects.none(),
-        empty_label='Выберите...',
-    )
+
 
     def __init__(self, *args, **kwargs):
         super(InvoiceForm, self).__init__(*args, **kwargs)
@@ -688,7 +687,7 @@ class InvoiceForm(forms.ModelForm):
 
     class Meta:
         model = models.Invoice
-        fields = ['number','house', 'section', 'apartment', 'type', 'date', 'period_from', 'period_to', 'status']
+        fields = ['number', 'house', 'apartment', 'type', 'date', 'period_from', 'period_to', 'status']
         widgets = {
             'number': forms.TextInput(attrs={
                 'class': 'form-control',
