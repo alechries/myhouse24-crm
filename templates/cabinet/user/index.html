@@ -1,10 +1,140 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'cabinet/base.html' %}
+{% block page_title %}
+    <h1 class="m-0">Профиль</h1>
+{% endblock %}
+{% block main_content %}
+    <section class="content input-form">
+         <div class="container-fluid d-flex justify-content-start">
+             <div class="col-lg-3" style="padding: 0 15px">
+                 <div class="row">
+                     <div class="col-md-6 col-lg-12" style="background-color: white">
+                         <div class="box">
+                             <div class="box-body box-profile">
+                                 <img class="profile-user-img img-responsive img-circle" src="{{ user.avatar.url }}" style="width: 160px; height: 160px" alt="Аватар">
 
-</body>
-</html>
+                                 <h3 class="profile-username text-center">{{ user }}</h3>
+
+                                 <p class="text-muted text-center">Владелец квартиры</p>
+
+                                 <ul class="list-group list-group-unbordered">
+                                     <li class="list-group-item">
+                                         <span>Телефон</span>
+                                         <span class="pull-right">{{ user.number }}</span>
+                                     </li>
+                                     <li class="list-group-item">
+                                         <span>Viber</span>
+                                         {% if user.viber %}
+                                         <span class="pull-right">{{ user.viber }}</span>
+                                         {% else %}
+                                         <span class="pull-right"></span>
+                                         {% endif %}
+                                     </li>
+                                     <li class="list-group-item">
+                                         <span>Telegram</span>
+                                         {% if user.telegram %}
+                                         <span class="pull-right">{{ user.telegram }}</span>
+                                         {% else %}
+                                         <span class="pull-right"></span>
+                                         {% endif %}
+                                     </li>
+                                     <li class="list-group-item">
+                                         <span>Email</span>
+                                         <span class="pull-right">{{ user.email }}</span>
+                                     </li>
+                                 </ul>
+
+                                 <a href="/cabinet/user/update" class="btn btn-primary btn-block">Изменить</a>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="col-md-6 col-lg-12">
+                         <h3 class="page-header">Обо мне (заметки)</h3>
+                         <div class="box">
+                             <div class="box-body box-profile">
+                                 {% if user.about %}
+                                 {{ user.about }}
+                                 {% else %}
+                                     Нет заметок
+                                 {% endif %}
+                             </div>
+                         </div>
+                     </div>
+                     <!-- /.box-body -->
+                 </div>
+             </div>
+
+            <!--
+             <div class="col-lg-9" style="padding: 0 15px;">
+                 <h2 class="page-header">Мои квартиры</h2>
+                 <div class="box" style="background-color: white; padding: 10px">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Описание квартиры</h3>
+                    </div>
+                    <div class="box-body">
+                        <p>ЖК "Дом Каркашадзе". Французский бульвар, 29, кв. 2017</p>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <img src="{{ el.image1.url }}" style="width: 522px; height: 350px;" class="img-responsive largeImg margin-bottom-30" alt="">
+                            </div>
+                            <div class="col-xs-6 col-md-3">
+                                <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="">
+                            </div>
+                            <div class="col-xs-6 col-md-3">
+                                <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="">
+                            </div>
+                            <div class="col-xs-6 col-md-3">
+                                <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="">
+                            </div>
+                            <div class="col-xs-6 col-md-3">
+                                <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Описание</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th style="min-width: 200px; font-weight:normal;">Название дома</th>
+                                        <th style="font-weight:normal;">ЖК "Дом Каркашадзе"</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Адрес</td>
+                                        <td>Французский бульвар, 29</td>
+                                    </tr>
+                                    <tr>
+                                        <td>№ квартиры</td>
+                                        <td>2017</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Площадь</td>
+                                        <td>
+                                            99.00м<sup>2</sup>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Этаж</td>
+                                        <td>Этаж 2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Секция</td>
+                                        <td>Секция 1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Лицевой счет</td>
+                                        <td>10012-00000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+             </div>
+            -->
+
+         </div>
+    </section>
+{% endblock %}

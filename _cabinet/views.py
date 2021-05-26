@@ -51,17 +51,26 @@ def invoice_view(request, pk=None):
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     if pk == 0:
-        invoice = models.Invoice.objects.filter(apartment=apartments)
-    else:
         invoice = models.Invoice.objects.filter(apartment__user=user)
+    else:
+        invoice = models.Invoice.objects.filter(apartment_id=pk)
     return render(request, 'cabinet/invoice/index.html', {'user': user,
                                                           'invoice': invoice,
                                                           'houses': houses,
                                                           'apartments': apartments})
 
 
-def invoice_view_view(request):
-    return render(request, 'cabinet/invoice/view.html')
+def invoice_detail_view(request, pk):
+    user = models.User.objects.get(id=1)
+    houses = models.House.objects.filter(userhouse__user=user)
+    apartments = models.Apartment.objects.filter(user=user)
+    invoice = models.Invoice.objects.get(id=pk)
+    service = models.TariffService.objects.filter(invoice=invoice)
+    return render(request, 'cabinet/invoice/detail.html', {'user': user,
+                                                           'service': service,
+                                                           'invoice': invoice,
+                                                           'houses': houses,
+                                                           'apartments': apartments})
 
 
 def tariffs_view(request):
@@ -130,7 +139,13 @@ def master_request_delete_view(request, pk):
 
 
 def user_view(request):
-    return render(request, 'cabinet/user/index.html')
+    user = models.User.objects.get(id=1)
+    houses = models.House.objects.filter(userhouse__user=user)
+    print(houses)
+    apartments = models.Apartment.objects.filter(user=user)
+    return render(request, 'cabinet/user/index.html', {'user': user,
+                                                       'houses': houses,
+                                                       'apartments': apartments})
 
 
 def user_change_view(request):

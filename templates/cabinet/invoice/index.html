@@ -18,9 +18,9 @@
                     <tbody>
                     {% if invoice.count > 0 %}
                     {% for el in invoice %}
-                        <tr>
+                        <tr data-href="{% url 'cabinet_invoice-view'  pk=el.pk %}">
                             <td>{{ el.number }}</td>
-                            <td>{{ el.period_from }}</td>
+                            <td>{{ el.period_from }} - {{ el.period_to }}</td>
                             <td>{{ el.type }}</td>
                             <td>{{ el.total_amount }}</td>
                         </tr>
@@ -35,4 +35,11 @@
             </div>
          </div>
     </section>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $('tr[data-href]').on("click", function() {
+    document.location = $(this).data('href');
+    });
+    </script>
 {% endblock %}
