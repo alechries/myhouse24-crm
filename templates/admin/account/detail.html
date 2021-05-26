@@ -47,23 +47,27 @@
                         </tr>
                         <tr>
                             <td>Дом</td>
-                            <td>{{ el.apartment.floor.section.house.name }}</td>
+                            <td>{{ el.get_apartment.floor.section.house.name }}</td>
                         </tr>
                         <tr>
                             <td>Секция</td>
-                            <td>{{ el.apartment.floor.section }}</td>
+                            <td>{{ el.get_apartment.floor.section.name }}</td>
                         </tr>
                         <tr>
                             <td>Квартира</td>
-                            <td>{{ el.apartment }}</td>
+                            <td>{{ el.get_apartment }}</td>
                         </tr>
                         <tr>
                             <td>Владелец</td>
-                            <td>{{ el.apartment.user }}</td>
+                            <td>{{ el.get_apartment.user }}</td>
                         </tr>
                         <tr>
                             <td>Остаток грн.</td>
-                            <td>{{ el.manager.first_name}} {{ el.manager.last_name }}</td>
+                            {% if el.money >= 0 %}
+                                <td style="color: #00a65a">{{ el.money }} грн.</td>
+                            {% else %}
+                                <td style="color: red">{{ el.money }} грн.</td>
+                            {% endif %}
                         </tr>
                     </table>
                     <div class="col">

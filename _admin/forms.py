@@ -230,9 +230,13 @@ class WebsiteContactsForm(forms.ModelForm):
 
 
 class AccountTransactionForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AccountTransactionForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
     class Meta:
         model = models.Transfer
-        fields = ['user', 'manager', 'account', 'transfer_type', 'amount', 'comment', 'payment_made', 'created_date',
+        fields = ['manager', 'account', 'transfer_type', 'amount', 'comment', 'payment_made', 'created_date',
                   'number']
         widgets = {
             'amount': forms.NumberInput(attrs={
@@ -326,11 +330,12 @@ class TariffInvoiceForm(forms.ModelForm):
             'amount': forms.NumberInput(attrs={
                 'placeholder': 'Введите показания',
                 'class': 'form-control',
-                'step': "0.01",
+                'step': "1",
                 'style': 'margin: 0.25rem 0',
             }),
             'price': forms.NumberInput(attrs={
                 'placeholder': 'Введите показания',
+                'step': "0.1",
                 'class': 'form-control',
                 'style': 'margin: 0.25rem 0',
             }),

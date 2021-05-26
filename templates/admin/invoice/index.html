@@ -18,22 +18,22 @@
                     <div class="col-xs-12 col-md-4">
                         <div class="small-box bg-green overflow-hidden">
                             <div class="inner">
-                                <h3>103 123.40 грн</h3>
+                                <h3>{{ system_balance }} грн</h3>
                                 <p>Состояние кассы</p>
                             </div>
                             <div class="icon">
-                                <i class="fa fa-dollar"></i>
+                                <i class="fas fa-dollar"></i>
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-4">
                         <div class="small-box bg-blue overflow-hidden">
                             <div class="inner">
-                                <h3>53 559.00 грн</h3>
+                                <h3>{{ account_balance }} грн</h3>
                                 <p>Баланс по счетам</p>
                             </div>
                             <div class="icon">
-                                <i class="fa fa-dollar"></i>
+                                <i class="fas fa-dollar"></i>
                             </div>
                             <!--<span class="small-box-footer">&nbsp;</span>-->
                         </div>
@@ -41,11 +41,11 @@
                     <div class="col-xs-12 col-md-4">
                         <div class="small-box bg-red overflow-hidden">
                             <div class="inner">
-                                <h3>58 506.90 грн</h3>
+                                <h3>{{ account_arrears }} грн</h3>
                                 <p>Задолженность по счетам</p>
                             </div>
                             <div class="icon">
-                                <i class="fa fa-dollar"></i>
+                                <i class="fas fa-dollar"></i>
                             </div>
                             <!--<span class="small-box-footer">&nbsp;</span>-->
                         </div>
@@ -66,8 +66,8 @@
                                 <th style="width: 125px; min-width: 125px">№ квитанции</th>
                                 <th style="width: 120px; min-width: 120px">Статус</th>
                                 <th style="width:auto">Дата</th>
-                                <th style="min-width: 200px">Месяц</th>
-                                <th style="min-width: 160px">Квартира</th>
+                                <th style="min-width: 150px">Месяц</th>
+                                <th style="min-width: 50px">Квартира</th>
                                 <th style="min-width: 200px">Владелец</th>
                                 <th style="width: 110px; min-width: 130px">Проведена</th>
                                 <th style="width: 110px; min-width: 130px">Сумма</th>
@@ -75,13 +75,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                        {% if invoice > 0 %} <!-- Итерируемый объект квитанций на оплату -->
-                        {% for el in invoice %} <!-- Итерируемый объект квитанций на оплату -->
-                        <tr data-href="{% url 'admin_account-detail'  pk=el.pk %}">
+                        {% if invoices.count > 0 %} <!-- Итерируемый объект квитанций на оплату -->
+                        {% for el in invoices %} <!-- Итерируемый объект квитанций на оплату -->
+                        <tr data-href="{% url 'admin_invoice-detail'  pk=el.pk %}">
                             <td>{{ el.number }}</td>
-                            {% if el.status == 'Оплачена' %}
+                            {% if el.type == 'Оплачена' %}
                                 <td style="color: #00ba13"><small class="label label-success">Оплачена</small></td>
-                            {% elif el.status == 'Частично оплачена' %}
+                            {% elif el.type == 'Частично оплачена' %}
                                 <td style="color: #00ba13"><small class="label label-warning">Частично оплачена</small></td>
                             {% else %}
                                 <td style="color: #c62232"><small class="label label-danger">Неоплачена</small></td>
@@ -89,15 +89,19 @@
                             <td>{{ el.period_from|date:"d.m.Y" }}</td>
                             <td>{{ el.period_from|date:"M Y" }}</td>
                             <td>{{ el.apartment.name }}</td>
-                            <td>{{ el.user}}</td>
-                            <td>{{ el.user }}</td>
-                            <td></td>
+                            <td>{{ el.apartment.user}}</td>
+                            {% if el.status == True %}
+                            <td>Проведена</td>
+                            {% else %}
+                            <td>Не проведена</td>
+                            {% endif %}
+                            <td>{{ el.total_amount }}</td>
                             <td>
                                 <div class="btn-group pull-right">
-                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_invoice-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_invoice-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </div>
@@ -106,12 +110,19 @@
                         {% endfor %}
                         {% else %}
                             <tr>
-                            <td colspan="9"><div class="empty">Ничего не найдено.</div></td>
-                        </tr>
+                                <td colspan="9"><div class="empty">Ничего не найдено.</div></td>
+                            </tr>
                         {% endif %}
                         </tbody>
                     </table>
             </div>
          </div>
     </section>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $('tr[data-href]').on("click", function() {
+    document.location = $(this).data('href');
+    });
+    </script>
 {% endblock %}

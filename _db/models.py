@@ -134,6 +134,10 @@ class User(CustomAbstractUser):
     def get_name_and_role(self):
         return f'{self.first_name} {self.last_name} - {self.role}'
 
+    def get_apartment(self):
+        return self.user_related.filter(user=self.id)
+
+
     class Meta:
         app_label = '_db'
 
@@ -158,7 +162,7 @@ class UserHouse(models.Model):
 
 
 class Section(models.Model):
-    house = models.ForeignKey(House, on_delete=models.CASCADE, verbose_name='', blank=True)
+    house = models.ForeignKey(House, on_delete=models.CASCADE, verbose_name='', blank=True, related_name='house_related')
     name = models.CharField(max_length=255, verbose_name='', blank=True)
 
     def __str__(self):
@@ -166,7 +170,7 @@ class Section(models.Model):
 
 
 class Floor(models.Model):
-    section = models.ForeignKey(Section, on_delete=models.CASCADE, blank=True)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, blank=True, related_name='section_related')
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -215,11 +219,11 @@ class Account(models.Model):
 
 
 class Apartment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, verbose_name='')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='user_related')
+    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, verbose_name='', related_name='floor_related')
     name = models.CharField('Номер квартиры', max_length=255)
     apartment_area = models.FloatField('Площадь квартиры', max_length=255, null=True)
-    account = models.OneToOneField(Account, on_delete=models.CASCADE, blank=True, null=True, related_name="appartament_related", unique=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True, related_name="appartament_related", unique=True)
     tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
@@ -227,6 +231,10 @@ class Apartment(models.Model):
 
     def get_full_name(self):
         return f'{self.floor.section.house.name}, кв.{self.name}'
+
+    def get_house(self):
+        houses = self.floor.section.house.name
+        return houses
 
 
 class Meter(models.Model):
@@ -258,11 +266,11 @@ class TransferType(models.Model):
 
 
 class Transfer(models.Model):
+    solo_status = models.BooleanField(null=True, verbose_name='дефолтное значение для пустых трансферов: 0 - расх')
     number = models.CharField('Номер транзакции', max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name='transfer_user', verbose_name='', null=True)
     manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name='transfer_manager', verbose_name='')
     account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True,  verbose_name='', null=True)
-    transfer_type = models.ForeignKey(TransferType, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
+    transfer_type = models.ForeignKey(TransferType, on_delete=models.CASCADE, blank=True, null=True)
     amount = models.IntegerField(verbose_name='', blank=True)
     comment = models.TextField('', null=True, blank=True)
     # статус платежа
@@ -280,7 +288,7 @@ class Invoice(models.Model):
 
     # Добавить модель Тарифа и сделать связь
     status = models.BooleanField(default=True) #
-    total_amount = models.IntegerField(null=True)
+    total_amount = models.FloatField(null=True)
     paid = models.IntegerField(null=True)
     number = models.CharField('', max_length=255, null=True) #
     type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, null=True, blank=True) #
@@ -299,6 +307,9 @@ class TariffService(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True, verbose_name='')
     tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True, blank=True)
     price = models.FloatField(max_length=255, blank=True, null=True, verbose_name='цена за еденицу')
+
+    def get_total(self):
+        return float(self.amount) * float(self.price)
 
 
 class SEO(models.Model):

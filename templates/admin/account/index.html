@@ -92,11 +92,15 @@
                              {% else %}
                                 <td style="color: #c62232"><small class="label label-danger">Неактивен</small></td>
                             {% endif %}
-                            <td class="el-apartment-name">{{ el.get_apartment }}</td>
-                            <td class="el-house-name">{{ el.get_apartment.floor.section.house.name }}</td>
-                            <td class="el-section-name">{{ el.get_apartment.floor.section }}</td>
-                            <td class="el.user-name">{{ el.get_apartment.user }}</td>
-                            <td></td>
+                            <td>{{ el.get_apartment }}</td>
+                            <td>{{ el.get_apartment.floor.section.house.name }}</td>
+                            <td>{{ el.get_apartment.floor.section }}</td>
+                            <td>{{ el.get_apartment.user }}</td>
+                            {% if el.money >= 0 %}
+                                <td style="color: #00a65a">{{ el.money }} грн.</td>
+                            {% else %}
+                                <td style="color: red">{{ el.money }} грн.</td>
+                            {% endif %}
                             <td>
                                 <div class="btn-group pull-right">
                                     <a class="btn btn-default btn-sm" href="{% url 'admin_account-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">

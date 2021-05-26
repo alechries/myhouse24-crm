@@ -1,7 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from openpyxl import Workbook
 from _db import models, utils, auth
+from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from . import forms
+from . import utils as utility
 from django.db.models import Count
 from django.forms import modelformset_factory
 from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -11,10 +14,27 @@ from django.forms import inlineformset_factory
 
 def index_view(request):
     user = request.user
-    print(user)
+    houses = models.House.objects.all().count()
+    active_user = models.User.objects.filter(Q(is_active=True), Q(is_superuser=0)).count()
+    master_request = models.MasterRequest.objects.filter(status='В работе').count()
+    master_request_new = models.MasterRequest.objects.filter(status='Новое').count()
+    statistic = utility.calculate_statistic()
+    apartment = models.Apartment.objects.all().count()
+    account = models.Account.objects.all().count()
     if request.user.is_authenticated:
         username = f'{request.user.first_name} {request.user.last_name}'
-    return render(request, 'admin/index.html', {'user': user})
+
+    context = {
+               'user': user,
+               'houses': houses,
+               'active_user': active_user,
+               'master_request': master_request,
+               'master_request_new': master_request_new,
+               'apartment': apartment,
+               'account': account,
+               }
+    context.update(statistic)
+    return render(request, 'admin/index.html', context)
 
 
 def test_view(request):
@@ -53,8 +73,12 @@ def logout_view(request):
 
 
 def account_transaction_view(request):
+    statistic = utility.calculate_statistic()
     accounts = models.Transfer.objects.all()
-    return render(request, 'admin/account-transaction/index.html', {'accounts': accounts})
+    context = {'accounts': accounts}
+    context.update(statistic)
+
+    return render(request, 'admin/account-transaction/index.html', context)
 
 
 def account_transaction_detail_view(request, pk):
@@ -66,7 +90,10 @@ def account_transaction_create_in_view(request):
     form = forms.AccountTransactionForm(request.POST)
     alerts = []
     if request.method == 'POST' and form.is_valid():
-        form.transfer_type = 1
+        transfer = form.save()
+        if transfer.transfer_type_id is None:
+            transfer.solo_status = 1
+
         form.save()
         alerts.append('Запись была успешно добавлена!')
 
@@ -77,12 +104,13 @@ def account_transaction_create_in_view(request):
 
 def account_transaction_create_out_view(request):
     form = forms.AccountTransactionForm(request.POST)
-    form.transfer_type = 0
-
     alerts = []
     if request.method == 'POST' and form.is_valid():
-        form.type = 0
-
+        transfer = form.save()
+        if transfer.transfer_type_id is None:
+            transfer.solo_status = 0
+        else:
+            transfer.transfer_type = 0
         form.save()
         alerts.append('Запись была успешно добавлена!')
 
@@ -99,15 +127,24 @@ def account_transaction_change_view(request, pk):
             form.save()
             alerts.append('Запись была успешно редактирована!')
     transfer = get_object_or_404(models.Transfer, id=pk)
-    if transfer.transfer_type.status == 'Приход':
-        return render(request, 'admin/account-transaction/create_in.html', {'form': form,
-                                                                            'alerts': alerts,
-
-                                                                            })
+    if transfer.transfer_type_id is not None:
+        if transfer.transfer_type.status == 'Приход':
+            return render(request, 'admin/account-transaction/create_in.html', {'form': form,
+                                                                                'alerts': alerts,
+                                                                                })
+        else:
+            return render(request, 'admin/account-transaction/create_out.html', {'form': form,
+                                                                                 'alerts': alerts,
+                                                                                 })
     else:
-        return render(request, 'admin/account-transaction/create_out.html', {'form': form,
-                                                                             'alerts': alerts,
-                                                                             })
+        if transfer.solo_status is True:
+            return render(request, 'admin/account-transaction/create_in.html', {'form': form,
+                                                                                'alerts': alerts,
+                                                                                })
+        else:
+            return render(request, 'admin/account-transaction/create_out.html', {'form': form,
+                                                                                 'alerts': alerts,
+                                                                                 })
 
 
 def account_transaction_delete_view(request, pk):
@@ -118,7 +155,11 @@ def account_transaction_delete_view(request, pk):
 
 
 def invoice_view(request):
-    return render(request, 'admin/invoice/index.html')
+    invoices = models.Invoice.objects.all()
+    context = {'invoices': invoices}
+    context.update(utility.calculate_statistic())
+
+    return render(request, 'admin/invoice/index.html', context)
 
 
 def invoice_create_view(request):
@@ -138,8 +179,12 @@ def invoice_create_view(request):
             total = 0
             for tariff_invoice_form in tariff_invoice_queryset:
                 tariff_invoice_form.invoice.id = invoice.id
-                total += int(tariff_invoice_form.price) * int(tariff_invoice_form.amount)
+                total += float(tariff_invoice_form.price) * float(tariff_invoice_form.amount)
+                tariff_invoice_form.save()
             invoice.total_amount = total
+            account = models.Account.objects.get(id=invoice.apartment.account.id)
+            account.money -= total
+            account.save()
             invoice.save()
             alerts.append('Квитанция сохранена')
 
@@ -159,16 +204,76 @@ def invoice_copy_view(request):
     return render(request, 'admin/invoice/copy.html')
 
 
-def invoice_change_view(request):
-    return render(request, 'admin/invoice/change.html')
+def invoice_change_view(request, pk=None):
+    invoice = models.Invoice.objects.get(id=pk)
+    service = models.TariffService.objects.filter(invoice=invoice)
+    TaroffInvoiceFormset = inlineformset_factory(
+        parent_model=models.Invoice,
+        model=models.TariffService,
+        form=forms.TariffInvoiceForm,
+        max_num=service.count() if service.count() > 0 else 1
+    )
+    alerts = []
+    if request.method == 'POST':
+        invoice_form = forms.InvoiceForm(request.POST, prefix='invoice_form', instance=invoice)
+        tariff_invoice_formset = TaroffInvoiceFormset(request.POST, prefix='tariff_invoice_form', instance=invoice)
+        if invoice_form.is_valid() and tariff_invoice_formset.is_valid():
+            tariff_invoice_queryset = tariff_invoice_formset.save(commit=False)
+            total = 0
+            for tariff_invoice_form in tariff_invoice_queryset:
+                tariff_invoice_form.invoice.id = invoice.id
+                total += float(tariff_invoice_form.price) * float(tariff_invoice_form.amount)
+                tariff_invoice_form.save()
+            invoice.total_amount = total
+            invoice.save()
+            alerts.append('Квитанция сохранена')
+
+    else:
+        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form', instance=invoice)
+        tariff_invoice_formset = TaroffInvoiceFormset(request.POST or None, prefix='tariff_invoice_form', instance=invoice)
+
+    context = {
+        'invoice_form': invoice_form,
+        'tariff_invoice_formset': tariff_invoice_formset,
+        'alerts': alerts
+    }
+    return render(request, 'admin/invoice/change.html', context)
 
 
-def invoice_delete_view(request):
-    return render(request, 'admin/invoice/delete.html')
+def invoice_detail_view(request, pk):
+    invoice = models.Invoice.objects.get(id=pk)
+    service = models.TariffService.objects.filter(invoice=invoice)
+
+    for el in service:
+        total = float(el.amount) * float(el.price)
+    return render(request, 'admin/invoice/detail.html', {'invoice': invoice,
+                                                         'service': service})
+
+
+def invoice_delete_view(request, pk):
+    invoice = models.Invoice.objects.get(id=pk)
+    invoice.delete()
+    return redirect('admin_invoice')
 
 
 def account_view(request):
     account = models.Account.objects.all()
+    for el in account:
+        total_in: float = 0
+        total_out: float = 0
+        total_wallet: float = 0
+        account_transaction_in = models.Transfer.objects.filter(account_id=el.id)
+        account_invoice = models.Invoice.objects.filter(Q(apartment__account_id=el.id), Q(type='Неоплачена'))
+        for invoice in account_invoice:
+            if invoice.total_amount is not None:
+                total_out += invoice.total_amount
+        for transaction in account_transaction_in:
+            total_in += transaction.amount
+        total_wallet = total_in - total_out
+        el.money = total_wallet
+        el.save()
+
+
     return render(request, 'admin/account/index.html', {'account': account})
 
 
@@ -489,14 +594,14 @@ def master_request_delete_view(request, pk):
 
 def counters_view(request):
     counters = models.Meter.objects.all()  # .order_by('service__name').distinct('service__name') POSTGRES
-    print(counters)
+
     return render(request, 'admin/meter-data/counters.html', {'counters': counters})
 
 
 def counter_house_view(request, pk):
     counters = models.Meter.objects.filter(apartment_id=pk)
     apartment = models.Apartment.objects.get(id=pk)
-    print(counters)
+
     return render(request, 'admin/meter-data/apartment_detail.html', {'counters': counters,
                                                                       'apartment': apartment})
 
@@ -888,7 +993,7 @@ def tariffs_create_view(request):
         if tariff_form.is_valid() and tariff_service_formset.is_valid():
             tariff = tariff_form.save()
             tariff_service_queryset = tariff_service_formset.save(commit=False)
-            print(tariff_form.data)
+
 
             for tariff_section_form in tariff_service_queryset:
                 tariff_section_form.tariff.id = tariff.id
@@ -964,7 +1069,7 @@ def tariffs_copy_view(request):
 def tariff_detail_view(request, pk):
     tariff = models.Tariff.objects.get(id=pk)
     tariff_service = models.TariffService.objects.filter(tariff=tariff)
-    print(tariff_service)
+
     return render(request, 'admin/tariffs/detail.html', {'tariff': tariff,
                                                          'tariff_service': tariff_service
                                                          })
@@ -1018,7 +1123,7 @@ def user_admin_role_view(request):
 
 def user_admin_users_list(request):
     users_list = models.User.objects.filter(is_superuser=1)
-    print(users_list)
+
     return render(request, 'admin/user-admin/list.html', {'users_list': users_list})
 
 
@@ -1036,7 +1141,7 @@ def user_admin_change_view(request, pk):
     user = models.User.objects.get(id=pk)
     alerts = []
     form = forms.UserCreateForm(request.POST or None, instance=user)
-    print(form.is_valid())
+
     if request.method == 'POST' and form.is_valid():
         form.instance.is_superuser = 1
         form.save()
