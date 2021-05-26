@@ -26,7 +26,11 @@
                             <td>{{ el.description }}</td>
                             <td>{{ el.get_full_time }}</td>
                              <td>{{ el.status }}</td>
-                             <td></td>
+                             <td style="max-width: 30px;">
+                                 <a class="btn btn-default btn-sm" href="{% url 'cabinet_master-request-delete' pk=el.pk %}" title="Удалить">
+                                     <i class="fas fa-trash"></i>
+                                 </a>
+                             </td>
                         </tr>
                         {% endfor %}
                     {% else %}

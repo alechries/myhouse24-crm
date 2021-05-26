@@ -1,4 +1,7 @@
 {% extends 'cabinet/base.html' %}
+{% block page_title %}
+    <h1 class="m-0">Сообщения</h1>
+{% endblock %}
 {% block main_content %}
     <section class="content input-form">
          <div class="container-fluid">
@@ -6,21 +9,27 @@
                 <table class="table table-bordered table-hover table-striped linkedRow">
                     <thead>
                         <tr>
-                            <th style="width: 40px; min-width: 40px"></th>
+                            <th style="width: 40px; min-width: 40px">#</th>
                             <th style="width: 250px">От кого</th>
                             <th>Текст</th>
                             <th>Дата</th>
                         </tr>
                     </thead>
                     <tbody>
+                    {% if messages.count > 0 %}
                     {% for el in messages %}
                         <tr>
-                            <td></td>
+                            <td>{{ forloop.counter }}</td>
                             <td>{{ el.addressee }}</td>
                             <td>{{ el.get_short_text|safe }}</td>
                             <td>{{ el.get_long_date }}</td>
                         </tr>
-                        {% endfor %}
+                    {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4"><div class="empty">Ничего не найдено.</div></td>
+                        </tr>
+                    {% endif %}
                     </tbody>
                 </table>
             </div>

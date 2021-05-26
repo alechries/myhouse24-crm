@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from openpyxl import Workbook
 from _db import models, utils, auth
+from django.conf import settings
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from . import forms
@@ -21,6 +22,7 @@ def index_view(request):
     statistic = utility.calculate_statistic()
     apartment = models.Apartment.objects.all().count()
     account = models.Account.objects.all().count()
+    print(request.user)
     if request.user.is_authenticated:
         username = f'{request.user.first_name} {request.user.last_name}'
 
@@ -49,12 +51,14 @@ def login_view(request):
     alerts = []
     if request.method == 'POST':
         form = forms.LoginForm(request.POST)
+        print(form.is_valid())
         if form.is_valid():
             user = auth.EmailAuthBackend.authenticate(email=form.cleaned_data['email'],
                                                       password=form.cleaned_data['password'])
             if user is not None:
                 if user.is_active:
                     login(request, user)
+                    print('user is:', request.user)
                     return redirect('admin_index')
                 else:
                     alerts.append('User is not active')

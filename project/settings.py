@@ -40,7 +40,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # '_admin.middleware.AccessCheckMiddleware',
+    '_admin.middleware.AccessCheckMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'

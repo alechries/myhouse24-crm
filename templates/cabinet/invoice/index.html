@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'cabinet/base.html' %}
+{% block page_title %}
+    <h1 class="m-0">Квитанции на оплату</h1>
+{% endblock %}
+{% block main_content %}
+    <section class="content input-form">
+         <div class="container-fluid">
+            <div class="card card-secondary card-outline table-responsive">
+                <table class="table table-bordered table-hover table-striped linkedRow">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px; min-width: 40px">№</th>
+                            <th style="width: 250px">Дата</th>
+                            <th>Статус</th>
+                            <th>Сумма</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if invoice.count > 0 %}
+                    {% for el in invoice %}
+                        <tr>
+                            <td>{{ el.number }}</td>
+                            <td>{{ el.period_from }}</td>
+                            <td>{{ el.type }}</td>
+                            <td>{{ el.total_amount }}</td>
+                        </tr>
+                    {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4"><div class="empty">Ничего не найдено.</div></td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+         </div>
+    </section>
+{% endblock %}
