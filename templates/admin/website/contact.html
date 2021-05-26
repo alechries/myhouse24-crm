@@ -32,7 +32,7 @@
                             </div>
                             <div>
                                 Краткий текст
-                                {{ contact_form.description }}
+                                {{ contact_form.description|safe }}
                             </div>
                             <div>
                                 Ссылка на коммерческий сайт
@@ -67,7 +67,7 @@
                 <div class="row" style="padding-left: 1em; padding-right: 50%;">
                     {{ contact_form.map }}
                 </div>
-                <div class="default-area">
+                <div class="default-area" style="display:none">
                     <h4>Настройки SEO</h4>
                     <hr/>
                     <div>
@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <div class="default-area text-center">
-                    <button type="submit" class="btn btn-success">Сохранить контакты и настройки SEO</button>
+                    <button type="submit" class="btn btn-success">Сохранить</button>
                 </div>
             </form>
         </div>

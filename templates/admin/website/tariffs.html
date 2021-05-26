@@ -33,7 +33,7 @@
                     </div>
                     <div>
                         Краткий текст
-                        {{ tariffs_form.description }}
+                        {{ tariffs_form.description|safe }}
                     </div>
                 </div>
                 <div class="default-area">
@@ -55,7 +55,6 @@
                                  style="background: url({% if form.instance.image %}{{ form.instance.image.url }}{% else %}{% static 'no_icon.png' %}{% endif %}) no-repeat;"></div>
                             <div>
                                 <b>Рекомендуемый размер: (1000x600)</b>
-                                <div class="blocks-image" style="background: url({% if form.instance.image %}{{ form.instance.image.url }}{% else %}{% static 'no_icon.png' %}{% endif %}) no-repeat;"></div>
                                 {{ form.image }}
                             </div>
                             <div>
@@ -70,7 +69,7 @@
                         <button type="button" class="btn btn-secondary" id="add-tariff-block">Добавить услугу</button>
                     </div>
                 </div>
-                <div class="default-area">
+                <div class="default-area" style="display:none">
                     <h4>Настройки SEO</h4>
                     <hr/>
                     <div>
@@ -87,7 +86,7 @@
                     </div>
                 </div>
                 <div class="default-area text-center">
-                    <button type="submit" class="btn btn-success">Сохранить тарифы и настройки SEO</button>
+                    <button type="submit" class="btn btn-success">Сохранить</button>
                 </div>
             </form>
         </div>
@@ -99,7 +98,7 @@
 <script src="{% static 'base/js/dynamicforms.js' %}"></script>
 <script src="{% static 'base/js/requestwithoutreload.js' %}"></script>
 <script>
-// tinymce.init({selector:'textarea'}); // Включить по необходиомости (может не работать динамическое добавление форм)
+tinymce.init({selector:'textarea'});
 
 let prefix = 'tariffs_block_form';
 let form = '.form-area';
