@@ -35,7 +35,8 @@ AUTH_USER_MODEL = '_db.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
-    '_admin.middleware.AdminCookieSessionMiddleware',
+    # '_admin.middleware.AdminCookieSessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',

@@ -1,14 +1,8 @@
-import time
-from importlib import import_module
 from django.conf import settings
-from django.contrib.sessions.backends.base import UpdateError
-from django.core.exceptions import SuspiciousOperation
-from django.utils.cache import patch_vary_headers
-from django.utils.deprecation import MiddlewareMixin
-from django.utils.http import http_date
 from django.shortcuts import redirect
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.contrib.auth.middleware import AuthenticationMiddleware
+from django.contrib.auth import logout
 
 
 class AccessCheckMiddleware:
@@ -20,13 +14,18 @@ class AccessCheckMiddleware:
         user = request.user
         path = request.path
 
-        if '_admin' in path:
-            if user.is_authenticated:
-                if not user.is_superuser:
-                    return redirect('admin_login')
-            elif 'login' not in path:
-                return redirect('admin_login')
+        if user.is_authenticated:
+            if 'login' not in path:
+                if user.is_superuser:
+                    if 'cabinet' in path:
+                        logout(request)
+                        return redirect('cabinet_login')
+                else:
+                    if 'admin' in path:
+                        logout(request)
+                        return redirect('admin_login')
         return self.get_response(request)
+
 
 
 class AdminCookieSessionMiddleware(SessionMiddleware):
