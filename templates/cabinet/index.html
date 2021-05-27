@@ -1,3 +1,66 @@
 {% extends 'cabinet/base.html' %}
+{% block page_title %}
+    <h1 class="m-0">Статистика по квартире №</h1>
+{% endblock %}
 {% block main_content %}
+    <section class="content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <h2 class="page-header">В вашем обслуживании</h2>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-lg-4 col-sm-12 col-xs-12">
+                <div class="small-box bg-primary">
+                    <div class="inner">
+                        <h3>{{ houses }}</h3>
+                        {% if houses == 1 %}
+                        <p>Дом</p>
+                        {% else %}
+                        <p>Домов</p>
+                        {% endif %}
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>{{ active_user }}</h3>
+                        {% if active_user == 1 %}
+                        <p>Активный пользователь</p>
+                        {% else %}
+                        <p>Активных пользователей</p>
+                        {% endif %}
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <a href="{% url 'admin_user' %}" class="small-box-footer">
+                        Перейти к владельцам <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>{{ master_request }}</h3>
+                        {% if master_request == 1 %}
+                        <p>Заявка мастера в работе</p>
+                        {% else %}
+                        <p>Заявок мастера в работе</p>
+                        {% endif %}
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <a href="{% url 'admin_master-request' %}" class="small-box-footer">
+                        Перейти в заявки <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

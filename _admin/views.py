@@ -252,23 +252,10 @@ def invoice_delete_view(request, pk):
 
 def account_view(request):
     account = models.Account.objects.all()
-    for el in account:
-        total_in: float = 0
-        total_out: float = 0
-        total_wallet: float = 0
-        account_transaction_in = models.Transfer.objects.filter(account_id=el.id)
-        account_invoice = models.Invoice.objects.filter(Q(apartment__account_id=el.id), Q(type='Неоплачена'))
-        for invoice in account_invoice:
-            if invoice.total_amount is not None:
-                total_out += invoice.total_amount
-        for transaction in account_transaction_in:
-            total_in += transaction.amount
-        total_wallet = total_in - total_out
-        el.money = total_wallet
-        el.save()
-
-
-    return render(request, 'admin/account/index.html', {'account': account})
+    statistic = utility.calculate_statistic()
+    context = {'account':account}
+    context.update(statistic)
+    return render(request, 'admin/account/index.html', context)
 
 
 def account_detail(request, pk):

@@ -8,10 +8,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 def index_view(request):
     user = request.user
-    houses = models.House.objects.filter(userhouse__user=user)
-    apartments = models.Apartment.objects.filter(user=user)
+    if models.Apartment.objects.filter(user=user).count() != 0:
+        apartments = models.Apartment.objects.filter(user=user)[0]
+    else:
+        apartments = {}
     return render(request, 'cabinet/index.html', {'user': user,
-                                                  'houses': houses,
                                                   'apartments': apartments})
 
 

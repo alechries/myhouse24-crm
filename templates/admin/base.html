@@ -82,7 +82,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- Menu Footer-->
                         <li class="user-footer d-flex justify-content-around">
 
-                                <a class="btn btn-default btn-flat" href="/admin/user-admin/update-my">Профиль</a>
+                                <a class="btn btn-default btn-flat" href="{% url 'admin_user-detail' pk=user.id %}">Профиль</a>
 
 
                                 <a class="btn btn-default btn-flat" href="{% url 'admin_logout' %}" data-method="post">Выход</a>
