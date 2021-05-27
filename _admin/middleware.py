@@ -24,6 +24,15 @@ class AccessCheckMiddleware:
                     if 'admin' in path:
                         logout(request)
                         return redirect('admin_login')
+        else:
+            if 'login' not in path:
+                if 'cabinet' in path:
+                    logout(request)
+                    return redirect('cabinet_login')
+                elif 'admin' in path:
+                    logout(request)
+                    return redirect('admin_login')
+
         return self.get_response(request)
 
 
