@@ -552,6 +552,7 @@ def master_request_create_view(request):
             alerts.append('Заявка создана')
         else:
             alerts.append('Произошла ошибка')
+    form = forms.MasterRequestForm()
     return render(request, 'admin/master-request/create.html', {'form': form,
                                                                 'alerts': alerts})
 

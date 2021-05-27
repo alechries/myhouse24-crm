@@ -416,15 +416,15 @@ class MasterRequest(models.Model):
         ('В работе', 'В работе'),
         ('Выполнено', 'Выполнено'),
     )
-    date = models.DateField(blank=True, verbose_name='')
-    time = models.TimeField(blank=True, verbose_name='')
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', blank=True, verbose_name='', null=True)
-    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, verbose_name='')
-    master_type = models.CharField(choices=TYPE, max_length=155, blank=True, verbose_name='')
-    status = models.CharField(choices=STATUS, max_length=155, blank=True, verbose_name='', default='Новое')
-    master = models.ForeignKey(User, on_delete=models.CASCADE, related_name='master', blank=True, verbose_name='', null=True)
-    description = models.TextField(blank=True, verbose_name='')
-    comment = models.TextField(blank=True, verbose_name='')
+    date = models.DateField(verbose_name='')
+    time = models.TimeField(verbose_name='')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', verbose_name='', null=True)
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, verbose_name='')
+    master_type = models.CharField(choices=TYPE, max_length=155, verbose_name='')
+    status = models.CharField(choices=STATUS, max_length=155, verbose_name='', default='Новое')
+    master = models.ForeignKey(User, on_delete=models.CASCADE, related_name='master', verbose_name='', null=True)
+    description = models.TextField(null=True, verbose_name='')
+    comment = models.TextField(null=True, verbose_name='')
 
     def __str__(self):
         return self.description
