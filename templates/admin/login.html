@@ -28,7 +28,7 @@
                         {% endfor %}
                         <form action="{% url 'admin_login' %}" method="post">
                             {% csrf_token %}
-                            <p class="login-box-msg">Вход в личный кабинет</p>
+                            <p class="login-box-msg">Вход в админ-панель</p>
                             <div class="form-group has-feedback field-loginform-username required">
                                 {{ form.email }}
                                 <i class="fas fa-envelope form-control-feedback"></i>

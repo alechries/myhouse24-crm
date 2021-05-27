@@ -68,7 +68,7 @@ def login_view(request):
         else:
             alerts.append('Data is incorrect')
     else:
-        alerts.append('Please, Sign in')
+        alerts.append('')
     return render(request, 'admin/login.html', {'form': forms.LoginForm(), 'alerts': alerts})
 
 
