@@ -97,6 +97,7 @@ def messages_index(request):
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     messages = models.Message.objects.filter(destination_id=user)[::-1]
+    print(messages)
     return render(request, 'cabinet/messages/index.html', {'user': user,
                                                            'houses': houses,
                                                            'apartments': apartments,

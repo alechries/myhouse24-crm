@@ -16,7 +16,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% if messages.count > 0 %}
+
                     {% for el in messages %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
@@ -25,11 +25,6 @@
                             <td>{{ el.get_long_date }}</td>
                         </tr>
                     {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="4"><div class="empty">Ничего не найдено.</div></td>
-                        </tr>
-                    {% endif %}
                     </tbody>
                 </table>
             </div>
