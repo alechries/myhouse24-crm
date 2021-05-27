@@ -1,40 +1,26 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from openpyxl import Workbook
 from _db import models, utils, auth
-from django.conf import settings
 from django.db.models import Q
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from . import forms
 from . import utils as utility
-from django.db.models import Count
 from django.forms import modelformset_factory
-from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse
 from django.forms import inlineformset_factory
 
 
 def index_view(request):
-    user = request.user
-    houses = models.House.objects.all().count()
-    active_user = models.User.objects.filter(Q(is_active=True), Q(is_superuser=0)).count()
-    master_request = models.MasterRequest.objects.filter(status='В работе').count()
-    master_request_new = models.MasterRequest.objects.filter(status='Новое').count()
-    statistic = utility.calculate_statistic()
-    apartment = models.Apartment.objects.all().count()
-    account = models.Account.objects.all().count()
-    print(request.user)
-    if request.user.is_authenticated:
-        username = f'{request.user.first_name} {request.user.last_name}'
-
     context = {
-               'user': user,
-               'houses': houses,
-               'active_user': active_user,
-               'master_request': master_request,
-               'master_request_new': master_request_new,
-               'apartment': apartment,
-               'account': account,
-               }
+        'user': request.user,
+        'houses': models.House.objects.all().count(),
+        'active_user': models.User.objects.filter(Q(is_active=True), Q(is_superuser=0)).count(),
+        'master_request': models.MasterRequest.objects.filter(status='В работе').count(),
+        'master_request_new': models.MasterRequest.objects.filter(status='Новое').count(),
+        'apartment': models.Apartment.objects.all().count(),
+        'account': models.Account.objects.all().count(),
+    }
+
+    statistic = utility.calculate_statistic()
     context.update(statistic)
     return render(request, 'admin/index.html', context)
 
