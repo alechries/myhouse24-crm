@@ -26,7 +26,7 @@
                         {% for el in alerts %}
                         <p style="text-align: center">{{ el }}</p>
                         {% endfor %}
-                        <form action="{% url 'admin_login' %}" method="post">
+                        <form action="{% url 'cabinet_login' %}" method="post">
                             {% csrf_token %}
                             <p class="login-box-msg">Вход в личный кабинет</p>
                             <div class="form-group has-feedback field-loginform-username required">

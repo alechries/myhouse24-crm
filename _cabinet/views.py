@@ -7,12 +7,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 
 def index_view(request):
-    user = models.User.objects.get(id=1)
+    user = request.user
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     return render(request, 'cabinet/index.html', {'user': user,
-                                                  'houses': houses,
-                                                  'apartments': apartments})
+                                                      'houses': houses,
+                                                      'apartments': apartments})
 
 
 def login_view(request):
@@ -24,7 +24,7 @@ def login_view(request):
             user = auth.EmailAuthBackend.authenticate(email=form.cleaned_data['email'],
                                                       password=form.cleaned_data['password'])
             if user is not None:
-                if user.is_active:
+                if user.is_active and user.is_superuser == 0:
                     login(request, user)
                     return redirect('cabinet_index')
                 else:
@@ -39,6 +39,7 @@ def login_view(request):
 
 
 def logout_view(request):
+    print(request.user)
     logout(request)
     return redirect('cabinet_login')
 
@@ -48,7 +49,7 @@ def statistic_view(request):
 
 
 def invoice_view(request, pk=None):
-    user = models.User.objects.get(id=1)
+    user = request.user
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     if pk == 0:
@@ -62,7 +63,7 @@ def invoice_view(request, pk=None):
 
 
 def invoice_detail_view(request, pk):
-    user = models.User.objects.get(id=1)
+    user = request.user
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     invoice = models.Invoice.objects.get(id=pk)
@@ -83,7 +84,7 @@ def tariffs_view_view(request):
 
 
 def messages_index(request):
-    user = models.User.objects.get(id=1)
+    user = request.user
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     messages = models.Message.objects.filter(destination_id=user)[::-1]
@@ -107,7 +108,7 @@ def messages_delete_view(request):
 
 
 def master_request_view(request):
-    user = models.User.objects.get(id=1)
+    user = request.user
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     requests = models.MasterRequest.objects.filter(apartment__user=user)
@@ -117,7 +118,7 @@ def master_request_view(request):
 
 
 def master_request_create_view(request):
-    user = models.User.objects.get(id=1)
+    user = request.user
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     form = forms.MasterRequestForm(request.POST)
@@ -140,7 +141,7 @@ def master_request_delete_view(request, pk):
 
 
 def user_view(request):
-    user = models.User.objects.get(id=1)
+    user = request.user
     houses = models.House.objects.filter(userhouse__user=user)
     print(houses)
     apartments = models.Apartment.objects.filter(user=user)
