@@ -290,8 +290,8 @@ class Invoice(models.Model):
     status = models.BooleanField(default=True) #
     total_amount = models.FloatField(null=True)
     paid = models.IntegerField(null=True)
-    number = models.CharField('', max_length=255, null=True) #
-    type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, null=True, blank=True) #
+    number = models.CharField('', max_length=255) #
+    type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, blank=True) #
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE) #
     period_from = models.DateField("Дата с", null=True) #
     period_to = models.DateField("Дата по", null=True) #
@@ -305,11 +305,12 @@ class TariffService(models.Model):
     amount = models.FloatField(verbose_name='К-во едениц измерения', default=0)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, null=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True, verbose_name='')
-    tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True, blank=True)
+    tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True, blank=True, related_name='tariff_related')
     price = models.FloatField(max_length=255, blank=True, null=True, verbose_name='цена за еденицу')
 
     def get_total(self):
         return float(self.amount) * float(self.price)
+
 
 
 class SEO(models.Model):

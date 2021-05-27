@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'cabinet/base.html' %}
+{% block page_title %}
+    <h1 class="m-0">Тарифы</h1>
+{% endblock %}
+{% block main_content %}
+    <section class="content input-form">
+         <div class="container-fluid">
+            <div class="card card-secondary card-outline table-responsive">
+                <table class="table table-bordered table-hover table-striped linkedRow">
+                    <thead>
+                        <tr>
+                            <th style="width: 290px; min-width: 40px">Услуга</th>
+                            <th style="width: 290px">Еденица измерения</th>
+                            <th>Цена за еденицу</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4"><div class="empty">Ничего не найдено.</div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+         </div>
+    </section>
+{% endblock %}

@@ -63,79 +63,83 @@
                      <!-- /.box-body -->
                  </div>
              </div>
-
-            <!--
-             <div class="col-lg-9" style="padding: 0 15px;">
-                 <h2 class="page-header">Мои квартиры</h2>
-                 <div class="box" style="background-color: white; padding: 10px">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Описание квартиры</h3>
-                    </div>
-                    <div class="box-body">
-                        <p>ЖК "Дом Каркашадзе". Французский бульвар, 29, кв. 2017</p>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <img src="{{ el.image1.url }}" style="width: 522px; height: 350px;" class="img-responsive largeImg margin-bottom-30" alt="">
+         <div class="col-lg-9">
+         <h2 class="page-header">Мои квартиры</h2>
+             <div class="row">
+                {% if apartments %}
+                     {% for el in apartments %}
+                     <div class="col-12" style="padding: 0 15px;">
+                         <div class="box" style="background-color: white; padding: 10px">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Описание квартиры</h3>
                             </div>
-                            <div class="col-xs-6 col-md-3">
-                                <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="">
-                            </div>
-                            <div class="col-xs-6 col-md-3">
-                                <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="">
-                            </div>
-                            <div class="col-xs-6 col-md-3">
-                                <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="">
-                            </div>
-                            <div class="col-xs-6 col-md-3">
-                                <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=248&amp;h=160&amp;fit=crop" class="img-responsive smallImg margin-bottom-30" alt="">
+                            <div class="box-body">
+                                <p>{{ el.floor.section.house.name }}. {{ el.floor.section.house.address }}, кв. {{ el.name }}</p>
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-6">
+                                        <img src="{{ el.floor.section.house.image1.url }}" style="width: 522px; height: 350px;" class="img-responsive largeImg margin-bottom-30" alt="">
+                                    </div>
+                                    <div class="col-xs-6 col-md-3">
+                                        <img src="{{ el.floor.section.house.image2.url }}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
+                                    </div>
+                                    <div class="col-xs-6 col-md-3">
+                                        <img src="{{ el.floor.section.house.image3.url }}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
+                                    </div>
+                                    <div class="col-xs-6 col-md-3">
+                                        <img src="{{ el.floor.section.house.image4.url }}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
+                                    </div>
+                                    <div class="col-xs-6 col-md-3">
+                                        <img src="{{ el.floor.section.house.image5.url }}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">Описание</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th style="min-width: 200px; font-weight:normal;">Название дома</th>
+                                                <th style="font-weight:normal;">{{ el.floor.section.house.name }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td>Адрес</td>
+                                                <td>{{ el.floor.section.house.address }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>№ квартиры</td>
+                                                <td>{{ el.name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Площадь</td>
+                                                <td>
+                                                    {{ el.apartment_area }}<sup>2</sup>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Этаж</td>
+                                                <td>Этаж {{ el.floor.name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Секция</td>
+                                                <td>Секция {{ el.floor.section.name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Лицевой счет</td>
+                                                <td>{% if el.account %}{{ el.account }}{% else %}Нет лицевого счёта{% endif %}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th colspan="2">Описание</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th style="min-width: 200px; font-weight:normal;">Название дома</th>
-                                        <th style="font-weight:normal;">ЖК "Дом Каркашадзе"</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Адрес</td>
-                                        <td>Французский бульвар, 29</td>
-                                    </tr>
-                                    <tr>
-                                        <td>№ квартиры</td>
-                                        <td>2017</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Площадь</td>
-                                        <td>
-                                            99.00м<sup>2</sup>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Этаж</td>
-                                        <td>Этаж 2</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Секция</td>
-                                        <td>Секция 1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Лицевой счет</td>
-                                        <td>10012-00000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                     </div>
+                    {% endfor %}
+                {% endif %}
                 </div>
-             </div>
-            -->
-
+            </div>
          </div>
     </section>
 {% endblock %}

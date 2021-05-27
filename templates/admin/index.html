@@ -21,7 +21,7 @@
                 <div class="icon">
                     <i class="fas fa-building"></i>
                 </div>
-                <a href="/admin/house/index" class="small-box-footer">
+                <a href="{% url 'admin_house' %}" class="small-box-footer">
                     Перейти в дома <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
@@ -39,7 +39,7 @@
                 <div class="icon">
                     <i class="fas fa-users"></i>
                 </div>
-                <a href="/admin/user/index" class="small-box-footer">
+                <a href="{% url 'admin_user' %}" class="small-box-footer">
                     Перейти к владельцам <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
@@ -57,7 +57,7 @@
                 <div class="icon">
                     <i class="fas fa-wrench"></i>
                 </div>
-                <a href="/admin/master-request/index" class="small-box-footer">
+                <a href="{% url 'admin_master-request' %}" class="small-box-footer">
                     Перейти в заявки <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
@@ -71,7 +71,7 @@
                 <div class="icon">
                     <i class="fas fa-key"></i>
                 </div>
-                <a href="/admin/flat/index" class="small-box-footer">
+                <a href="{% url 'admin_apart' %}" class="small-box-footer">
                     Перейти в квартиры <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
@@ -85,7 +85,7 @@
                 <div class="icon">
                     <i class="fas fa-child"></i>
                 </div>
-                <a href="/admin/account/index" class="small-box-footer">
+                <a href="{% url 'admin_account' %}" class="small-box-footer">
                     Перейти к счетам <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
@@ -99,8 +99,8 @@
                 <div class="icon">
                     <i class="fas fa-user-plus"></i>
                 </div>
-                <a href="/admin/master-request/index" class="small-box-footer">
-                    Перейти в заявки <i class="fa fa-arrow-circle-right"></i>
+                <a href="{% url 'admin_master-request' %}" class="small-box-footer">
+                    Перейти в заявки <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>

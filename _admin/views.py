@@ -187,11 +187,14 @@ def invoice_create_view(request):
                 total += float(tariff_invoice_form.price) * float(tariff_invoice_form.amount)
                 tariff_invoice_form.save()
             invoice.total_amount = total
-            account = models.Account.objects.get(id=invoice.apartment.account.id)
-            account.money -= total
-            account.save()
-            invoice.save()
-            alerts.append('Квитанция сохранена')
+            if invoice.apartment.account:
+                account = models.Account.objects.get(id=invoice.apartment.account.id)
+                account.money -= total
+                account.save()
+                invoice.save()
+                alerts.append('Квитанция сохранена')
+            else:
+                alerts.append('У квартиры нет счёта!')
 
     else:
         invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form')

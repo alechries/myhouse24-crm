@@ -11,8 +11,8 @@ def index_view(request):
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
     return render(request, 'cabinet/index.html', {'user': user,
-                                                      'houses': houses,
-                                                      'apartments': apartments})
+                                                  'houses': houses,
+                                                  'apartments': apartments})
 
 
 def login_view(request):
@@ -76,11 +76,20 @@ def invoice_detail_view(request, pk):
 
 
 def tariffs_view(request):
-    return render(request, 'cabinet/tariffs/index.html')
+    houses = models.House.objects.filter(userhouse__user=request.user)
+    apartments = models.Apartment.objects.filter(user=request.user)
+    return render(request, 'cabinet/tariffs/index.html', {'houses': houses,
+                                                          'apartments': apartments})
 
 
-def tariffs_view_view(request):
-    return render(request, 'cabinet/tariffs/view.html')
+def tariffs_view_view(request, pk):
+    houses = models.House.objects.filter(userhouse__user=request.user)
+    apartments = models.Apartment.objects.filter(user=request.user)
+    tariff = models.TariffService.objects.filter(tariff=pk)
+    print(tariff)
+    return render(request, 'cabinet/tariffs/view.html', {'tariff': tariff,
+                                                         'houses': houses,
+                                                         'apartments': apartments})
 
 
 def messages_index(request):
@@ -142,11 +151,9 @@ def master_request_delete_view(request, pk):
 
 def user_view(request):
     user = request.user
-    houses = models.House.objects.filter(userhouse__user=user)
-    print(houses)
     apartments = models.Apartment.objects.filter(user=user)
+    print(apartments)
     return render(request, 'cabinet/user/index.html', {'user': user,
-                                                       'houses': houses,
                                                        'apartments': apartments})
 
 

@@ -170,8 +170,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </ul>
                     </li>
                     <li class="nav-item menu
-            {% if request.path == '/admin/services' %} menu-open
-            {% elif request.path == '/admin/tariffs' %} menu-open
+            {% if request.path == '/cabinet/tariffs' %} menu-open
+            {% elif request.path == '/admin/tariffs/view/' %} menu-open
             {% elif request.path == '/admin/user-admin/role' %} menu-open
             {% elif request.path == '/admin/user-admin/users/list' %} menu-open
             {% elif request.path == '/admin/pay-company' %} menu-open
@@ -186,7 +186,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <ul class="nav nav-treeview">
                             {% for apartment in apartments %}
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link {% if request.path == '/admin/services' %} active {% endif %}" style="white-space: initial">
+                                    <a href="{% if apartment.tariff.pk %}{% url 'cabinet_tariffs-view' pk=apartment.tariff.pk %}{% else %}{% url 'cabinet_tariffs' %}{% endif %}" class="nav-link {% if request.path == '/admin/services' %} active {% endif %}" style="white-space: initial">
                                         <span class="navbar-item">
                                             <i class="far fa-file-alt"></i>
                                             {{ apartment.get_full_name }}
