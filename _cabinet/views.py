@@ -7,6 +7,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 
 def index_view(request):
+    new_userlist = models.User.objects.filter()
     user = request.user
     if models.Apartment.objects.filter(user=user).count() != 0:
         apartments = models.Apartment.objects.filter(user=user)[0]
