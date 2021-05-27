@@ -488,18 +488,6 @@ class MasterRequestForm(forms.ModelForm):
     class Meta:
         model = models.MasterRequest
         fields = ['date', 'time', 'owner', 'apartment', 'master_type', 'master', 'status', 'description', 'comment']
-        owner = forms.ModelChoiceField(
-            queryset=models.User.objects.all(),
-            empty_label=None,
-        )
-        apartment = forms.ModelChoiceField(
-            queryset=models.Apartment.objects.all(),
-            empty_label=None
-        )
-        master = forms.ModelChoiceField(
-            queryset=models.User.objects.filter(user_type='Обслуживающий персонал'),
-            empty_label=None
-        )
         widgets = {
             'date': forms.DateInput(format=('%Y-%m-%d'), attrs={
                 'type': "date",

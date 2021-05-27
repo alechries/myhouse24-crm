@@ -544,9 +544,9 @@ def master_request_view(request):
 
 
 def master_request_create_view(request):
-    form = forms.MasterRequestForm(request.POST)
     alerts = []
     if request.method == 'POST':
+        form = forms.MasterRequestForm(request.POST)
         if form.is_valid():
             form.save()
             alerts.append('Заявка создана')
