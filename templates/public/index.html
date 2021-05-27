@@ -74,8 +74,8 @@
                         <div class="thumbnail">
                             <div class="blocks-image img-responsive" style="width: 250px; height: 150px; background: url({% if page.image %}{{ page.image.url }}{% else %}{% static 'no_icon.png' %}{% endif %}) no-repeat;"></div>
                             <div class="caption">
-                                <h3>{{ page.title }}</h3>
-                                <p>{{ page.description|safe }}</p>
+                                <h3>{{ block.title }}</h3>
+                                <p>{{ block.description|safe }}</p>
                             </div>
                         </div>
                     </div>
