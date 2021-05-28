@@ -35,7 +35,7 @@
                     <tbody>
                     {% if requests.count > 0 %}
                     {% for el in requests %}
-                        <tr>
+                        <tr  data-href="{% url 'admin_master-request-detail'  pk=el.pk %}">
                             <td>{{ el.id }}</td>
                             <td>{{ el.date }} - {{ el.time }}</td>
                             <td>{{ el.master_type }}</td>
@@ -73,4 +73,11 @@
             </div>
          </div>
     </section>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $('tr[data-href]').on("click", function() {
+    document.location = $(this).data('href');
+    });
+    </script>
 {% endblock %}

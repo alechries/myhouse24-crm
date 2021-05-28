@@ -29,7 +29,7 @@
                     <tbody>
                     {% if houses.count > 0 %}
                     {% for el in houses %}
-                        <tr>
+                        <tr data-href="{% url 'admin_house-detail'  pk=el.pk %}">
                             <td>{{ el.id }}</td>
                             <td>{{ el.name }}</td>
                             <td>{{ el.address }}</td>
@@ -55,4 +55,11 @@
             </div>
          </div>
     </section>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $('tr[data-href]').on("click", function() {
+    document.location = $(this).data('href');
+    });
+    </script>
 {% endblock %}
