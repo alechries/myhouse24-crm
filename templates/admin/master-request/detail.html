@@ -1,0 +1,109 @@
+{% extends 'admin/base.html' %}
+{% block page_title %}
+    <h1 class="m-0">Заявка № {{ master_request.id }}</h1>
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_master-request' %}">
+            Заявки мастера
+        </a>
+    </li>
+    <li class="breadcrumb-item active">Заявка № {{ master_request.id }}</li>
+{% endblock %}
+{% block main_content %}
+<section class="content input-form">
+    <div class="row">
+        <div class="col-xs-12 col-md-7 col-lg-6">
+        <div class="page-header-spec">
+            <div class="form-group">
+                <div class="input-group date">
+                    <div class="input-group-addon" style="padding: 10px">
+                        <i class="far fa-calendar-alt"></i>
+                    </div>
+                    <div class="form-control pull-right">{{ master_request.date }}</div>
+                </div>
+            </div>
+            <span class="label-mid">от</span>
+            <div class="form-group">
+                <div class="input-group date">
+                    <div class="input-group-addon" style="padding: 10px">
+                        <i class="far fa-clock"></i>
+                    </div>
+                    <div class="form-control pull-right">{{ master_request.time }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="container-fluid">
+        <div class="card card-secondary card-outline">
+            <section>
+            <div class="d-flex justify-content-end" style="padding: 0 10px">
+                <a href="{% url 'admin_master-request-change' pk=master_request.id %}" class="btn btn-default btn-sm">Редактировать заявку</a>
+            </div>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <td>Cтатус</td>
+                        <td>
+                            {% if master_request.status == 'Новое' %}
+                            <small class="label label-success">Новое</small>
+                            {% elif master_request.status == 'В работе' %}
+                            <small class="label label-warning">В работе</small>
+                            {% elif master_request.status == 'Выполнено' %}
+                            <small class="label label-default">Выполнено</small>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Владелец</td>
+                        <td><a href="{% url 'admin_user-detail' pk=master_request.apartment.user.id %}">{{ master_request.apartment.user }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>Телефон</td>
+                        <td>{{ master_request.apartment.user.number }}</td>
+                    </tr>
+                    <tr>
+                        <td>Квартира</td>
+                        <td><a href="{% url 'admin_apart-detail' pk=master_request.apartment.id %}">{{ master_request.apartment }}, {{ master_request.apartment.floor.section.house.name }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>Тип мастера</td>
+                        {% if master_request.master_type %}
+                        <td>{{ master_request.master_type }}</td>
+                        {% else %}
+                        <td>Не указан</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Мастер</td>
+                        {% if master_request.master %}
+                        <td>{{ master_request.master }}</td>
+                        {% else %}
+                        <td>Не указан</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Описание</td>
+                        {% if master_request.description %}
+                        <td>{{ master_request.description|safe }}</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Добавлено</td>
+                        <td>{{ master_request.date }} - {{ master_request.time }}</td>
+                    </tr>
+
+                </table>
+            </section>
+        </div>
+    </div>
+</section>
+{% endblock %}

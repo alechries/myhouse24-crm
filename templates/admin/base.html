@@ -42,30 +42,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <!-- Notifications -->
-                <!--
-                <li class="dropdown notifications-menu">
-                    <a href="" class="disabled dropdown-toggle" data-toggle="dropdown">
+                <li class="nav-item dropdown show">
+                <a href="" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fas fa-child fa-lg"></i>
-                        <span class="label label-warning">2</span>
+                        {% if new_user_slice.count > 0 %}<span class="label label-warning">{{ new_user_slice.count }}</span>{% endif %}
                     </a>
-                    <ul class="dropdown-menu">
-                        <li class="header">Новых пользователей: 2</li>
-                        <li>
-                            <ul class="menu">
-                                <li><a href="/admin/user/103">
-                                    Коваль Борис Сергеевич
-                                </a>
-                                </li>
-                                <li><a href="/admin/user/102">
-                                    Ефросинин Аристарх Петрович
-                                </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="footer"><a href="/admin/user/index">Перейти в раздел пользователей</a></li>
-                    </ul>
-                </li>
-                -->
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
+                  <span class="dropdown-item dropdown-header">{% if new_user %}{{ new_user_count.count }}{% else %}Нет новых пользователей{% endif %}</span>
+                  <div class="dropdown-divider"></div>
+                {% if new_user_slice %}
+                {% for user in new_user_slice %}
+                  <a href="{% url 'admin_user-detail' pk=user.id %}" class="dropdown-item">
+                    {{ user}}
+                  </a>
+                {% endfor %}
+                {% endif %}
+                  <div class="dropdown-divider"></div>
+                  <a href="#" class="dropdown-item dropdown-footer">Перейти в раздел пользователей</a>
+                </div>
                 <!-- User Account -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">

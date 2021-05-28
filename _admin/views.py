@@ -10,7 +10,17 @@ from django.forms import inlineformset_factory
 
 
 def index_view(request):
+    new_user_count = models.User.objects.filter(status='Новый'),
+    print(new_user_count)
+    new_user_slice = {}
+    if models.User.objects.filter(status='Новый').count() > 3:
+        new_user_slice = models.User.objects.filter(status='Новый')[:2]
+    elif 3 > models.User.objects.filter(status='Новый').count() > 0:
+        new_user_slice = models.User.objects.filter(status='Новый')
+        print(new_user_slice)
     context = {
+        'new_user_count': new_user_count,
+        'new_user_slice': new_user_slice,
         'user': request.user,
         'houses': models.House.objects.all().count(),
         'active_user': models.User.objects.filter(Q(is_active=True), Q(is_superuser=0)).count(),
@@ -72,9 +82,43 @@ def account_transaction_view(request):
     return render(request, 'admin/account-transaction/index.html', context)
 
 
+def account_transaction_filter(request, pk):
+    statistic = utility.calculate_statistic()
+    accounts = models.Transfer.objects.filter(account_id=pk)
+    context = {'accounts': accounts}
+    context.update(statistic)
+
+    return render(request, 'admin/account-transaction/index.html', context)
+
+
+# НЕ до конца реализованно копирование
+def account_transaction_copy_view(request, pk):
+    instance = models.Transfer.objects.get(id=pk)
+    alerts = []
+    if request.method == 'POST':
+        form = forms.AccountTransactionForm(request.POST, instance=instance)
+
+        if form.is_valid():
+            form.save()
+            alerts.append('Успешное создание новой формы')
+        else:
+            alerts.append('Не успешно')
+
+    form = forms.AccountTransactionForm(request.POST, instance=instance)
+
+    return render(request, 'admin/account-transaction/create_in.html', {'form': form})
+
+
 def account_transaction_detail_view(request, pk):
-    transaction = models.Transfer.objects.filter(id=pk)
-    return render(request, 'admin/account-transaction/detail.html', {'transaction': transaction})
+    transaction = models.Transfer.objects.get(id=pk)
+    if transaction.account is not None:
+        username = transaction.account.get_apartment().user
+    else:
+        username = None
+
+    return render(request, 'admin/account-transaction/detail.html', {'transaction': transaction,
+                                                                     'username': username,
+                                                                     })
 
 
 def account_transaction_create_in_view(request):
@@ -147,6 +191,14 @@ def account_transaction_delete_view(request, pk):
 
 def invoice_view(request):
     invoices = models.Invoice.objects.all()
+    context = {'invoices': invoices}
+    context.update(utility.calculate_statistic())
+
+    return render(request, 'admin/invoice/index.html', context)
+
+
+def invoice_filter_view(request, pk):
+    invoices = models.Invoice.objects.filter(apartment__account_id=pk)
     context = {'invoices': invoices}
     context.update(utility.calculate_statistic())
 
@@ -259,7 +311,7 @@ def account_view(request):
 
 
 def account_detail(request, pk):
-    account = models.Account.objects.filter(id=pk)
+    account = models.Account.objects.get(id=pk)
     return render(request, 'admin/account/detail.html', {'account': account})
 
 
@@ -382,6 +434,24 @@ def user_delete_view(request, pk):
 def house_view(request):
     houses = models.House.objects.all()
     return render(request, 'admin/house/index.html', {'houses': houses})
+
+
+def house_detail_view(request, pk):
+    house = models.House.objects.get(id=pk)
+    floors = models.Floor.objects.all()
+    sections = models.Section.objects.filter(house_id=house.id)
+    floor_count = 0
+    user_count = models.UserHouse.objects.filter(house_id=house)
+    if sections:
+        for section in sections:
+            for floor in floors:
+                if floor.section_id == section.id:
+                    floor_count += 1
+
+    return render(request, 'admin/house/detail.html', {'house': house,
+                                                       'sections': sections,
+                                                       'floor_count': floor_count,
+                                                       'user_count': user_count})
 
 
 def house_edit_view(request, pk):
@@ -543,6 +613,11 @@ def master_request_view(request):
     return render(request, 'admin/master-request/index.html', {'requests': requests})
 
 
+def master_request_detail_view(request, pk):
+    master_request = models.MasterRequest.objects.get(id=pk)
+    return render(request, 'admin/master-request/detail.html', {'master_request': master_request})
+
+
 def master_request_create_view(request):
     alerts = []
     if request.method == 'POST':
@@ -578,6 +653,13 @@ def counters_view(request):
     counters = models.Meter.objects.all()  # .order_by('service__name').distinct('service__name') POSTGRES
 
     return render(request, 'admin/meter-data/counters.html', {'counters': counters})
+
+
+def counter_filter(request, pk):
+    counters = models.Meter.objects.filter(apartment__account_id=pk)
+    apartment = models.Apartment.objects.get(account_id=pk)
+    return render(request, 'admin/meter-data/apartment_detail.html', {'counters': counters,
+                                                                      'apartment': apartment})
 
 
 def counter_house_view(request, pk):

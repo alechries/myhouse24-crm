@@ -1,6 +1,10 @@
 {% extends 'admin/base.html' %}
 {% block page_title %}
+    {% if apartment %}
     <h1 class="m-0">Показания счётчиков, кв. {{ apartment.name }}</h1>
+    {% else %}
+    <h1>Показания</h1>
+    {% endif %}
 {% endblock %}
 {% block pagination_link %}
     <li class="breadcrumb-item">

@@ -18,14 +18,37 @@
 {% endblock %}
 {% block main_content %}
 <section class="content input-form">
+    <div class="row">
+        <div class="col-xs-12 col-md-7 col-lg-6">
+        <div class="page-header-spec">
+            <div class="form-group">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        №
+                    </div>
+                    <div class="form-control pull-right">{{ invoice.number }}</div>
+                </div>
+            </div>
+            <span class="label-mid">от</span>
+            <div class="form-group">
+                <div class="input-group date">
+                    <div class="form-control pull-right">{{ invoice.date }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container-fluid">
         <div class="card card-secondary card-outline">
             <section>
-            <div class="d-flex justify-content-between" style="padding: 0 10px">
-                <h4>Просмотр квитации</h4>
-                <a href="{% url 'admin_invoice-change' pk=invoice.id %}" class="btn btn-success">Редактировать квитанцию</a>
-            </div>
-                <div class="default-area">
+                <div class="default-area" style="margin: 0">
+                 <div class="box-header with-border d-flex justify-content-between" style="margin: 0">
+                    <h4 class="box-title">Приходная ведомость</h4>
+                    <div class="box-tools">
+                        <a href="#" class="disabled btn btn-default btn-sm">Печать</a>
+                        <a href="#" class="disabled btn btn-default btn-sm">Отправить на email</a>
+                        <a href="{% url 'admin_invoice-change' pk=invoice.id %}" class="btn btn-primary btn-sm">Редактировать квитанцию</a>
+                    </div>
+                </div>
                     <table class="table table-bordered table-striped">
                         <tr>
                             <td>Проведена</td>
@@ -41,8 +64,10 @@
                                 <td style="color: #00ba13"><small class="label label-success">Оплачена</small></td>
                             {% elif invoice.type == 'Неоплачена' %}
                                 <td style="color: #c62232"><small class="label label-danger">Неоплачена</small></td>
-                            {% else %}
+                            {% elif invoice.type == 'Частично оплачена' %}
                                 <td style="color: #f6ba04"><small class="label label-warning">Частично оплачена</small></td>
+                            {% else %}
+                                <td>Нет статуса</td>
                             {% endif %}
                         </tr>
                         <tr>
@@ -51,23 +76,23 @@
                         </tr>
                         <tr>
                             <td>Владелец</td>
-                            <td>{{ invoice.apartment.user }}</td>
+                            <td><a href="{% url 'admin_user-detail' pk=invoice.apartment.user.id %}">{{ invoice.apartment.user }}</a></td>
                         </tr>
                         <tr>
                             <td>Лицевой счёт</td>
-                            <td>{{ invoice.apartment.account }}</td>
+                            <td><a href="{% url 'admin_account-detail' pk=invoice.apartment.account.id %}">{{ invoice.apartment.account }}</a></td>
                         </tr>
                         <tr>
                             <td>Дом</td>
-                            <td>{{ invoice.apartment.floor.section.house.name }}</td>
+                            <td><a href="{% url 'admin_house-detail' pk=invoice.apartment.floor.section.house.id %}">{{ invoice.apartment.floor.section.house.name }}</a></td>
                         </tr>
                         <tr>
                             <td>Квартира</td>
-                            <td>{{ invoice.apartment}}</td>
+                            <td><a href="{% url 'admin_apart-detail' pk=invoice.apartment.id %}">{{ invoice.apartment }}</a></td>
                         </tr>
                         <tr>
                             <td>Секция</td>
-                            <td>{{ invoice.apartment.floor.section}}</td>
+                            <td>{{ invoice.apartment.floor.section.name}}</td>
                         </tr>
                         <tr>
                             <td>Тариф</td>
@@ -109,6 +134,7 @@
                 </div>
             </section>
         </div>
+    </div>
     </div>
 </section>
 {% endblock %}

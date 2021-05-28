@@ -1,6 +1,6 @@
 {% extends 'admin/base.html' %}
 {% block page_title %}
-    <h1 class="m-0">Квартира №{{ apartment.id }}, {{ apartment.house.name }}</h1>
+    <h1 class="m-0">Квартира №{{ apartment }}, {{ apartment.floor.section.house.name }}</h1>
 {% endblock %}
 {% block pagination_link %}
     <li class="breadcrumb-item">
@@ -76,13 +76,16 @@
                         </tr>
                     </table>
                     <div class="col">
-                        <a href="#">Посмотреть показания счётчиков</a>
+                        {% if apartment.account %}
+                        <a href="{% url 'admin_counters-filter' pk=apartment.account.id %}">Посмотреть показания счётчиков</a>
+                        {% else %}
+                        {% endif %}
                     </div>
                     <div class="col">
-                        <a href="#">Посмотреть приходы</a>
+                        <a href="{% url 'admin_account-transaction-filter' pk=apartment.account.id %}">Посмотреть приходы</a>
                     </div>
                     <div class="col">
-                        <a href="#">Посмотреть квитанции</a>
+                        <a href="{% url 'admin_invoice-filter' pk=apartment.account.id %}">Посмотреть квитанции</a>
                     </div>
                 </div>
             </section>

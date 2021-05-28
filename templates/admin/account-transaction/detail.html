@@ -1,54 +1,112 @@
 {% extends 'admin/base.html' %}
-{% block page_title %}
-    <h1 class="m-0">{% for el in transaction %}
-        {% if el.transfer_type.status == 1%}
-        Расходная ведомость
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_account-transaction' %}">
+            Платежи
+        </a>
+    </li>
+    <li class="breadcrumb-item active">
+        {% if transaction.transfer_type %}
+        {% if transaction.transfer_type.status == 'Приход' %}
+            Приходная ведомость {{ transaction.number }}
         {% else %}
-        Приходная ведомость
+            Расходная ведомость {{ transaction.number }}
         {% endif %}
-    {% endfor %}
-    </h1>
+        {% else %}
+        {% if transaction.solo_status == 1%}
+            Приходная ведомость {{ transaction.number }}
+        {% elif transaction.solo_status == 0 %}
+            Расходная ведомость {{ transaction.number }}
+        {% endif %}
+    {% endif %}
+    </li>
+{% endblock %}
+{% block page_title %}
+    {% if transaction.transfer_type %}
+        {% if transaction.transfer_type.status == 'Приход' %}
+            <h1 class="m-0">Приходная ведомость</h1>
+        {% else %}
+            <h1 class="m-0">Расходная ведомость</h1>
+        {% endif %}
+        {% else %}
+        {% if transaction.solo_status == 1%}
+            <h1 class="m-0">Приходная ведомость</h1>
+        {% elif transaction.solo_status == 0 %}
+            <h1 class="m-0">Расходная ведомость</h1>
+        {% endif %}
+    {% endif %}
+
 {% endblock %}
 {% block main_content %}
-{% for el in transaction %}
 <section class="content input-form">
     <div class="row">
-        <div class="col-md-6 d-flex justify-content-center">
-            <div class="col-md-6">
-                <input type="text" name="number" value="{{ el.number }}" class="form-control" required="" maxlength="255" id="id_number" readonly>
+        <div class="col-xs-12 col-md-7 col-lg-6">
+        <div class="page-header-spec">
+            <div class="form-group">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        №
+                    </div>
+                    <div class="form-control pull-right">{{ transaction.number }}</div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <input type="text" name="number" value="{{ el.created_date}}" class="form-control" required="" maxlength="255" id="id_number" readonly>
+            <span class="label-mid">от</span>
+            <div class="form-group">
+                <div class="input-group date">
+                    <div class="form-control pull-right">{{ transaction.created_date }}</div>
+                </div>
             </div>
         </div>
     </div>
+    </div>
     <div class="container-fluid">
         <div class="card card-secondary card-outline">
-                <div class="default-area">
+                <div class="default-area" style="margin: 0">
+                <div class="box-header with-border d-flex justify-content-between" style="margin: 0">
+                    <h3 class="box-title">Приходная ведомость</h3>
+                    <div class="box-tools">
+                        <a href="{% url 'admin_account-transaction-copy' pk=transaction.id %}" class="disabled btn btn-default btn-sm">Копировать</a>
+                        <a href="{% url 'admin_account-transaction-delete' pk=transaction.id %}" class="btn btn-default btn-sm">Удалить</a>
+                        <a href="{% url 'admin_account-transaction-change' pk=transaction.id %}" class="btn btn-primary btn-sm">Редактировать ведомость</a>
+                        <a href="/admin/account-transaction/delete/124" class="disabled btn btn-default btn-sm">Выгрузить в Exel</a>
+                    </div>
+                </div>
                     <table class="table table-bordered table-striped">
                         <tr>
                             <td>Владелец квартиры</td>
                             <td>
-                                {% if el.user == None %}
-                                    Не указан
-                                    {% else %}
-                                    {{ el.user.first_name }} {{ el.user.last_name }}
+                                {% if username %}
+                                    <a href="{% url 'admin_user-detail' pk=username.id %}">{{ username }}</a>
+                                {% else %}
+                                Пользователь не задан
                                 {% endif %}
                             </td>
                         </tr>
                         <tr>
                             <td>Лицевой счёт</td>
                             <td>
-                                {% if el.account == None %}
+                                {% if transaction.account == None %}
                                     Не указан
                                     {% else %}
-                                    {{ el.account }}
+                                    <a href="{% url 'admin_account-detail' pk=transaction.account.id %}">{{ transaction.account }}</a>
                                 {% endif %}
                             </td>
                         </tr>
                         <tr>
                             <td>Статья</td>
-                            <td>{{ el.transfer_type.name }}</td>
+                            <td>
+                                {% if transaction.transfer_type %}
+                                    {{ transaction.transfer_type.name }}
+                                {% else %}
+                                    Не указано
+                                {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <td>Квитанция</td>
@@ -56,18 +114,32 @@
                         </tr>
                         <tr>
                             <td>Услуга</td>
-                            <td></td>
+                            <td>Не указано</td>
                         </tr>
                         <tr>
                             <td>Менеджер</td>
-                            <td>{{ el.manager.first_name}} {{ el.manager.last_name }}</td>
+                            <td>
+                                {% if transaction.manager %}
+                                    <a href="{% url 'admin_user-admin-detail' pk=transaction.manager.id %}">{{ transaction.manager }}</a>
+                                {% else %}
+                                Не указано
+                                {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <td>Сумма</td>
-                            {% if el.transfer_type.status == 'Приход' %}
-                                <td style="color: #00ba13">{{ el.amount }}.00</td>
+                            {% if transaction.transfer_type %}
+                                {% if transaction.transfer_type.status == 'Приход' %}
+                                    <td style="color: #00ba13">{{ transaction.amount }}.00</td>
+                                {% else %}
+                                    <td style="color: #c62232">-{{ transaction.amount }}.00</td>
+                                {% endif %}
                             {% else %}
-                                <td style="color: #c62232">-{{ el.amount }}.00</td>
+                                {% if transaction.solo_status == 1 %}
+                                    <td style="color: #00ba13">{{ transaction.amount }}.00</td>
+                                {% elif transaction.solo_status == 0 %}
+                                    <td style="color: #c62232">-{{ transaction.amount }}.00</td>
+                                {% endif %}
                             {% endif %}
                             </td>
                         </tr>
@@ -80,5 +152,4 @@
         </div>
     </div>
 </section>
-{% endfor %}
 {% endblock %}

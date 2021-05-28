@@ -168,6 +168,9 @@ class Section(models.Model):
     def __str__(self):
         return f'{self.name} - {self.house.name}'
 
+    def get_floor(self):
+        return self.section_related.get(section_id=self.id)
+
 
 class Floor(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE, blank=True, related_name='section_related')
@@ -215,6 +218,12 @@ class Account(models.Model):
         return self.wallet
 
     def get_apartment(self):
+        try:
+            return self.appartament_related.get(account=self.id)
+        except:
+            return None
+
+    def get_account(self):
         return self.appartament_related.get(account=self.id)
 
 
