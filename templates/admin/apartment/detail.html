@@ -82,10 +82,16 @@
                         {% endif %}
                     </div>
                     <div class="col">
+                        {% if apartment.account %}
                         <a href="{% url 'admin_account-transaction-filter' pk=apartment.account.id %}">Посмотреть приходы</a>
+                        {% else %}
+                        {% endif %}
                     </div>
                     <div class="col">
+                        {% if apartment.account %}
                         <a href="{% url 'admin_invoice-filter' pk=apartment.account.id %}">Посмотреть квитанции</a>
+                        {% else %}
+                        {% endif %}
                     </div>
                 </div>
             </section>
