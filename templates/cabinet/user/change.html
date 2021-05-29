@@ -1,10 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'cabinet/base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% block page_title %}
+        <h1 class="m-0">Редактирование владельца</h1>
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'cabinet_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+        <li class="breadcrumb-item active">Редактирование владельца</li>
+{% endblock %}
+{% block main_content %}
+    <section class="content input-form">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container-fluid">
+                <div class="card card-secondary card-outline">
+                    <div class="default-area">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                {{ form.avatar }}
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <label>Статус</label>
+                                {{ form.status }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <label>Фамилия</label>
+                                {{ form.first_name }}
+                                <label>Имя</label>
+                                {{ form.last_name }}
+                                <label>Отчество</label>
+                                {{ form.middle_name }}
+                                <label>Дата рождения</label>
+                                {{ form.date_of_birth }}
+                            </div>
+                            <div class="col-xs-6 col-sm-6">
+                                <label>Статус</label>
+                                <label>О владельце (заметки)</label>
+                                {{ form.about }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <h2 class="page-header">Контактные данные</h2>
+                                <label>Телефон</label>
+                                {{ form.number }}
+                                <label>Viber</label>
+                                {{ form.viber|as_crispy_field }}
+                                <label>Telegram</label>
+                                {{ form.telegram|as_crispy_field }}
+                                <label>Email</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <h2 class="page-header">Изменить пароль</h2>
+                                <label>Пароль</label>
+                                {{ form.password }}
+                            </div>
+                        </div>
+                    <div class="col-xs-12 text-right">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+            </div>
+        </form>
+    </section>
+{% endblock %}

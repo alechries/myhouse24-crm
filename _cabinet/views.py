@@ -133,17 +133,22 @@ def master_request_create_view(request):
     user = request.user
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
-    form = forms.MasterRequestForm(request.POST)
-    form.owner = 1
     alerts = []
     if request.method == 'POST':
+        form = forms.MasterRequestForm(request.POST)
+        form.owner = user.id
+        print(form.data)
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно добавлена!')
+        else:
+            alerts.append('Неуспешно')
+    form = forms.MasterRequestForm()
     return render(request, 'cabinet/master-request/create.html', {'form': form,
                                                                   'user': user,
                                                                   'houses': houses,
-                                                                  'apartments': apartments})
+                                                                  'apartments': apartments,
+                                                                  'alerts': alerts})
 
 
 def master_request_delete_view(request, pk):
@@ -161,4 +166,20 @@ def user_view(request):
 
 
 def user_change_view(request):
-    return render(request, 'cabinet/user/change.html')
+    user = models.User.objects.get(id=request.user.id)
+    houses = models.House.objects.filter(userhouse__user=user)
+    apartments = models.Apartment.objects.filter(user=user)
+    alerts = []
+    if request.method == 'POST':
+        form = forms.UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            alerts.append('Успех')
+        else:
+            alerts.append('Неуспешно')
+    form = forms.UserForm(instance=user)
+    return render(request, 'cabinet/user/change.html', {'form': form,
+                                                        'houses': houses,
+                                                        'apartments': apartments,
+                                                        'alerts': alerts
+                                                        })
