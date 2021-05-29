@@ -10,7 +10,7 @@ def index_view(request):
     new_userlist = models.User.objects.filter()
     user = request.user
     if models.Apartment.objects.filter(user=user).count() != 0:
-        apartments = models.Apartment.objects.filter(user=user)[0]
+        apartments = models.Apartment.objects.filter(user=user)
     else:
         apartments = {}
     return render(request, 'cabinet/index.html', {'user': user,
