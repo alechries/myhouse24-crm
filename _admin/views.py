@@ -409,7 +409,10 @@ def user_create_view(request):
 
 def user_detail_view(request, pk):
     user = get_object_or_404(models.User, id=pk)
-    return render(request, 'admin/user/detail.html', {'user': user})
+    apartment = models.Apartment.objects.filter(user_id=pk)
+    print(apartment)
+    return render(request, 'admin/user/detail.html', {'user': user,
+                                                      'apartment': apartment})
 
 
 def user_change_view(request, pk):

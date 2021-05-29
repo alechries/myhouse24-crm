@@ -71,6 +71,39 @@
                             <td>{{ user.email }}</td>
                         </tr>
                     </table>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="max-width: 40px">ID</th>
+                                <th style="width: 125px; min-width: 150px">
+                                    Дом
+                                </th>
+                                <th style="min-width: 60px">Секция</th>
+                                <th style="width:auto">Квартира</th>
+                                <th style="min-width: 120px">Лицеовй счёт</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% if apartment.count > 0 %}
+                        {% for el in apartment %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{% url 'admin_house-detail' pk=el.floor.section.house.id %}">{{ el.floor.section.house.name }}</a></td>
+                            <td>{{ el.floor.section.name }}</td>
+                            <td><a href="{% url 'admin_apart-detail' pk=el.id %}">{{ el.name }}</a></td>
+                            {% if el.account %}
+                            <td><a href="{% url 'admin_account-detail' pk=el.account.id %}">{{ el.account }}</a></td>
+                            {% else %}
+                            <td>Не назначен</td>
+                            {% endif %}
+                        {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5"><div class="empty">Ничего не найдено.</div></td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
                 </div>
             </section>
         </div>

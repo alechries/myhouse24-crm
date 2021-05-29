@@ -36,7 +36,7 @@
             <section>
                 <div class="default-area">
                 <div class="box-header with-border d-flex justify-content-between">
-                    <h3 class="box-title">Приходная ведомость</h3>
+                    <h3 class="box-title">Лицевой счёт № {{ account.wallet }}</h3>
                     <div class="box-tools">
                         {% if account.get_apartment %}
                         <a href="{% url 'admin_account-transaction-create_in' %}" class="btn btn-default btn-sm">
