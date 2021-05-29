@@ -122,9 +122,11 @@ def messages_delete_view(request):
 def master_request_view(request):
     user = request.user
     houses = models.House.objects.filter(userhouse__user=user)
-    apartments = models.Apartment.objects.filter(user=user)
-    requests = models.MasterRequest.objects.filter(apartment__user=user)
-    return render(request, 'cabinet/master-request/index.html', {'requests': requests,
+    apartments = models.Apartment.objects.filter(user_id=user.id)
+    master_request = models.MasterRequest.objects.filter(apartment__user_id=user.id)
+    print(user.id)
+    print(master_request)
+    return render(request, 'cabinet/master-request/index.html', {'requests': master_request,
                                                                  'houses': houses,
                                                                  'apartments': apartments})
 
@@ -136,8 +138,7 @@ def master_request_create_view(request):
     alerts = []
     if request.method == 'POST':
         form = forms.MasterRequestForm(request.POST)
-        form.owner = user.id
-        print(form.data)
+        print(form.errors)
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно добавлена!')
