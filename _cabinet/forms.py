@@ -20,11 +20,13 @@ class LoginForm(Form):
         'placeholder': 'Password',
     }))
 
+
 class MasterRequestForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(MasterRequestForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_show_labels = False
+
     class Meta:
         model = models.MasterRequest
         fields = ['date', 'time', 'apartment', 'master_type', 'description', 'owner']
