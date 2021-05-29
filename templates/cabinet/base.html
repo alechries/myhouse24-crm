@@ -39,28 +39,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <!-- Notifications -->
-                    <li class="dropdown notifications-menu">
-                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fas fa-bell" style="width: auto"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">Новых пользователей: 2</li>
-                            <li>
-                                <!-- inner menu: contains the actual data -->
-                                <ul class="menu">
-                                    <li><a href="/admin/user/103">
-                                        Коваль Борис Сергеевич <!--<i class="fa fa-angle-right pull-right" aria-hidden="true"></i>-->
-                                    </a>
-                                    </li>
-                                    <li><a href="/admin/user/102">
-                                        Ефросинин Аристарх Петрович <!--<i class="fa fa-angle-right pull-right" aria-hidden="true"></i>-->
-                                    </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="footer"><a href="/admin/user/index">Перейти в раздел пользователей</a></li>
-                        </ul>
-                    </li>
+
+
                     <!-- User Account -->
                     <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -71,14 +51,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header" style="background-color: #f39c12">
-                            <img style="background-color: white" src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" class="img-circle" alt="Михаил Поляков">
-
+                            <!--<img src="/app-admin/dist/img/user2-160x160.jpg" class="img-circle" alt="Михаил Поляков">-->
+                            <span><i class="fas fa-user-circle text-purple bg-gray-light img-circle" style="font-size: 78px; text-align: center; width: 78px"></i></span>
                             <p style="color: white">{{ user }}</p>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer d-flex justify-content-around">
 
-                                <a class="btn btn-default btn-flat" href="/admin/user-admin/update-my">Профиль</a>
+                                <a class="btn btn-default btn-flat" href="{% url 'cabinet_user' %}">Профиль</a>
 
 
                                 <a class="btn btn-default btn-flat" href="{% url 'cabinet_logout' %}" data-method="post">Выход</a>

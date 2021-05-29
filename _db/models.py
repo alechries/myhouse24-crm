@@ -428,11 +428,11 @@ class MasterRequest(models.Model):
     date = models.DateField(verbose_name='')
     time = models.TimeField(verbose_name='')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', verbose_name='', null=True)
-    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, verbose_name='')
-    master_type = models.CharField(choices=TYPE, max_length=155, verbose_name='')
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, verbose_name='', blank=True)
+    master_type = models.CharField(choices=TYPE, max_length=155, verbose_name='', blank=True)
     status = models.CharField(choices=STATUS, max_length=155, verbose_name='', default='Новое')
     master = models.ForeignKey(User, on_delete=models.CASCADE, related_name='master', verbose_name='', null=True)
-    description = models.TextField(null=True, verbose_name='')
+    description = models.TextField(null=True, verbose_name='', blank=True)
     comment = models.TextField(null=True, verbose_name='')
 
     def __str__(self):
