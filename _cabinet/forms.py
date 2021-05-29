@@ -2,6 +2,7 @@ from django import forms
 from _db import models
 from django.forms import TextInput, CharField, Form
 from datetime import datetime
+from crispy_forms.helper import FormHelper
 
 
 class LoginForm(Form):
@@ -20,6 +21,10 @@ class LoginForm(Form):
     }))
 
 class MasterRequestForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(MasterRequestForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
     class Meta:
         model = models.MasterRequest
         fields = ['date', 'time', 'apartment', 'master_type', 'description', 'owner']
