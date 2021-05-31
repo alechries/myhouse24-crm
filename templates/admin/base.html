@@ -107,6 +107,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" style="top: -8px">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+        {% if user.role.statistic_status == 1 %}
           <li class="nav-item">
             <a href="{% url 'admin_index' %}" class="nav-link {% if request.path == '/admin/' %} active {% endif %}">
               <i class="fas fa-chart-line"></i>
@@ -115,6 +116,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+        {% endif %}
+        {% if user.role.cash_box_status == 1 %}
           <li class="nav-item">
             <a href="{% url 'admin_account-transaction' %}" class="nav-link
                 {% if  url_name == 'admin_account-transaction-detail'%} active
@@ -129,6 +132,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+        {% endif %}
+        {% if user.role.invoice_status == 1 %}
           <li class="nav-item">
             <a href="{% url 'admin_invoice' %}" class="nav-link
                 {% if  url_name == 'admin_invoice'%} active
@@ -144,6 +149,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+        {% endif %}
+        {% if user.role.account_status == 1 %}
           <li class="nav-item">
             <a href="{% url 'admin_account' %}" class="nav-link
                 {% if  url_name == 'admin_account' %} active
@@ -157,6 +164,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+        {% endif %}
+        {% if user.role.apartment == 1 %}
           <li class="nav-item">
             <a href="{% url 'admin_apart' %}" class="nav-link
                 {% if  url_name == 'admin_apart'%} active
@@ -170,6 +179,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+        {% endif %}
+        {% if user.role.house_user_status == 1 %}
           <li class="nav-item">
             <a href="{% url 'admin_user' %}" class="nav-link
                 {% if  url_name == 'admin_user'%} active
@@ -183,6 +194,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+        {% endif %}
+        {% if user.role.house_status == 1 %}
           <li class="nav-item">
             <a href="{% url 'admin_house' %}" class="nav-link
                 {% if  url_name == 'admin_house'%} active
@@ -196,6 +209,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+        {% endif %}
+        {% if user.role.message_status == 1 %}
           <li class="nav-item">
             <a href="{% url 'admin_message' %}" class="nav-link
                 {% if  url_name == 'admin_message'%} active
@@ -208,6 +223,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+        {% endif %}
+        {% if user.role.master_request_status == 1 %}
           <li class="nav-item">
             <a href="{% url 'admin_master-request' %}" class="nav-link
                 {% if  url_name == 'admin_master-request'%} active
@@ -221,6 +238,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+        {% endif %}
+        {% if user.role.meter_status == 1 %}
           <li class="nav-item">
             <a href="{% url 'admin_counters-view' %}" class="nav-link
                 {% if  url_name == 'admin_counters-view'%} active
@@ -236,6 +255,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+        {% endif %}
+        {% if user.role.website_status == 1 %}
           <li class="nav-item menu
             {% if request.path == '/admin/website/main-page' %} menu-open
             {% elif request.path == '/admin/website/about' %} menu-open
@@ -283,6 +304,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </li>
             </ul>
           </li>
+        {% endif %}
           <li class="nav-item menu
             {% if request.path == '/admin/services' %} menu-open
             {% elif request.path == '/admin/tariffs' %} menu-open
@@ -313,6 +335,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
             <ul class="nav nav-treeview">
+            {% if user.role.service_status == 1 %}
               <li class="nav-item">
                 <a href="{% url 'admin_services' %}" class="nav-link
                     {% if request.path == '/admin/services' %} active {% endif %}">
@@ -320,6 +343,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Услуги</p>
                 </a>
               </li>
+            {% endif %}
+            {% if user.role.tariff_status == 1 %}
               <li class="nav-item">
                 <a href="{% url 'admin_tariffs' %}" class="nav-link
                     {% if request.path == '/admin/tariffs' %} active
@@ -333,12 +358,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Тарифы</p>
                 </a>
               </li>
+            {% endif %}
+            {% if user.role.role_status == 1 %}
               <li class="nav-item">
                 <a href="{% url 'admin_user-admin-role' %}" class="nav-link {% if  url_name == 'admin_user-admin-role'%} active {% endif %}">
                   <i class="fas fa-user"></i>
                   <p>Роли</p>
                 </a>
               </li>
+            {% endif %}
+            {% if user.role.user_status == 1 %}
               <li class="nav-item">
                 <a href="{% url 'admin_user-users-list' %}" class="nav-link
                     {% if  url_name == 'admin_user-users-list'%} active
@@ -349,12 +378,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Пользователи</p>
                 </a>
               </li>
+            {% endif %}
+            {% if user.role.payments_detail_status == 1 %}
               <li class="nav-item">
                 <a href="{% url 'admin_pay-company' %}" class="nav-link {% if request.path == '/admin/pay-company' %} active {% endif %}">
                   <i class="far fa-credit-card"></i>
                   <p>Плетежные реквизиты</p>
                 </a>
               </li>
+            {% endif %}
               <li class="nav-item">
                 <a href="{% url 'admin_transaction-purpose' %}" class="nav-link
                     {% if  url_name == 'admin_transaction-purpose'%} active
