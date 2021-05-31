@@ -77,19 +77,19 @@
                                 <p>{{ el.floor.section.house.name }}. {{ el.floor.section.house.address }}, кв. {{ el.name }}</p>
                                 <div class="row">
                                     <div class="col-xs-12 col-md-6">
-                                        <img src="{{ el.floor.section.house.image1.url }}" style="width: 522px; height: 350px;" class="img-responsive largeImg margin-bottom-30" alt="">
+                                        <img src="{% if el.floor.section.house.image1 %}{{ el.floor.section.house.image1.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" style="width: 522px; height: 350px;" class="img-responsive largeImg margin-bottom-30" alt="">
                                     </div>
                                     <div class="col-xs-6 col-md-3">
-                                        <img src="{{ el.floor.section.house.image2.url }}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
+                                        <img src="{% if el.floor.section.house.image2 %}{{ el.floor.section.house.image2.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
                                     </div>
                                     <div class="col-xs-6 col-md-3">
-                                        <img src="{{ el.floor.section.house.image3.url }}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
+                                        <img src="{% if el.floor.section.house.image3 %}{{ el.floor.section.house.image3.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
                                     </div>
                                     <div class="col-xs-6 col-md-3">
-                                        <img src="{{ el.floor.section.house.image4.url }}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
+                                        <img src="{% if el.floor.section.house.image4 %}{{ el.floor.section.house.image4.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
                                     </div>
                                     <div class="col-xs-6 col-md-3">
-                                        <img src="{{ el.floor.section.house.image5.url }}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
+                                        <img src="{% if el.floor.section.house.image5 %}{{ el.floor.section.house.image5.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
                                     </div>
                                 </div>
                                 <div class="table-responsive">

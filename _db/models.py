@@ -146,11 +146,11 @@ class House(models.Model):
     name = models.CharField(max_length=255, verbose_name='', blank=True)
     address = models.CharField(max_length=255)
     number = models.IntegerField('', null=True)
-    image1 = models.ImageField(upload_to='images/')
-    image2 = models.ImageField(upload_to='images/')
-    image3 = models.ImageField(upload_to='images/')
-    image4 = models.ImageField(upload_to='images/')
-    image5 = models.ImageField(upload_to='images/')
+    image1 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image2 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image3 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image4 = models.ImageField(upload_to='images/', null=True, blank=True)
+    image5 = models.ImageField(upload_to='images/', null=True, blank=True)
 
     def __str__(self):
         return f'{self.name}, ул. {self.address}'

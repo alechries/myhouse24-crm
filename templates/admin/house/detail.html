@@ -1,4 +1,5 @@
 {% extends 'admin/base.html' %}
+{% load static %}
 {% block page_title %}
     <h1 class="m-0">{{ house.name }}</h1>
 {% endblock %}
@@ -66,25 +67,25 @@
                     <div class="col-xs-12 col-lg-4" style="margin-top: 0">
                         <div class="row" style="margin-top: 0">
                             <div class="col-xs-12 col-md-6">
-                                <img src="{{ house.image1.url }}" class="img-responsive smallImg" alt="">
+                                <img src="{% if house.image1 %}{{ house.image1.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" class="img-responsive smallImg" alt="">
                             </div>
                             <div class="col-xs-12 col-md-6">
-                                <img src="{{ house.image2.url }}" class="img-responsive smallImg" alt="">
+                                <img src="{% if house.image2 %}{{ house.image2.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" class="img-responsive smallImg" alt="">
                             </div>
                         </div>
                         <div class="row" style="margin-top: 0">
                             <div class="col-xs-12 col-md-6">
-                                <img src="{{ house.image3.url }}" class="img-responsive smallImg" alt="">
+                                <img src="{% if house.image3 %}{{ house.image3.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" class="img-responsive smallImg" alt="">
                             </div>
                             <div class="col-xs-12 col-md-6">
-                                <img src="{{ house.image4.url }}" class="img-responsive smallImg" alt="">
+                                <img src="{% if house.image4 %}{{ house.image4.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" class="img-responsive smallImg" alt="">
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-lg-4" style="margin-top: 0">
                         <div class="row" style="margin-top: 0">
                             <div class="col-xs-12 col-md-6">
-                                <img src="{{ house.image5.url }}" class="img-responsive largeImg" alt="" style="width: 350px; height: 335px">
+                                <img src="{% if house.image5 %}{{ house.image5.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" class="img-responsive largeImg" alt="" style="width: 350px; height: 335px">
                             </div>
                         </div>
                     </div>

@@ -55,7 +55,7 @@ class MasterRequestForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = models.User
-        fields = ['status', 'avatar', 'first_name', 'middle_name', 'last_name', 'date_of_birth', 'about', 'number',
+        fields = ['avatar', 'first_name', 'middle_name', 'last_name', 'date_of_birth', 'about', 'number',
                   'viber', 'telegram', 'email', 'password']
         widgets = {
             'avatar': forms.FileInput(),
