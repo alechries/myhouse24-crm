@@ -1,0 +1,79 @@
+{% extends 'cabinet/base.html' %}
+{% load static %}
+{% block main_content %}
+    <section class="content">
+    <div class="row">
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="small-box bg-primary">
+                <div class="inner">
+                    {% if apartment.account %}
+                    <h3>{{ apartment.account.get_money }} грн.</h3>
+                    {% else %}
+                    <h3>Нет лицевого счёта</h3>
+                    {% endif %}
+                    <p>Баланс по квартире</p>
+                </div>
+                <div class="icon">
+                    <i class="far fa-money-bill-alt"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="small-box bg-green">
+                <div class="inner">
+                    {% if apartment.account %}
+                    <h3>{{ apartment.account }}</h3>
+                    {% else %}
+                    <h3>Нет лицевого чёта</h3>
+                    {% endif %}
+                    <p>Лицоевой счёт</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-12">
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    {% if apartment.account %}
+                    <h3>{{ apartment.get_arrears }}</h3>
+                    {% else %}
+                    <h3>Нет лицевого счёта</h3>
+                    {% endif %}
+                    <p>Средний расход за месяц</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+            </div>
+        </div>
+
+<!--    <div class="row">-->
+<!--        <div class="col-xs-12">-->
+<!--            <div class="box box-default">-->
+<!--                <div class="box-header with-border">-->
+<!--                    <h3 class="box-title">График погашения квитанций, грн</h3>-->
+<!--                </div>-->
+<!--                <div class="box-body">-->
+<!--                   <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--        <div class="col-xs-12">-->
+<!--            <div class="box box-default">-->
+<!--                <div class="box-header with-border">-->
+<!--                    <h3 class="box-title">График приходов и расходов по кассе, грн</h3>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    </section>
+
+{% endblock %}
+{% block scripts %}
+<script>
+</script>
+{% endblock %}
