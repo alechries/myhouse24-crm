@@ -99,8 +99,12 @@
                                             </div>
                                         </div>
                                     {% endfor %}
-                            <div class="text-left">
-                                <button type="button" class="btn btn-secondary" id="add-tariff-invoice-form">Добавить тариф</button>
+                            <div class="form-title-line">
+                                <div><button type="button" class="btn btn-secondary" id="add-tariff-invoice-form">Добавить тариф</button></div>
+                                <div>
+                                    <b>Итого:</b>
+                                    <a class="amount-price">0</a> грн
+                                </div>
                             </div>
                             <div class="row d-flex justify-content-start">
                                 <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
@@ -178,5 +182,24 @@ $('#select-section').find('select').each(function() {
         data = {'csrfmiddlewaretoken':token}
         if (deleteURL != '#') requestWithoutReload(deleteURL, data);
     });
+    </script>
+    <script>
+        var init_prices = document.getElementsByClassName('invoice-price')
+        for (let i = 0; i < init_prices.length; i++) {
+            price = init_prices[i]
+            price.addEventListener('change', function(){
+                var prices = document.getElementsByClassName('invoice-price')
+                var amount = 0
+                for (let i = 0; i < prices.length; i++) {
+                    price = prices[i]
+                    amount = amount + +price.value
+                    console.log(parseInt(price.value))
+                }
+                amount_html = document.getElementsByClassName('amount-price')
+                amount_html[0].innerText = amount
+                alert(amount)
+
+            })
+        }
     </script>
 {% endblock %}

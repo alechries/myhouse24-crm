@@ -336,7 +336,7 @@ class TariffInvoiceForm(forms.ModelForm):
             'price': forms.NumberInput(attrs={
                 'placeholder': 'Введите показания',
                 'step': "0.1",
-                'class': 'form-control',
+                'class': 'form-control invoice-price',
                 'style': 'margin: 0.25rem 0',
             }),
 
