@@ -367,7 +367,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
             {% endif %}
-            {% if user.role.user_status == 1 %}
+            {% if user.is_superuser == 1 %}
               <li class="nav-item">
                 <a href="{% url 'admin_user-users-list' %}" class="nav-link
                     {% if  url_name == 'admin_user-users-list'%} active
