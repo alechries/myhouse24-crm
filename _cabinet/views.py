@@ -12,7 +12,7 @@ def index_view(request):
     if apartments.count() != 0:
         return redirect('cabinet_statistic', pk=apartments[0].id)
     else:
-        return redirect('cabinet_statistic', pk=apartments[0].id)
+        return redirect('non_view')
 
 
 def non_view(request):
