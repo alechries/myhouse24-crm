@@ -16,7 +16,7 @@ def index_view(request):
 
 
 def non_view(request):
-    return render(request, 'index.html')
+    return render(request, 'cabinet/index.html')
 
 
 def login_view(request):
