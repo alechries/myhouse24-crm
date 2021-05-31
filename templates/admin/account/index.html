@@ -96,10 +96,14 @@
                             <td>{{ el.get_apartment.floor.section.house.name }}</td>
                             <td>{{ el.get_apartment.floor.section }}</td>
                             <td>{{ el.get_apartment.user }}</td>
-                            {% if el.money >= 0 %}
-                                <td style="color: #00a65a">{{ el.money }} грн.</td>
+                            {% if el.get_money %}
+                            {% if el.get_money >= 0 %}
+                                <td style="color: #00a65a">{{ el.get_money }} грн.</td>
                             {% else %}
-                                <td style="color: red">{{ el.money }} грн.</td>
+                                <td style="color: red">{{ el.get_money }} грн.</td>
+                            {% endif %}
+                            {% else %}
+                                <td>0 грн</td>
                             {% endif %}
                             <td>
                                 <div class="btn-group pull-right">

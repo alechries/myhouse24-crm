@@ -102,10 +102,10 @@
                         </tr>
                         <tr>
                             <td>Остаток грн.</td>
-                            {% if account.money >= 0 %}
-                                <td style="color: #00a65a">{{ account.money }} грн.</td>
+                            {% if account.get_money >= 0 %}
+                                <td style="color: #00a65a">{{ account.get_money }} грн.</td>
                             {% else %}
-                                <td style="color: red">{{ account.money }} грн.</td>
+                                <td style="color: red">{{ account.get_money }} грн.</td>
                             {% endif %}
                         </tr>
                     </table>

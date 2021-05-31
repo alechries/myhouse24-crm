@@ -229,9 +229,6 @@ def invoice_create_view(request):
                 tariff_invoice_form.save()
             invoice.total_amount = total
             if invoice.apartment.account:
-                account = models.Account.objects.get(id=invoice.apartment.account.id)
-                account.money -= total
-                account.save()
                 invoice.save()
                 alerts.append('Квитанция сохранена')
             else:
@@ -312,8 +309,17 @@ def invoice_delete_view(request, pk):
 
 def account_view(request):
     account = models.Account.objects.all()
+    for el in account:
+        el.money = 0
+        transaction_in_balance = models.Transfer.objects.filter(Q(account_id=el.id), Q(transfer_type__status='Приход'))
+        transaction_out_balance = models.Transfer.objects.filter(Q(account_id=el.id), Q(transfer_type__status='Расход'))
+        for transfer_in in transaction_in_balance:
+            el.money += transfer_in.amount
+
+        for transfer_out in transaction_out_balance:
+            el.money -= transfer_out.amount
     statistic = utility.calculate_statistic()
-    context = {'account':account}
+    context = {'account': account}
     context.update(statistic)
     context.update(utility.new_user())
     return render(request, 'admin/account/index.html', context)

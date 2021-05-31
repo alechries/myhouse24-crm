@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from _db import models
+from . import utils as utility
 from . import forms
 from _db import models, utils, auth
 from django.contrib.auth import authenticate, login, logout
@@ -7,14 +8,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 
 def index_view(request):
-    new_userlist = models.User.objects.filter()
-    user = request.user
-    if models.Apartment.objects.filter(user=user).count() != 0:
-        apartments = models.Apartment.objects.filter(user=user)
+    apartments = models.Apartment.objects.filter(user_id=request.user.id)
+    if apartments.count() != 0:
+        return redirect('cabinet_statistic', pk=apartments[0].id)
     else:
-        apartments = {}
-    return render(request, 'cabinet/index.html', {'user': user,
-                                                  'apartments': apartments})
+        return redirect('cabinet_statistic', pk=apartments[0].id)
+
+
+def non_view(request):
+    return render(request, 'index.html')
 
 
 def login_view(request):
@@ -46,8 +48,18 @@ def logout_view(request):
     return redirect('cabinet_login')
 
 
-def statistic_view(request):
-    return render(request, 'cabinet/statistic.html')
+def statistic_view(request, pk):
+    user = request.user
+    apartments = models.Apartment.objects.filter(user=user)
+    houses = models.House.objects.filter(userhouse__user=user)
+    apartment = models.Apartment.objects.get(id=pk)
+    month_arrears = apartment.get_arrears()
+    context = {'user': user,
+               'houses': houses,
+               'apartment': apartment,
+               'apartments': apartments,
+               'arrears': month_arrears}
+    return render(request, 'cabinet/statistic.html', context)
 
 
 def invoice_view(request, pk=None):

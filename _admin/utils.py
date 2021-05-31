@@ -77,3 +77,4 @@ def new_user():
         'new_user_count': new_user_count,
         'new_user_slice': new_user_slice,
     }
+

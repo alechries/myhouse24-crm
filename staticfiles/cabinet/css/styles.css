@@ -294,3 +294,6 @@ img {
 a .menu-nav{
     white-space: revert;
 }
+.icon>i {
+    left: 75%;
+}

@@ -1,5 +1,5 @@
 import datetime
-
+from django.db.models import Q
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 from solo.models import SingletonModel
@@ -226,6 +226,19 @@ class Account(models.Model):
     def get_account(self):
         return self.appartament_related.get(account=self.id)
 
+    def get_money(self):
+        account_balance = 0
+        transaction_in_balance = self.related_account.filter(Q(account_id=self.id), Q(transfer_type__status='Приход'))
+        transaction_out_balance = self.related_account.filter(Q(account_id=self.id), Q(transfer_type__status='Расход'))
+        for el in transaction_in_balance:
+            account_balance += el.amount
+
+        for el in transaction_out_balance:
+            account_balance -= el.amount
+        account = self.appartament_related.get(account=self)
+        account_balance -= account.get_arrears()
+        return account_balance
+
 
 class Apartment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='user_related')
@@ -244,6 +257,14 @@ class Apartment(models.Model):
     def get_house(self):
         houses = self.floor.section.house.name
         return houses
+
+    def get_arrears(self):
+        arrears = 0
+        invoices = self.apartment_related.filter(type='Неоплачена')
+        for invoice in invoices:
+            arrears += invoice.total_amount
+        return arrears
+
 
 
 class Meter(models.Model):
@@ -278,7 +299,7 @@ class Transfer(models.Model):
     solo_status = models.BooleanField(null=True, verbose_name='дефолтное значение для пустых трансферов: 0 - расх')
     number = models.CharField('Номер транзакции', max_length=255)
     manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name='transfer_manager', verbose_name='')
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True,  verbose_name='', null=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True,  verbose_name='', null=True, related_name='related_account')
     transfer_type = models.ForeignKey(TransferType, on_delete=models.CASCADE, blank=True, null=True)
     amount = models.IntegerField(verbose_name='', blank=True)
     comment = models.TextField('', null=True, blank=True)
@@ -301,7 +322,7 @@ class Invoice(models.Model):
     paid = models.IntegerField(null=True)
     number = models.CharField('', max_length=255) #
     type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, blank=True) #
-    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE) #
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, related_name='apartment_related') #
     period_from = models.DateField("Дата с", null=True) #
     period_to = models.DateField("Дата по", null=True) #
     date = models.DateField(null=True) #
