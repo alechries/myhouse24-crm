@@ -22,53 +22,53 @@
         <div class="card card-secondary card-outline">
             <section>
             <div class="d-flex justify-content-end" style="padding: 0 10px">
-                <a href="{% url 'admin_user-change' pk=user.id %}" class="btn btn-success">Редактировать профиль</a>
+                <a href="{% url 'admin_user-change' pk=user_detail.id %}" class="btn btn-success">Редактировать профиль</a>
             </div>
                 <div class="default-area">
                     <table class="table table-bordered table-striped">
                         <tr>
                             <td>Статус</td>
-                            <td>{{ user.status }}</td>
+                            <td>{{ user_detail.status }}</td>
                         </tr>
                         <tr>
                             <td>ID</td>
-                            <td>{{ user.id }}</td>
+                            <td>{{ user_detail.id }}</td>
                         </tr>
                         <tr>
                             <td>Фамилия</td>
-                            <td>{{ user.last_name }}</td>
+                            <td>{{ user_detail.last_name }}</td>
                         </tr>
                         <tr>
                             <td>Имя</td>
-                            <td>{{ user.first_name }}</td>
+                            <td>{{ user_detail.first_name }}</td>
                         </tr>
                         <tr>
                             <td>Отчество</td>
-                            <td>{{ user.middle_name }}</td>
+                            <td>{{ user_detail.middle_name }}</td>
                         </tr>
                         <tr>
                             <td>Дата рождения</td>
-                            <td>{{ user.date_of_birth }}</td>
+                            <td>{{ user_detail.date_of_birth }}</td>
                         </tr>
                         <tr>
                             <td>О владельце (заметки)</td>
-                            <td>{{ user.about }}</td>
+                            <td>{{ user_detail.about }}</td>
                         </tr>
                         <tr>
                             <td>Телефон</td>
-                            <td>{{ user.number }}</td>
+                            <td>{{ user_detail.number }}</td>
                         </tr>
                         <tr>
                             <td>Вайбер</td>
-                            <td>{{ user.viber }}</td>
+                            <td>{{ user_detail.viber }}</td>
                         </tr>
                         <tr>
                             <td>Телеграм</td>
-                            <td>{{ user.telegram }}</td>
+                            <td>{{ user_detail.telegram }}</td>
                         </tr>
                         <tr>
                             <td>Email</td>
-                            <td>{{ user.email }}</td>
+                            <td>{{ user_detail.email }}</td>
                         </tr>
                     </table>
                     <table class="table table-bordered table-striped">

@@ -22,34 +22,34 @@
         <div class="card card-secondary card-outline">
             <section>
             <div class="d-flex justify-content-end" style="padding: 0 10px">
-                <a href="{% url 'admin_user-admin-change' pk=user.pk %}" class="btn btn-success ">Редактировать пользователя</a>
+                <a href="{% url 'admin_user-admin-change' pk=current_user.pk %}" class="btn btn-success ">Редактировать пользователя</a>
             </div>
                 <div class="default-area">
                     <table class="table table-bordered table-striped">
                         <tr>
                             <td>Пользователь</td>
-                            <td>{{ user }}</td>
+                            <td>{{ current_user }}</td>
                         </tr>
                         <tr>
                             <td>Роль</td>
-                            <td>{{ user.role}}</td>
+                            <td>{{ current_user.role}}</td>
                         </tr>
                         <tr>
                             <td>Телефон</td>
-                            <td>{{ user.number }}м2</td>
+                            <td>{{ current_user.number }}м2</td>
                         </tr>
                         <tr>
                             <td>Email</td>
-                            <td>{{ user.email }}</td>
+                            <td>{{ current_user.email }}</td>
                         </tr>
                         <tr>
                             <td>Статус</td>
                             {% if user.status == 'Активен' %}
-                                <td style="color: #00ba13"><small class="label label-success">{{ user.status }}</small></td>
+                                <td style="color: #00ba13"><small class="label label-success">{{ current_user.status }}</small></td>
                             {% elif user.status == 'Новый' %}
-                                <td style="color: #00ba13"><small class="label label-warning">{{ user.status }}</small></td>
+                                <td style="color: #00ba13"><small class="label label-warning">{{ current_user.status }}</small></td>
                             {% elif user.status == 'Отключен' %}
-                                <td style="color: #00ba13"><small class="label label-danger">{{ user.status }}</small></td>
+                                <td style="color: #00ba13"><small class="label label-danger">{{ current_user.status }}</small></td>
                             {% else %}
                                 <td>None</td>
                             {% endif %}

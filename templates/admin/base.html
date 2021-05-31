@@ -1,4 +1,5 @@
 {% load static %}
+{% with request.resolver_match.url_name as url_name %}
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -115,7 +116,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'admin_account-transaction' %}" class="nav-link {% if request.path == '/admin/account-transaction' %} active {% endif %}">
+            <a href="{% url 'admin_account-transaction' %}" class="nav-link
+                {% if  url_name == 'admin_account-transaction-detail'%} active
+                {% elif  url_name == 'admin_account-transaction-create_in'%} active
+                {% elif  url_name == 'admin_account-transaction-create_out'%} active
+                {% elif  url_name == 'admin_account-transaction-change'%} active
+                {% elif  url_name == 'admin_account-transaction-filter'%} active
+                {% elif  url_name == 'admin_account-transaction'%} active {% endif %}">
               <i class="fas fa-dollar-sign"></i>
               <p>
                 Касса
@@ -123,7 +130,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'admin_invoice' %}" class="nav-link {% if request.path == '/admin/invoice' %} active {% endif %}">
+            <a href="{% url 'admin_invoice' %}" class="nav-link
+                {% if  url_name == 'admin_invoice'%} active
+                {% elif  url_name == 'admin_invoice-detail'%} active
+                {% elif  url_name == 'admin_invoice-create'%} active
+                {% elif  url_name == 'admin_invoice-copy'%} active
+                {% elif  url_name == 'admin_invoice-change'%} active
+                {% elif  url_name == 'admin_invoice-delete'%} active
+                {% elif  url_name == 'admin_invoice-filter'%} active {% endif %}">
               <i class="far fa-copy"></i>
               <p>
                 Квитанции на оплату
@@ -131,7 +145,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'admin_account' %}" class="nav-link {% if request.path == '/admin/account' %} active {% endif %}">
+            <a href="{% url 'admin_account' %}" class="nav-link
+                {% if  url_name == 'admin_account' %} active
+                {% elif  url_name == 'admin_account-detail' %} active
+                {% elif  url_name == 'admin_account-create' %} active
+                {% elif  url_name == 'admin_account-change' %} active
+                {% elif  url_name == 'admin_account-delete' %} active {% endif %}">
               <i class="far fa-credit-card"></i>
               <p>
                 Лицевые счета
@@ -139,7 +158,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'admin_apart' %}" class="nav-link {% if request.path == '/admin/apartment' %} active {% endif %}">
+            <a href="{% url 'admin_apart' %}" class="nav-link
+                {% if  url_name == 'admin_apart'%} active
+                {% elif  url_name == 'admin_apart-detail'%} active
+                {% elif  url_name == 'admin_apart-create'%} active
+                {% elif  url_name == 'admin_apart-change'%} active
+                {% elif  url_name == 'admin_apart-delete'%} active {% endif %}">
               <i class="fas fa-key"></i>
               <p>
                 Квартиры
@@ -147,7 +171,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'admin_user' %}" class="nav-link {% if request.path == '/admin/user' %} active {% endif %}">
+            <a href="{% url 'admin_user' %}" class="nav-link
+                {% if  url_name == 'admin_user'%} active
+                {% elif  url_name == 'admin_user-detail'%} active
+                {% elif  url_name == 'admin_user-create'%} active
+                {% elif  url_name == 'admin_user-change'%} active
+                {% elif  url_name == 'admin_user-delete'%} active {% endif %}">
               <i class="fas fa-users"></i>
               <p>
                 Владельцы квартир
@@ -155,7 +184,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'admin_house' %}" class="nav-link {% if request.path == '/admin/house' %} active {% endif %}">
+            <a href="{% url 'admin_house' %}" class="nav-link
+                {% if  url_name == 'admin_house'%} active
+                {% elif  url_name == 'admin_house-create'%} active
+                {% elif  url_name == 'admin_house-change'%} active
+                {% elif  url_name == 'admin_house-delete'%} active
+                {% elif  url_name == 'admin_house-detail'%} active {% endif %}">
               <i class="fas fa-building"></i>
               <p>
                 Дома
@@ -163,7 +197,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'admin_message' %}" class="nav-link {% if request.path == '/admin/message' %} active {% endif %}">
+            <a href="{% url 'admin_message' %}" class="nav-link
+                {% if  url_name == 'admin_message'%} active
+                {% elif  url_name == 'admin_message-create'%} active
+                {% elif  url_name == 'admin_message-detail'%} active
+                {% elif  url_name == 'admin_message-delete'%} active {% endif %}">
               <i class="far fa-envelope"></i>
               <p>
                 Сообщения
@@ -171,7 +209,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'admin_master-request' %}" class="nav-link {% if request.path == '/admin/master-request' %} active {% endif %}">
+            <a href="{% url 'admin_master-request' %}" class="nav-link
+                {% if  url_name == 'admin_master-request'%} active
+                {% elif  url_name == 'admin_master-request-create'%} active
+                {% elif  url_name == 'admin_master-request-change'%} active
+                {% elif  url_name == 'admin_master-request-delete'%} active
+                {% elif  url_name == 'admin_master-request-detail'%} active {% endif %}">
               <i class="fas fa-wrench"></i>
               <p>
                 Заявки вызова мастера
@@ -179,7 +222,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'admin_counters-view' %}" class="nav-link {% if request.path == '/admin/meter-data' %} active {% endif %}">
+            <a href="{% url 'admin_counters-view' %}" class="nav-link
+                {% if  url_name == 'admin_counters-view'%} active
+                {% elif  url_name == 'admin_counters-filter'%} active
+                {% elif  url_name == 'admin_counter-house-view'%} active
+                {% elif  url_name == 'admin_meter-data-create'%} active
+                {% elif  url_name == 'admin_meter-data-detail'%} active
+                {% elif  url_name == 'admin_meter-data-change'%} active
+                {% elif  url_name == 'admin_meter-data-delete'%} active {% endif %}">
               <i class="fas fa-tachometer-alt"></i>
               <p>
                 Показания счётчиков
@@ -240,6 +290,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
             {% elif request.path == '/admin/user-admin/users/list' %} menu-open
             {% elif request.path == '/admin/pay-company' %} menu-open
             {% elif request.path == '/admin/transaction-purpose' %} menu-open
+            {% elif  url_name == 'admin_tariffs-create'%} menu-open
+            {% elif  url_name == 'admin_tariffs-change'%} menu-open
+            {% elif  url_name == 'admin_tariffs-copy'%} menu-open
+            {% elif  url_name == 'admin_tariff-detail'%} menu-open
+            {% elif  url_name == 'admin_tariffs-delete'%} menu-open
+            {% elif  url_name == 'admin_user-admin-role'%} menu-open
+            {% elif  url_name == 'admin_user-users-list'%} menu-open
+            {% elif  url_name == 'admin_user-admin-create'%} menu-open
+            {% elif  url_name == 'admin_user-admin-detail'%} menu-open
+            {% elif  url_name == 'admin_user-admin-change'%} menu-open
+            {% elif  url_name == 'admin_user-admin-role'%} menu-open
+            {% elif  url_name == 'admin_transaction-purpose'%} menu-open
+            {% elif  url_name == 'admin_transaction-purpose-create'%} menu-open
+            {% elif  url_name == 'admin_transaction-purpose-change'%} menu-open
             {% else %} menu {% endif %}">
             <a href="" class="nav-link">
               <i class="fas fa-cogs"></i>
@@ -250,25 +314,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'admin_services' %}" class="nav-link {% if request.path == '/admin/services' %} active {% endif %}">
+                <a href="{% url 'admin_services' %}" class="nav-link
+                    {% if request.path == '/admin/services' %} active {% endif %}">
                   <i class="fas fa-briefcase"></i>
                   <p>Услуги</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'admin_tariffs' %}" class="nav-link {% if request.path == '/admin/tariffs' %} active {% endif %}">
+                <a href="{% url 'admin_tariffs' %}" class="nav-link
+                    {% if request.path == '/admin/tariffs' %} active
+                    {% elif  url_name == 'admin_tariffs-create'%} active
+                    {% elif  url_name == 'admin_tariffs-change'%} active
+                    {% elif  url_name == 'admin_tariffs-copy'%} active
+                    {% elif  url_name == 'admin_tariff-detail'%} active
+                    {% elif  url_name == 'admin_tariffs-delete'%} active
+                    {% elif  url_name == 'admin_tariffs-service-delete'%} active {% endif %}">
                   <i class="far fa-money-bill-alt"></i>
                   <p>Тарифы</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'admin_user-admin-role' %}" class="nav-link {% if request.path == '/admin/user-admin/role' %} active {% endif %}">
+                <a href="{% url 'admin_user-admin-role' %}" class="nav-link {% if  url_name == 'admin_user-admin-role'%} active {% endif %}">
                   <i class="fas fa-user"></i>
                   <p>Роли</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'admin_user-users-list' %}" class="nav-link {% if request.path == '/admin/user-admin/users/list' %} active {% endif %}">
+                <a href="{% url 'admin_user-users-list' %}" class="nav-link
+                    {% if  url_name == 'admin_user-users-list'%} active
+                    {% elif  url_name == 'admin_user-admin-create'%} active
+                    {% elif  url_name == 'admin_user-admin-detail'%} active
+                    {% elif  url_name == 'admin_user-admin-change'%} active {% endif %}">
                   <i class="fas fa-user-plus"></i>
                   <p>Пользователи</p>
                 </a>
@@ -280,7 +356,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'admin_transaction-purpose' %}" class="nav-link {% if request.path == '/admin/transaction-purpose' %} active {% endif %}">
+                <a href="{% url 'admin_transaction-purpose' %}" class="nav-link
+                    {% if  url_name == 'admin_transaction-purpose'%} active
+                    {% elif  url_name == 'admin_transaction-purpose-create'%} active
+                    {% elif  url_name == 'admin_transaction-purpose-change'%} active {% endif %}">
                   <i class="fas fa-list-ol"></i>
                   <p>Статьи платежей</p>
                 </a>
@@ -416,3 +495,4 @@ for(let i = 0; i < menus.length; i++) {
 {% endblock %}
 </body>
 </html>
+{% endwith %}

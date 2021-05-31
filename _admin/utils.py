@@ -63,3 +63,17 @@ def calculate_statistic():
         'account_balance': float(account_balance),
         'account_arrears': float(account_arrears)
     }
+
+
+def new_user():
+
+    new_user_slice = {}
+    new_user_count = models.User.objects.filter(status='Новый'),
+    if models.User.objects.filter(status='Новый').count() > 3:
+        new_user_slice = models.User.objects.filter(status='Новый')[:2]
+    elif 3 > models.User.objects.filter(status='Новый').count() > 0:
+        new_user_slice = models.User.objects.filter(status='Новый')
+    return {
+        'new_user_count': new_user_count,
+        'new_user_slice': new_user_slice,
+    }

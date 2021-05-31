@@ -11,7 +11,6 @@ from django.forms import inlineformset_factory
 
 def index_view(request):
     new_user_count = models.User.objects.filter(status='Новый'),
-    print(new_user_count)
     new_user_slice = {}
     if models.User.objects.filter(status='Новый').count() > 3:
         new_user_slice = models.User.objects.filter(status='Новый')[:2]
@@ -78,6 +77,7 @@ def account_transaction_view(request):
     accounts = models.Transfer.objects.all()
     context = {'accounts': accounts}
     context.update(statistic)
+    context.update(utility.new_user())
 
     return render(request, 'admin/account-transaction/index.html', context)
 
@@ -87,6 +87,7 @@ def account_transaction_filter(request, pk):
     accounts = models.Transfer.objects.filter(account_id=pk)
     context = {'accounts': accounts}
     context.update(statistic)
+    context.update(utility.new_user())
 
     return render(request, 'admin/account-transaction/index.html', context)
 
@@ -105,8 +106,9 @@ def account_transaction_copy_view(request, pk):
             alerts.append('Не успешно')
 
     form = forms.AccountTransactionForm(request.POST, instance=instance)
-
-    return render(request, 'admin/account-transaction/create_in.html', {'form': form})
+    context = {'form': form}
+    context.update(utility.new_user())
+    return render(request, 'admin/account-transaction/create_in.html', context)
 
 
 def account_transaction_detail_view(request, pk):
@@ -115,10 +117,11 @@ def account_transaction_detail_view(request, pk):
         username = transaction.account.get_apartment().user
     else:
         username = None
-
-    return render(request, 'admin/account-transaction/detail.html', {'transaction': transaction,
-                                                                     'username': username,
-                                                                     })
+    context = {'transaction': transaction,
+               'username': username,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/account-transaction/detail.html', context)
 
 
 def account_transaction_create_in_view(request):
@@ -131,10 +134,11 @@ def account_transaction_create_in_view(request):
 
         form.save()
         alerts.append('Запись была успешно добавлена!')
-
-    return render(request, 'admin/account-transaction/create_in.html', {'form': form,
-                                                                        'alerts': alerts,
-                                                                        })
+    context = {'form': form,
+               'alerts': alerts,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/account-transaction/create_in.html', context)
 
 
 def account_transaction_create_out_view(request):
@@ -148,10 +152,11 @@ def account_transaction_create_out_view(request):
             transfer.transfer_type = 0
         form.save()
         alerts.append('Запись была успешно добавлена!')
-
-    return render(request, 'admin/account-transaction/create_out.html', {'form': form,
-                                                                         'alerts': alerts,
-                                                                         })
+    context = {'form': form,
+               'alerts': alerts,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/account-transaction/create_out.html', context)
 
 
 def account_transaction_change_view(request, pk):
@@ -162,24 +167,20 @@ def account_transaction_change_view(request, pk):
             form.save()
             alerts.append('Запись была успешно редактирована!')
     transfer = get_object_or_404(models.Transfer, id=pk)
+    context = {'form': form,
+               'alerts': alerts,
+               }
+    context.update(utility.new_user())
     if transfer.transfer_type_id is not None:
         if transfer.transfer_type.status == 'Приход':
-            return render(request, 'admin/account-transaction/create_in.html', {'form': form,
-                                                                                'alerts': alerts,
-                                                                                })
+            return render(request, 'admin/account-transaction/create_in.html', context)
         else:
-            return render(request, 'admin/account-transaction/create_out.html', {'form': form,
-                                                                                 'alerts': alerts,
-                                                                                 })
+            return render(request, 'admin/account-transaction/create_out.html', context)
     else:
         if transfer.solo_status is True:
-            return render(request, 'admin/account-transaction/create_in.html', {'form': form,
-                                                                                'alerts': alerts,
-                                                                                })
+            return render(request, 'admin/account-transaction/create_in.html', context)
         else:
-            return render(request, 'admin/account-transaction/create_out.html', {'form': form,
-                                                                                 'alerts': alerts,
-                                                                                 })
+            return render(request, 'admin/account-transaction/create_out.html', context)
 
 
 def account_transaction_delete_view(request, pk):
@@ -193,6 +194,7 @@ def invoice_view(request):
     invoices = models.Invoice.objects.all()
     context = {'invoices': invoices}
     context.update(utility.calculate_statistic())
+    context.update(utility.new_user())
 
     return render(request, 'admin/invoice/index.html', context)
 
@@ -201,6 +203,7 @@ def invoice_filter_view(request, pk):
     invoices = models.Invoice.objects.filter(apartment__account_id=pk)
     context = {'invoices': invoices}
     context.update(utility.calculate_statistic())
+    context.update(utility.new_user())
 
     return render(request, 'admin/invoice/index.html', context)
 
@@ -243,6 +246,7 @@ def invoice_create_view(request):
         'tariff_invoice_formset': tariff_invoice_formset,
         'alerts': alerts
     }
+    context.update(utility.new_user())
     return render(request, 'admin/invoice/change.html', context)
 
 
@@ -283,6 +287,7 @@ def invoice_change_view(request, pk=None):
         'tariff_invoice_formset': tariff_invoice_formset,
         'alerts': alerts
     }
+    context.update(utility.new_user())
     return render(request, 'admin/invoice/change.html', context)
 
 
@@ -292,8 +297,11 @@ def invoice_detail_view(request, pk):
 
     for el in service:
         total = float(el.amount) * float(el.price)
-    return render(request, 'admin/invoice/detail.html', {'invoice': invoice,
-                                                         'service': service})
+    context = {'invoice': invoice,
+               'service': service,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/invoice/detail.html', context)
 
 
 def invoice_delete_view(request, pk):
@@ -307,12 +315,15 @@ def account_view(request):
     statistic = utility.calculate_statistic()
     context = {'account':account}
     context.update(statistic)
+    context.update(utility.new_user())
     return render(request, 'admin/account/index.html', context)
 
 
 def account_detail(request, pk):
     account = models.Account.objects.get(id=pk)
-    return render(request, 'admin/account/detail.html', {'account': account})
+    context = {'account': account}
+    context.update(utility.new_user())
+    return render(request, 'admin/account/detail.html', context)
 
 
 def account_create_view(request):
@@ -321,10 +332,11 @@ def account_create_view(request):
     if request.method == 'POST' and form.is_valid():
         form.save()
         alerts.append('Запись была успешно добавлена!')
-
-    return render(request, 'admin/account/create.html', {'form': form,
-                                                         'alerts': alerts
-                                                         })
+    context = {'form': form,
+               'alerts': alerts,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/account/create.html', context)
 
 
 def account_change_view(request, pk):
@@ -334,26 +346,35 @@ def account_change_view(request, pk):
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно редактирована!')
-    return render(request, 'admin/account/create.html', {'form': form,
-                                                         'alerts': alerts})
+
+    context = {'form': form,
+               'alerts': alerts,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/account/create.html', context)
 
 
 def account_delete_view(request, pk):
     account = get_object_or_404(models.Account, id=pk)
     account.delete()
-    return render(request, 'admin/account/delete.html')
+    return redirect('admin_account')
 
 
 def apartment_view(request):
     apartment = models.Apartment.objects.all()
-    return render(request, 'admin/apartment/index.html',{'apartment': apartment})
+    context = {'apartment': apartment}
+    context.update(utility.new_user())
+    return render(request, 'admin/apartment/index.html', context)
 
 
 def apartment_detail_view(request, pk):
     apartment = get_object_or_404(models.Apartment, id=pk)
     account = models.Account.objects.filter(appartament_related=apartment)
-    return render(request, 'admin/apartment/detail.html', {'apartment': apartment,
-                                                           'account': account})
+    context = {'apartment': apartment,
+               'account': account,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/apartment/detail.html', context)
 
 
 def apartment_create_view(request):
@@ -364,8 +385,11 @@ def apartment_create_view(request):
         form.save()
         alerts.append('Запись была успешно добавлена!')
 
-    return render(request, 'admin/apartment/create.html', {'form': form,
-                                                           'alerts': alerts})
+    context = {'form': form,
+               'alerts': alerts,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/apartment/create.html', context)
 
 
 def apartment_change_view(request, pk):
@@ -375,8 +399,12 @@ def apartment_change_view(request, pk):
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно редактирована!')
-    return render(request, 'admin/apartment/create.html', {'form': form,
-                                                           'alerts': alerts})
+
+    context = {'form': form,
+               'alerts': alerts,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/apartment/create.html', context)
 
 
 def apartment_delete_view(request, pk):
@@ -384,12 +412,14 @@ def apartment_delete_view(request, pk):
     apartment = get_object_or_404(models.Apartment, id=pk)
     apartment.delete()
     alert.append('Запись успешно удалена')
-    return render(request, 'admin/apartment/delete.html',)
+    return redirect('admin_apart',)
 
 
 def user_view(request):
     users = models.User.objects.filter(is_superuser=0)
-    return render(request, 'admin/user/index.html', {'users': users})
+    context = {'users': users}
+    context.update(utility.new_user())
+    return render(request, 'admin/user/index.html', context)
 
 
 def user_create_view(request):
@@ -402,17 +432,22 @@ def user_create_view(request):
         else:
             alerts.append('Неуспешно')
 
-    return render(request, 'admin/user/create.html', {'form': form,
-                                                      'alerts': alerts
-                                                      })
+    context = {'form': form,
+               'alerts': alerts,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/user/create.html', context)
 
 
 def user_detail_view(request, pk):
     user = get_object_or_404(models.User, id=pk)
     apartment = models.Apartment.objects.filter(user_id=pk)
     print(apartment)
-    return render(request, 'admin/user/detail.html', {'user': user,
-                                                      'apartment': apartment})
+    context = {'user_detail': user,
+               'apartment': apartment,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/user/detail.html', context)
 
 
 def user_change_view(request, pk):
@@ -424,8 +459,12 @@ def user_change_view(request, pk):
             alerts.append('Успех')
         else:
             alerts.append('Неуспешно')
-    return render(request, 'admin/user/create.html', {'form': form,
-                                                      'alerts': alerts})
+
+    context = {'form': form,
+               'alerts': alerts,
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/user/create.html', context)
 
 
 def user_delete_view(request, pk):
@@ -436,7 +475,9 @@ def user_delete_view(request, pk):
 
 def house_view(request):
     houses = models.House.objects.all()
-    return render(request, 'admin/house/index.html', {'houses': houses})
+    context = {'houses': houses}
+    context.update(utility.new_user())
+    return render(request, 'admin/house/index.html', context)
 
 
 def house_detail_view(request, pk):
@@ -451,10 +492,13 @@ def house_detail_view(request, pk):
                 if floor.section_id == section.id:
                     floor_count += 1
 
-    return render(request, 'admin/house/detail.html', {'house': house,
-                                                       'sections': sections,
-                                                       'floor_count': floor_count,
-                                                       'user_count': user_count})
+    context = {'house': house,
+               'sections': sections,
+               'floor_count': floor_count,
+               'user_count': user_count
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/house/detail.html', context)
 
 
 def house_edit_view(request, pk):
@@ -509,16 +553,16 @@ def house_edit_view(request, pk):
         section_formset = SectionFormset(prefix='section_form', instance=house)
         user_house_formset = UserFormset(prefix='user_form', instance=house)
 
+    context = {
+        'floor_formset': floor_formset,
+        'user_house_formset': user_house_formset,
+        'house_form': house_form,
+        'section_formset': section_formset,
+        'alerts': aletrs
+    }
+    context.update(utility.new_user())
     return render(
-        request, 'admin/house/edit.html',
-        context={
-            'floor_formset': floor_formset,
-            'user_house_formset': user_house_formset,
-            'house_form': house_form,
-            'section_formset': section_formset,
-            'alerts': aletrs
-        }
-    )
+        request, 'admin/house/edit.html', context)
 
 
 def house_create_view(request):
@@ -547,14 +591,14 @@ def house_create_view(request):
         house_form = forms.HouseForm(prefix='house_form')
         section_formset = SectionFormset(prefix='section_form')
 
+    context = {
+        'house_form': house_form,
+        'section_formset': section_formset,
+        'alerts': aletrs
+    }
+    context.update(utility.new_user())
     return render(
-        request, 'admin/house/create.html',
-        context={
-            'house_form': house_form,
-            'section_formset': section_formset,
-            'alerts': aletrs
-        }
-    )
+        request, 'admin/house/create.html', context)
 
 
 def section_delete_view(request, pk):
@@ -583,7 +627,9 @@ def house_delete_view(request, pk):
 
 def message_view(request):
     messages = models.Message.objects.all()
-    return render(request, 'admin/message/index.html', {'messages': messages})
+    context = {'messages': messages}
+    context.update(utility.new_user())
+    return render(request, 'admin/message/index.html', context)
 
 
 def message_create_view(request):
@@ -596,13 +642,18 @@ def message_create_view(request):
         else:
             alerts.append('Произошла ошибка')
     form = forms.MessageCreateForm()
-    return render(request, 'admin/message/create.html', {'form': form,
-                                                         'alerts': alerts})
+
+    context = {'form': form,
+               'alerts': alerts}
+    context.update(utility.new_user())
+    return render(request, 'admin/message/create.html', context)
 
 
 def message_detail_view(request, pk):
     message = get_object_or_404(models.Message, id=pk)
-    return render(request, 'admin/message/detail.html', {'message': message})
+    context = {'message': message}
+    context.update(utility.new_user())
+    return render(request, 'admin/message/detail.html', context)
 
 
 def message_delete_view(request, pk):
@@ -613,12 +664,16 @@ def message_delete_view(request, pk):
 
 def master_request_view(request):
     requests = models.MasterRequest.objects.all()
-    return render(request, 'admin/master-request/index.html', {'requests': requests})
+    context = {'requests': requests}
+    context.update(utility.new_user())
+    return render(request, 'admin/master-request/index.html', context)
 
 
 def master_request_detail_view(request, pk):
     master_request = models.MasterRequest.objects.get(id=pk)
-    return render(request, 'admin/master-request/detail.html', {'master_request': master_request})
+    context = {'master_request': master_request}
+    context.update(utility.new_user())
+    return render(request, 'admin/master-request/detail.html', context)
 
 
 def master_request_create_view(request):
@@ -631,8 +686,11 @@ def master_request_create_view(request):
         else:
             alerts.append('Произошла ошибка')
     form = forms.MasterRequestForm()
-    return render(request, 'admin/master-request/create.html', {'form': form,
-                                                                'alerts': alerts})
+
+    context = {'form': form,
+               'alerts': alerts}
+    context.update(utility.new_user())
+    return render(request, 'admin/master-request/create.html', context)
 
 
 def master_request_change_view(request, pk):
@@ -642,8 +700,11 @@ def master_request_change_view(request, pk):
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно редактирована!')
-    return render(request, 'admin/master-request/create.html', {'form': form,
-                                                                'alerts': alerts})
+
+    context = {'form': form,
+               'alerts': alerts}
+    context.update(utility.new_user())
+    return render(request, 'admin/master-request/create.html', context)
 
 
 def master_request_delete_view(request, pk):
@@ -655,22 +716,31 @@ def master_request_delete_view(request, pk):
 def counters_view(request):
     counters = models.Meter.objects.all()  # .order_by('service__name').distinct('service__name') POSTGRES
 
-    return render(request, 'admin/meter-data/counters.html', {'counters': counters})
+    context = {'counters': counters}
+    context.update(utility.new_user())
+    return render(request, 'admin/meter-data/counters.html', context)
 
 
 def counter_filter(request, pk):
     counters = models.Meter.objects.filter(apartment__account_id=pk)
     apartment = models.Apartment.objects.get(account_id=pk)
-    return render(request, 'admin/meter-data/apartment_detail.html', {'counters': counters,
-                                                                      'apartment': apartment})
+
+    context = {'counters': counters,
+               'apartment': apartment
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/meter-data/apartment_detail.html', context)
 
 
 def counter_house_view(request, pk):
     counters = models.Meter.objects.filter(apartment_id=pk)
     apartment = models.Apartment.objects.get(id=pk)
 
-    return render(request, 'admin/meter-data/apartment_detail.html', {'counters': counters,
-                                                                      'apartment': apartment})
+    context = {'counters': counters,
+               'apartment': apartment
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/meter-data/apartment_detail.html', context)
 
 
 def meter_data_create_view(request):
@@ -682,8 +752,12 @@ def meter_data_create_view(request):
             alerts.append('Запись была успешно добавлена!')
         else:
             alerts.append('Неуспешно')
-    return render(request, 'admin/meter-data/create.html', {'form': form,
-                                                            'alerts': alerts})
+
+    context = {'form': form,
+               'alerts': alerts
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/meter-data/create.html', context)
 
 
 def meter_data_change_view(request, pk):
@@ -693,13 +767,19 @@ def meter_data_change_view(request, pk):
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно редактирована!')
-    return render(request, 'admin/meter-data/create.html', {'form': form,
-                                                            'alerts': alerts})
+
+    context = {'form': form,
+               'alerts': alerts
+               }
+    return render(request, 'admin/meter-data/create.html', context)
 
 
 def meter_data_detail_view(request, pk):
     meter = models.Meter.objects.get(id=pk)
-    return render(request, 'admin/meter-data/detail.html', {'meter': meter})
+
+    context = {'meter': meter}
+    context.update(utility.new_user())
+    return render(request, 'admin/meter-data/detail.html', context)
 
 
 def meter_data_delete_view(request, pk):
@@ -766,6 +846,7 @@ def website_main_page_view(request):
         'main_page_block_formset': main_page_block_formset,
         'main_page_seo_form': main_page_seo_form,
     }
+    context.update(utility.new_user())
     return render(request, 'admin/website/main-page.html', context)
 
 
@@ -833,6 +914,7 @@ def website_about_view(request):
         'about_gallery_formset': about_gallery_formset,
         'about_seo_form': about_seo_form,
     }
+    context.update(utility.new_user())
     return render(request, 'admin/website/about.html', context)
 
 
@@ -873,6 +955,7 @@ def website_services_view(request):
         'seo_form': seo_form,
         'alerts': alerts,
     }
+    context.update(utility.new_user())
     return render(
         request, 'admin/website/services.html', context)
 
@@ -941,6 +1024,7 @@ def website_tariffs_view(request):
         'tariffs_block_formset': tariffs_block_formset,
         'tariffs_seo_form': tariffs_seo_form,
     }
+    context.update(utility.new_user())
     return render(request, 'admin/website/tariffs.html', context)
 
 
@@ -974,6 +1058,7 @@ def website_contact_view(request):
         'contact_seo_form': contact_seo_form,
         'alerts': alerts,
     }
+    context.update(utility.new_user())
     return render(request, 'admin/website/contact.html', context)
 
 
@@ -1024,6 +1109,7 @@ def services_view(request):
         'service_formset': service_formset,
         'measure_formset': measure_formset,
     }
+    context.update(utility.new_user())
     return render(request, 'admin/services/services.html', context)
 
 
@@ -1043,6 +1129,7 @@ def tariffs_view(request):
     context = {
         'tariff': models.Tariff.objects.all(),
     }
+    context.update(utility.new_user())
     return render(request, 'admin/tariffs/index.html', context)
 
 
@@ -1072,13 +1159,15 @@ def tariffs_create_view(request):
         tariff_form = forms.TariffCreateForm(prefix='tariff_form')
         tariff_service_formset = TariffServiceFormset(prefix='tariff_service_form')
 
+    context = {
+        'tariff_form': tariff_form,
+        'tariff_service_formset': tariff_service_formset,
+        'alerts': aletrs
+    }
+    context.update(utility.new_user())
     return render(
         request, 'admin/tariffs/create.html',
-        context={
-            'tariff_form': tariff_form,
-            'tariff_service_formset': tariff_service_formset,
-            'alerts': aletrs
-        }
+        context
     )
 
 
@@ -1119,13 +1208,15 @@ def tariffs_change_view(request, pk=None):
         tariff_form = forms.TariffCreateForm(prefix='tariff_form', instance=tariff)
         tariff_service_formset = TariffServiceFormset(prefix='tariff_service_form', instance=tariff)
 
+    context = {
+        'tariff_form': tariff_form,
+        'tariff_service_formset': tariff_service_formset,
+        'alerts': aletrs
+    }
+    context.update(utility.new_user())
     return render(
         request, 'admin/tariffs/create.html',
-        context={
-            'tariff_form': tariff_form,
-            'tariff_service_formset': tariff_service_formset,
-            'alerts': aletrs
-        }
+        context
     )
 
 
@@ -1137,9 +1228,11 @@ def tariff_detail_view(request, pk):
     tariff = models.Tariff.objects.get(id=pk)
     tariff_service = models.TariffService.objects.filter(tariff=tariff)
 
-    return render(request, 'admin/tariffs/detail.html', {'tariff': tariff,
-                                                         'tariff_service': tariff_service
-                                                         })
+    context = {'tariff': tariff,
+               'tariff_service': tariff_service
+               }
+    context.update(utility.new_user())
+    return render(request, 'admin/tariffs/detail.html', context)
 
 
 def tariffs_delete_view(request, pk):
@@ -1185,13 +1278,15 @@ def user_admin_role_view(request):
         'alerts': alerts,
         'user_role_formset': user_role_formset
     }
+    context.update(utility.new_user())
     return render(request, 'admin/user-admin/role.html', context)
 
 
 def user_admin_users_list(request):
     users_list = models.User.objects.filter(is_superuser=1)
-
-    return render(request, 'admin/user-admin/list.html', {'users_list': users_list})
+    context = {'users_list': users_list}
+    context.update(utility.new_user())
+    return render(request, 'admin/user-admin/list.html', context)
 
 
 def user_admin_create_view(request):
@@ -1201,7 +1296,9 @@ def user_admin_create_view(request):
         form.instance.is_superuser = 1
         form.save()
         return redirect('admin_user-users-list')
-    return render(request, 'admin/user-admin/create.html', {'form': form})
+    context = {'form': form}
+    context.update(utility.new_user())
+    return render(request, 'admin/user-admin/create.html', context)
 
 
 def user_admin_change_view(request, pk):
@@ -1213,13 +1310,18 @@ def user_admin_change_view(request, pk):
         form.instance.is_superuser = 1
         form.save()
         alerts.append('Успех')
-    return render(request, 'admin/user-admin/create.html', {'form': form,
-                                                            'alerts': alerts})
+
+    context = {'form': form,
+               'alerts': alerts}
+    context.update(utility.new_user())
+    return render(request, 'admin/user-admin/create.html', context)
 
 
 def user_admin_detail_view(request, pk):
     user = models.User.objects.get(id=pk)
-    return render(request, 'admin/user-admin/detail.html', {'user': user})
+    context = {'current_user': user}
+    context.update(utility.new_user())
+    return render(request, 'admin/user-admin/detail.html', context)
 
 
 def user_admin_delete_view(request, pk):
@@ -1227,16 +1329,23 @@ def user_admin_delete_view(request, pk):
 
 
 def pay_company_view(request):
+    alerts = []
     form = forms.PaymentCompany(request.POST or None, instance=models.Requisites.get_solo())
     if request.method == 'POST' and form.is_valid():
         form.save()
+        alerts.append('Успех!')
         return redirect('admin_pay-company')
-    return render(request, 'admin/pay-company.html', {'form': form})
+    context = {'form': form,
+               'alerts': alerts}
+    context.update(utility.new_user())
+    return render(request, 'admin/pay-company.html', context)
 
 
 def transaction_purpose_view(request):
     transfer_type = models.TransferType.objects.all()
-    return render(request, 'admin/transaction-purpose/index.html', {'transfer_type': transfer_type})
+    context = {'transfer_type': transfer_type}
+    context.update(utility.new_user())
+    return render(request, 'admin/transaction-purpose/index.html', context)
 
 
 def transaction_purpose_create_view(request):
@@ -1248,8 +1357,11 @@ def transaction_purpose_create_view(request):
             alerts.append('Запись была успешно добавлена!')
         else:
             alerts.append('Неуспешно')
-    return render(request, 'admin/transaction-purpose/create.html', {'form': form,
-                                                                     'alerts': alerts})
+
+    context = {'form': form,
+               'alerts': alerts}
+    context.update(utility.new_user())
+    return render(request, 'admin/transaction-purpose/create.html', context)
 
 
 def transaction_purpose_change_view(request, pk):
@@ -1261,8 +1373,11 @@ def transaction_purpose_change_view(request, pk):
             alerts.append('Успех')
         else:
             alerts.append('Неуспешно')
-    return render(request, 'admin/transaction-purpose/create.html', {'form': form,
-                                                                     'alerts': alerts})
+
+    context = {'form': form,
+               'alerts': alerts}
+    context.update(utility.new_user())
+    return render(request, 'admin/transaction-purpose/create.html', context)
 
 
 def transaction_purpose_delete_view(request, pk):

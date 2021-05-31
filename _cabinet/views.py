@@ -138,13 +138,13 @@ def master_request_create_view(request):
     alerts = []
     if request.method == 'POST':
         form = forms.MasterRequestForm(request.POST)
-        print(form.errors)
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно добавлена!')
         else:
             alerts.append('Неуспешно')
     form = forms.MasterRequestForm()
+    form.fields['apartment'].queryset = models.Apartment.objects.filter(user_id=user.id)
     return render(request, 'cabinet/master-request/create.html', {'form': form,
                                                                   'user': user,
                                                                   'houses': houses,
