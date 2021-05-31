@@ -344,7 +344,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
             {% endif %}
-            {% if user.role.tariff_status == 1 %}
+            {% if user.role.tariffs_status == 1 %}
               <li class="nav-item">
                 <a href="{% url 'admin_tariffs' %}" class="nav-link
                     {% if request.path == '/admin/tariffs' %} active
