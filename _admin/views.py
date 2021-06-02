@@ -245,7 +245,7 @@ def invoice_create_view(request):
                 alerts.append('У квартиры нет счёта!')
 
     else:
-        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form')
+        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form', initial={'number': utility.invoice_number()})
         tariff_invoice_formset = TaroffInvoiceFormset(request.POST or None, prefix='tariff_invoice_form')
 
     context = {
@@ -343,11 +343,15 @@ def account_detail(request, pk):
 
 
 def account_create_view(request):
-    form = forms.AccountForm(request.POST)
     alerts = []
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        alerts.append('Запись была успешно добавлена!')
+    if request.method == 'POST':
+        form = forms.AccountForm()
+        if form.is_valid():
+            form.save()
+            alerts.append('Запись была успешно добавлена!')
+    form = forms.AccountForm(initial={'wallet': utility.serial_number_transaction()})
+
+
     context = {'form': form,
                'alerts': alerts,
                }
@@ -760,14 +764,15 @@ def counter_house_view(request, pk):
 
 
 def meter_data_create_view(request):
-    form = forms.CounterForm(request.POST)
     alerts = []
     if request.method == 'POST':
+        form = forms.CounterForm(request.POST)
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно добавлена!')
         else:
             alerts.append('Неуспешно')
+    form = forms.CounterForm(initial={'number': utility.counter_number()})
 
     context = {'form': form,
                'alerts': alerts

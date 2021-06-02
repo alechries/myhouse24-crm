@@ -4,18 +4,15 @@ from _db import models
 
 
 def serial_number_account():
-    date = datetime.now().strftime('%Y%m%d')
-    if models.Account.objects.count() > 0 and models.Account.objects.all().last():
-        last_order = models.Account.objects.all().last()
-        if last_order.wallet[0:8] == date:
-            num = last_order.wallet[8::]
-            print(num)
-        else:
-            num = 1
-        date = f'{date}{num}'
+    date = datetime.now().strftime('%d%m%y')
+    if models.Account.objects.count() > 0:
+        initial_len = '00000'
+        count = int(models.Account.objects.all().count()) + 1
+        initial_len = initial_len[0:(5 - (int(len(str(count)))))]
+        number = f'{date}{initial_len}{count}'
     else:
-        date = f'{date}001'
-    return date
+        number = f'{date}00001'
+    return number
 
 
 def serial_number_transaction():
@@ -35,6 +32,18 @@ def invoice_number():
     if models.Invoice.objects.count() > 0:
         initial_len = '00000'
         count = int(models.Invoice.objects.all().count()) + 1
+        initial_len = initial_len[0:(5 - (int(len(str(count)))))]
+        number = f'{date}{initial_len}{count}'
+    else:
+        number = f'{date}00001'
+    return number
+
+
+def counter_number():
+    date = datetime.now().strftime('%d%m%y')
+    if models.Meter.objects.count() > 0:
+        initial_len = '00000'
+        count = int(models.Meter.objects.all().count()) + 1
         initial_len = initial_len[0:(5 - (int(len(str(count)))))]
         number = f'{date}{initial_len}{count}'
     else:
