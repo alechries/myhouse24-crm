@@ -167,9 +167,7 @@ $('#select-section').find('select').each(function() {
     <script src="{% static 'base/js/dynamicforms.js' %}"></script>
     <script src="{% static 'base/js/requestwithoutreload.js' %}"></script>
     <script>
-    function number_change(fields){
-        for (let i = 0; i < fields.length; i++) {
-            fields[i].addEventListener('change', function(){
+    function number_change(){
                 var forms = document.getElementsByClassName('tariff-invoice-form-area')
                 var result = 0
                 for (let i = 1; i < forms.length; i++) {
@@ -179,6 +177,11 @@ $('#select-section').find('select').each(function() {
                     result = result + price * amount
                 }
                 document.getElementsByClassName('amount-price')[0].innerText = result
+    }
+    function number_change_event(fields){
+        for (let i = 0; i < fields.length; i++) {
+            fields[i].addEventListener('change', function(){
+                number_change()
             })
         }
     }
@@ -197,7 +200,7 @@ $('#select-section').find('select').each(function() {
             let el = document.getElementById(el_id)
             elements.push(el)
         }
-        number_change(elements)
+        number_change_event(elements)
     });
     $('.del-tariff-invoice-form').click(function() { delForm(this, tariff_invoice_prefix, tariff_invoice_form, tariff_invoice_counter)});
 
@@ -208,8 +211,8 @@ $('#select-section').find('select').each(function() {
         if (deleteURL != '#') requestWithoutReload(deleteURL, data);
     });
 
-    number_change(document.getElementsByClassName('invoice-change-event'))
-
-    </script>
+    number_change_event(document.getElementsByClassName('invoice-change-event'))
+    number_change()
+</script>
 {% endblock %}
 
