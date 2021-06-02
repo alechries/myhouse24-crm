@@ -216,7 +216,7 @@ def invoice_filter_view(request, pk):
 
 
 def invoice_create_view(request):
-    TaroffInvoiceFormset = inlineformset_factory(
+    TariffInvoiceFormset = inlineformset_factory(
         parent_model=models.Invoice,
         model=models.TariffService,
         form=forms.TariffInvoiceForm,
@@ -225,7 +225,7 @@ def invoice_create_view(request):
     alerts = []
     if request.method == 'POST':
         invoice_form = forms.InvoiceForm(request.POST, prefix='invoice_form',)
-        tariff_invoice_formset = TaroffInvoiceFormset(request.POST, prefix='tariff_invoice_form')
+        tariff_invoice_formset = TariffInvoiceFormset(request.POST, prefix='tariff_invoice_form')
         if invoice_form.is_valid() and tariff_invoice_formset.is_valid():
             invoice = invoice_form.save()
             tariff_invoice_queryset = tariff_invoice_formset.save(commit=False)
