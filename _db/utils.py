@@ -14,6 +14,6 @@ def forms_save(forms):
             print(form.errors)
             return False
     for form in forms:
-        print(f'Save - {form.prefix}')
-        form.save()
+        ins = form.save()
+        print(f'Save [{ins}] - {form.prefix}')
     return True
