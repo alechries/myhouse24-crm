@@ -97,9 +97,9 @@ let default_image_url = '{% static 'no_icon.png' %}';
 
 document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(prefix, form, default_image_url) }, false);
 $('#add-service-block').click(function() {
-    let form = addForm(prefix, form, counter)
-    let image = form.getElementsByTagName('img')[0]
-    handleFileSelectSet(image, 'image-input', 'blocks-image')
+    addForm(prefix, form, counter)
+    //let image = form.getElementsByTagName('img')[0]
+    //handleFileSelectSet(image, 'image-input', 'blocks-image')
 });
 $('.del-form').click(function() { delForm(this, prefix, form, counter); });
 
