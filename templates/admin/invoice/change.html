@@ -170,7 +170,7 @@ $('#select-section').find('select').each(function() {
     function number_change(){
                 var forms = document.getElementsByClassName('tariff-invoice-form-area')
                 var result = 0
-                for (let i = 1; i < forms.length; i++) {
+                for (let i = 0; i < forms.length; i++) {
                     form = forms[i]
                     var price = form.getElementsByClassName('invoice-price')[0].value
                     var amount = form.getElementsByClassName('invoice-amount')[0].value
@@ -210,9 +210,8 @@ $('#select-section').find('select').each(function() {
         data = {'csrfmiddlewaretoken':token}
         if (deleteURL != '#') requestWithoutReload(deleteURL, data);
     });
-
-    number_change_event(document.getElementsByClassName('invoice-change-event'))
     number_change()
+    number_change_event(document.getElementsByClassName('invoice-change-event'))
 </script>
 {% endblock %}
 
