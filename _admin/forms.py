@@ -179,6 +179,9 @@ class WebsiteServiceBlocksForm(forms.ModelForm):
         fields = ['id', 'image', 'name', 'description']
         widgets = {
             'id': forms.HiddenInput(),
+            'image': forms.FileInput(attrs={
+                'class': 'image-input',
+            }),
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Введите название услуги',
