@@ -38,12 +38,12 @@
                             <td>{{ el.floor.section.name }}</td>
                             <td>{{ el.floor }}</td>
                             <td>{{ el.user.first_name }} {{ el.user.last_name }}</td>
-                            {% if el.account.money > 0 %}
-                            <td style="color: #00a65a">{{ el.account.money }}</td>
-                            {% elif el.account.money < 0 %}
-                            <td style="color: #791606">{{ el.account.money }}</td>
-                            {% elif el.account.money == 0 %}
-                            <td>{{ el.account.money }}</td>
+                            {% if el.account.get_money > 0 %}
+                            <td style="color: #00a65a">{{ el.account.get_money }}</td>
+                            {% elif el.account.get_money < 0 %}
+                            <td style="color: #791606">{{ el.account.get_money }}</td>
+                            {% elif el.account.get_money == 0 %}
+                            <td>{{ el.account.get_money }}</td>
                             {% else %}
                             <td>Нет счёта</td>
                             {% endif %}

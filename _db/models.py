@@ -321,7 +321,7 @@ class Invoice(models.Model):
     total_amount = models.FloatField(null=True)
     paid = models.IntegerField(null=True)
     number = models.CharField('', max_length=255) #
-    type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, blank=True) #
+    type = models.CharField('Статус квитанции', choices=TYPE, max_length=55, blank=True, default='Оплачена') #
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, related_name='apartment_related') #
     period_from = models.DateField("Дата с", null=True) #
     period_to = models.DateField("Дата по", null=True) #
@@ -407,10 +407,10 @@ class WebsiteContacts(SingletonModel):
     description = models.TextField(null=True, blank=True)
     site = models.URLField(null=True, blank=True)
     name = models.CharField(max_length=255, null=True, blank=True)
-    address = models.CharField(max_length=255, null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True, default='Одесса')
     tel = models.CharField(max_length=255, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
-    map = models.CharField(max_length=255)
+    map = models.TextField()
 
 
 class Message(models.Model):

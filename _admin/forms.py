@@ -198,7 +198,7 @@ class WebsiteServiceBlocksForm(forms.ModelForm):
 class WebsiteContactsForm(forms.ModelForm):
     class Meta:
         model = models.WebsiteContacts
-        fields = ['title', 'description', 'site', 'name', 'address', 'tel', 'email', ]
+        fields = ['title', 'description', 'site', 'name', 'address', 'tel', 'email', 'map' ]
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -228,6 +228,11 @@ class WebsiteContactsForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Введите электронную почту',
+            }),
+            'map': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': '3',
+                'placeholder': 'Введите описание',
             }),
         }
 

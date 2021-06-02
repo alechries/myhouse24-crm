@@ -151,12 +151,9 @@ def account_transaction_create_out_view(request):
         form = forms.AccountTransactionForm(request.POST)
         if form.is_valid():
             transfer = form.save()
-            if transfer.transfer_type_id is None:
-                transfer.solo_status = 0
-            else:
-                transfer.transfer_type = 0
-                form.save()
-            alerts.append('Запись была успешно добавлена!')
+            transfer.solo_status = 0
+        form.save()
+        alerts.append('Запись была успешно добавлена!')
     form = forms.AccountTransactionForm(initial={'number': utility.serial_number_transaction(),
                                                  'manager': models.User.objects.filter(role__cash_box_status=1).first()})
     form.fields['manager'].queryset = models.User.objects.filter(role__cash_box_status=1)
@@ -319,6 +316,7 @@ def invoice_delete_view(request, pk):
 
 def account_view(request):
     account = models.Account.objects.all()
+    total_arrears = 0
     for el in account:
         el.money = 0
         transaction_in_balance = models.Transfer.objects.filter(Q(account_id=el.id), Q(transfer_type__status='Приход'))
@@ -328,6 +326,7 @@ def account_view(request):
 
         for transfer_out in transaction_out_balance:
             el.money -= transfer_out.amount
+
     statistic = utility.calculate_statistic()
     context = {'account': account}
     context.update(statistic)

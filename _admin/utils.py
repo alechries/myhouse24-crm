@@ -57,18 +57,20 @@ def calculate_statistic():
     account_arrears = 0
     transfer_in_list = models.Transfer.objects.filter(solo_status=True)
     transfer_out_list = models.Transfer.objects.filter(solo_status=False)
-    invoice_arrears = models.Invoice.objects.filter(type='Неоплачена')
     transaction_balance = models.Transfer.objects.filter(solo_status=None)
-    for el in invoice_arrears:
-        if el.total_amount is not None:
-            account_arrears += el.total_amount
+    account = models.Account.objects.all()
+    for el in account:
+        if el.get_money() < 0:
+            account_arrears -= el.get_money()
+        if el.get_money() > 0:
+            account_balance += el.get_money()
 
-    for el in transaction_balance:
-        if el.amount is not None:
-            account_balance += el.amount
     for el in transfer_in_list:
         if el.amount is not None:
-            system_balance += el.amount
+            for account in account:
+                if account.get_money() > 0:
+                    system_balance += account.get_money()
+        system_balance += el.amount
     for el in transfer_out_list:
         if el.amount is not None:
             system_balance -= el.amount
