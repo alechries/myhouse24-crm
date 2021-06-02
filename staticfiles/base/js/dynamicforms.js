@@ -44,6 +44,8 @@ function addForm(prefix, form, counter) {
     let attr_id = newElement.find('textarea').attr('id');
 
     tinymce.init({selector:'#'+attr_id});
+
+    return getElements
 }
 
 function addHiddenForm(prefix, form_class, image_class, default_image_url){

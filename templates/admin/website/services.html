@@ -88,6 +88,7 @@
 <script src="https://cdn.tiny.cloud/1/kra6rmqrjhsjtzn537eqbc98zd4itnaxx3en34fmphnfe00h/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script src="{% static 'base/js/dynamicforms.js' %}"></script>
 <script src="{% static 'base/js/requestwithoutreload.js' %}"></script>
+<script src="{% static 'base/js/imagepreview.js' %}"></script>
 <script>
 let prefix = 'service';
 let form = '.form-area';
@@ -95,12 +96,15 @@ let counter = '.form-counter';
 let default_image_url = '{% static 'no_icon.png' %}';
 
 document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(prefix, form, default_image_url) }, false);
-$('#add-service-block').click(function() { addForm(prefix, form, counter); });
+$('#add-service-block').click(function() {
+    let form = addForm(prefix, form, counter)
+    let image = form.getElementsByTagName('img')[0]
+    handleFileSelectSet(image, 'image-input', 'blocks-image')
+});
 $('.del-form').click(function() { delForm(this, prefix, form, counter); });
 
 tinymce.init({selector:'textarea:not(".hidden_textarea")'}); // Включить по необходиомости (может не работать динамическое добавление форм)
-</script>
-<script>
+
 $('.del-form').click(function(){
     var deleteURL = $(this).attr("href");
     token = $("input[name='csrfmiddlewaretoken']").val();
