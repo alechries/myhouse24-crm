@@ -243,7 +243,7 @@ def invoice_create_view(request):
 
     else:
         invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form', initial={'number': utility.invoice_number()})
-        tariff_invoice_formset = TaroffInvoiceFormset(request.POST or None, prefix='tariff_invoice_form')
+        tariff_invoice_formset = TariffInvoiceFormset(request.POST or None, prefix='tariff_invoice_form')
 
     context = {
         'invoice_form': invoice_form,
