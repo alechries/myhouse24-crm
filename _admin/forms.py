@@ -57,15 +57,12 @@ class WebsiteMainPageForm(forms.ModelForm):
         fields = ['slide1', 'slide2', 'slide3', 'title', 'description']
         widgets = {
             'slide1': forms.FileInput(attrs={
-                'class': 'upload',
                 'id': 'File1Input',
             }),
             'slide2': forms.FileInput(attrs={
-                'class': 'upload',
                 'id': 'File2Input',
             }),
             'slide3': forms.FileInput(attrs={
-                'class': 'upload',
                 'id': 'File3Input',
             }),
             'title': forms.TextInput(attrs={

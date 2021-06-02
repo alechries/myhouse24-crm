@@ -23,6 +23,7 @@
             </div> <!-- /.card-body -->
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+                <div class="display:none">{{ main_page_form.id }}</div>
                 <div class="default-area">
                     <h4>Слайдер</h4>
                     <hr/>
@@ -64,10 +65,11 @@
                     <hr/>
                     <div class="row align-items-center">
                         {% for form in main_page_block_formset %}
-                        {{ form.id }}
+                        <div class="display:none">{{ form.id }}</div>
                         <div class="col-md-4">
                             <div> Блок {{ forloop.counter }}</div>
                             <div>
+                                <div class="blocks-image" style="background: url({% if form.instance.image %}{{ form.instance.image.url }}{% else %}{% static 'no_icon.png' %}{% endif %}) no-repeat;"></div>
                                 <b>Рекомендуемый размер: (1000x600)</b>
                                 {{ form.image }}
                             </div>

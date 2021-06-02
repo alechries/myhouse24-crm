@@ -817,12 +817,12 @@ def website_main_page_view(request):
         max_num=6,
         min_num=6
     )
-
+    main_page: models.WebsiteMainPage = models.WebsiteMainPage.get_solo()
     if request.method == 'POST':
-
         main_page_form = forms.WebsiteMainPageForm(
             request.POST, request.FILES,
             prefix='main_page_form',
+            instance=main_page,
         )
         main_page_block_formset = MainPageBlockFormset(
             request.POST, request.FILES,
@@ -841,7 +841,6 @@ def website_main_page_view(request):
             alerts.append('Данные сохранены успешно!')
 
     else:
-        main_page: models.WebsiteMainPage = models.WebsiteMainPage.get_solo()
         if not main_page.seo:
             main_page.seo = models.SEO.objects.create()
             main_page.save()
