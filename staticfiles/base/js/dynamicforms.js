@@ -68,10 +68,12 @@ function addChoiseForm(prefix, form, counter) {
     let newElement = $(selector_first).clone(true);
     let total = $('#id_' + prefix + '-TOTAL_FORMS').val();
     let i = 0;
+    var result = []
 
     newElement.find('input, select').each(function () {
         let name = prefix + '-' + total + '-' + $(this).attr('name');
         let id = 'id_' + name;
+        result.push(id)
         $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
     });
     newElement.css('display', '')
@@ -84,4 +86,6 @@ function addChoiseForm(prefix, form, counter) {
     $(selector_last).after(newElement);
 
     let attr_id = newElement.find('select').attr('id');
+
+    return result
 }

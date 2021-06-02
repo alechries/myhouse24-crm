@@ -336,7 +336,7 @@ class TariffService(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, null=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True, verbose_name='')
     tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True, blank=True, related_name='tariff_related')
-    price = models.FloatField(max_length=255, blank=True, null=True, verbose_name='цена за еденицу')
+    price = models.FloatField(max_length=255, blank=True, null=True, verbose_name='цена за еденицу', default=0)
 
     def get_total(self):
         return float(self.amount) * float(self.price)
