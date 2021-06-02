@@ -1,5 +1,5 @@
 from _db import models
-"""from datetime import datetime
+from datetime import datetime
 from _db import models
 
 
@@ -18,23 +18,28 @@ def serial_number_account():
     return date
 
 
-def serial_number_transfer():
-    date = datetime.now().strftime('%Y%m%d')
-    print(date)
-    if models.Transfer.objects.count() > 0 and models.Transfer.objects.all().last():
-        last_order = models.Transfer.objects.all().last()
-        if last_order.number[0:8] == date:
-            num = int(last_order.number[8::])
-            num += 1
-            print(last_order.number)
-            print(num)
-        else:
-            num = 1
-        date = f'{date}{num}'
+def serial_number_transaction():
+    date = datetime.now().strftime('%d%m%y')
+    if models.Transfer.objects.count() > 0:
+        initial_len = '00000'
+        count = int(models.Transfer.objects.all().count()) + 1
+        initial_len = initial_len[0:(5 - (int(len(str(count)))))]
+        number = f'{date}{initial_len}{count}'
     else:
-        date = f'{date}001'
-    return date
-"""
+        number = f'{date}00001'
+    return number
+
+
+def invoice_number():
+    date = datetime.now().strftime('%d%m%y')
+    if models.Invoice.objects.count() > 0:
+        initial_len = '00000'
+        count = int(models.Invoice.objects.all().count()) + 1
+        initial_len = initial_len[0:(5 - (int(len(str(count)))))]
+        number = f'{date}{initial_len}{count}'
+    else:
+        number = f'{date}00001'
+    return number
 
 
 def calculate_statistic():

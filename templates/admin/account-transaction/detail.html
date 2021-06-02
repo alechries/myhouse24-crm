@@ -47,26 +47,26 @@
 <section class="content input-form">
     <div class="row">
         <div class="col-xs-12 col-md-7 col-lg-6">
-        <div class="page-header-spec">
-            <div class="form-group">
-                <div class="input-group date">
-                    <div class="input-group-addon">
-                        №
+            <div class="page-header-spec">
+                <div class="form-group">
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            №
+                        </div>
+                        <div class="form-control pull-right">{{ transaction.number }}</div>
                     </div>
-                    <div class="form-control pull-right">{{ transaction.number }}</div>
                 </div>
-            </div>
-            <span class="label-mid">от</span>
-            <div class="form-group">
-                <div class="input-group date">
-                    <div class="input-group-addon" style="padding: 10px">
-                        <i class="far fa-calendar-alt"></i>
+                <span class="label-mid" style="margin-left: 25px">от</span>
+                <div class="form-group">
+                    <div class="input-group date">
+                        <div class="input-group-addon" style="padding: 10px">
+                            <i class="far fa-calendar-alt"></i>
+                        </div>
+                        <div class="form-control pull-right">{{ transaction.created_date }}</div>
                     </div>
-                    <div class="form-control pull-right">{{ transaction.created_date }}</div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <div class="container-fluid">
         <div class="card card-secondary card-outline">

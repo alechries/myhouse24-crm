@@ -304,7 +304,7 @@ class Transfer(models.Model):
     amount = models.IntegerField(verbose_name='', blank=True)
     comment = models.TextField('', null=True, blank=True)
     # статус платежа
-    payment_made = models.BooleanField(verbose_name='', null=True)
+    payment_made = models.BooleanField(verbose_name='', default=True)
     #
     created_date = models.DateField(default=timezone.now, null=True)
 

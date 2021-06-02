@@ -125,15 +125,19 @@ def account_transaction_detail_view(request, pk):
 
 
 def account_transaction_create_in_view(request):
-    form = forms.AccountTransactionForm(request.POST)
     alerts = []
-    if request.method == 'POST' and form.is_valid():
-        transfer = form.save()
-        if transfer.transfer_type_id is None:
-            transfer.solo_status = 1
+    if request.method == 'POST':
+        form = forms.AccountTransactionForm(request.POST)
+        if form.is_valid():
+            transfer = form.save()
+            if transfer.transfer_type_id is None:
+                transfer.solo_status = 1
 
         form.save()
         alerts.append('Запись была успешно добавлена!')
+    form = forms.AccountTransactionForm(initial={'number': utility.serial_number_transaction(), 'manager': models.User.objects.filter(role__cash_box_status=1).first()})
+    form.fields['manager'].queryset = models.User.objects.filter(role__cash_box_status=1)
+    form.fields['transfer_type'].queryset = models.TransferType.objects.filter(status='Приход')
     context = {'form': form,
                'alerts': alerts,
                }
@@ -142,16 +146,22 @@ def account_transaction_create_in_view(request):
 
 
 def account_transaction_create_out_view(request):
-    form = forms.AccountTransactionForm(request.POST)
     alerts = []
-    if request.method == 'POST' and form.is_valid():
-        transfer = form.save()
-        if transfer.transfer_type_id is None:
-            transfer.solo_status = 0
-        else:
-            transfer.transfer_type = 0
-        form.save()
-        alerts.append('Запись была успешно добавлена!')
+    if request.method == 'POST':
+        form = forms.AccountTransactionForm(request.POST)
+        if form.is_valid():
+            transfer = form.save()
+            if transfer.transfer_type_id is None:
+                transfer.solo_status = 0
+            else:
+                transfer.transfer_type = 0
+                form.save()
+            alerts.append('Запись была успешно добавлена!')
+    form = forms.AccountTransactionForm(initial={'number': utility.serial_number_transaction(),
+                                                 'manager': models.User.objects.filter(role__cash_box_status=1).first()})
+    form.fields['manager'].queryset = models.User.objects.filter(role__cash_box_status=1)
+    form.fields['transfer_type'].queryset = models.TransferType.objects.filter(status='Расход')
+
     context = {'form': form,
                'alerts': alerts,
                }
@@ -217,7 +227,7 @@ def invoice_create_view(request):
     )
     alerts = []
     if request.method == 'POST':
-        invoice_form = forms.InvoiceForm(request.POST, prefix='invoice_form')
+        invoice_form = forms.InvoiceForm(request.POST, prefix='invoice_form',)
         tariff_invoice_formset = TaroffInvoiceFormset(request.POST, prefix='tariff_invoice_form')
         if invoice_form.is_valid() and tariff_invoice_formset.is_valid():
             invoice = invoice_form.save()
