@@ -37,7 +37,20 @@
                             {{ form.indebtedness }}
                         </div>
                         <div class="col-lg-6">
-                            {{ form.destination|as_crispy_field }}
+                            <label>ЖК</label>
+                            {{ form.house|as_crispy_field }}
+                        </div>
+                        <div class="col-lg-6">
+                            <label>Секция</label>
+                            {{ form.section|as_crispy_field }}
+                        </div>
+                        <div class="col-lg-6">
+                            <label>Этаж</label>
+                            {{ form.floor|as_crispy_field }}
+                        </div>
+                        <div class="col-lg-6">
+                            <label>Квартира</label>
+                            {{ form.apartment|as_crispy_field }}
                         </div>
                     </div>
                     <div class="row d-flex justify-content-end">

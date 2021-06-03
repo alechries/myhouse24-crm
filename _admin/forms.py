@@ -464,13 +464,25 @@ class HouseForm(forms.ModelForm):
 
 
 class MessageCreateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(MessageCreateForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+    house = forms.ModelChoiceField(
+        queryset=models.House.objects.all(),
+    )
+    section = forms.ModelChoiceField(
+        queryset=models.Section.objects.all(),
+    )
+    floor = forms.ModelChoiceField(
+        queryset=models.Floor.objects.all(),
+    )
+    apartment = forms.ModelChoiceField(
+        queryset=models.Apartment.objects.all(),
+    )
     class Meta:
         model = models.Message
-        destination = forms.ModelChoiceField(
-            queryset=models.User.objects.all(),
-            empty_label=None,
-        )
-        fields = ['title', 'destination', 'text', 'indebtedness']
+        fields = ['title', 'destination', 'text', 'indebtedness', 'house', 'section', 'floor', 'apartment']
         widgets = {
             'title': forms.TextInput(attrs={
                 'placeholder': 'Введите тему сообщения',
