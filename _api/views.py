@@ -63,12 +63,16 @@ class ApartmentList(generics.ListAPIView):
 
         floor = self.request.query_params.get('floor')
         account = self.request.query_params.get('account')
+        user = self.request.query_params.get('user')
 
         if floor is not None:
             queryset = queryset.filter(floor=floor)
 
         elif account is not None:
             queryset = queryset.filter(account=account)
+
+        elif user is not None:
+            queryset = queryset.filter(user=user)
 
         return queryset
 
