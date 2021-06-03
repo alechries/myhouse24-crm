@@ -254,6 +254,11 @@ def invoice_create_view(request):
     return render(request, 'admin/invoice/change.html', context)
 
 
+def tariff_service_del(request, pk):
+    tariff_service = models.TariffService.objects.get(id=pk)
+    tariff_service.delete()
+    return redirect('admin_invoice')
+
 def invoice_copy_view(request):
     return render(request, 'admin/invoice/copy.html')
 
@@ -348,7 +353,7 @@ def account_create_view(request):
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно добавлена!')
-    form = forms.AccountForm(initial={'wallet': utility.serial_number_transaction()})
+    form = forms.AccountForm(initial={'wallet': utility.serial_number_account()})
 
 
     context = {'form': form,
@@ -413,11 +418,15 @@ def apartment_create_view(request):
 
 def apartment_change_view(request, pk):
     alerts = []
-    form = forms.ApartmentForm(request.POST or None, instance=get_object_or_404(models.Apartment, id=pk))
     if request.method == 'POST':
+        form = forms.ApartmentForm(request.POST or None, instance=get_object_or_404(models.Apartment, id=pk))
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно редактирована!')
+    else:
+        form = forms.ApartmentForm(request.POST or None, instance=get_object_or_404(models.Apartment, id=pk))
+        form.fields['user'].queryset = models.User.objects.filter(is_superuser=False)
+
 
     context = {'form': form,
                'alerts': alerts,
