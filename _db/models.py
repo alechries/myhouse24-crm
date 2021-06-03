@@ -448,7 +448,7 @@ class MasterRequest(models.Model):
     )
     date = models.DateField(verbose_name='', null=True)
     time = models.TimeField(verbose_name='', null=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', verbose_name='', null=True, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', verbose_name='', null=True)
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, verbose_name='', blank=True)
     master_type = models.CharField(choices=TYPE, max_length=155, verbose_name='', blank=True)
     status = models.CharField(choices=STATUS, max_length=155, verbose_name='', default='Новое', null=True)

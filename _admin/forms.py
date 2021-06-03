@@ -492,6 +492,10 @@ class MessageCreateForm(forms.ModelForm):
 class MasterRequestForm(forms.ModelForm):
     class Meta:
         model = models.MasterRequest
+        owner = forms.ModelChoiceField(
+            queryset=models.User.objects.filter(is_superuser=0),
+            empty_label=None,
+        )
         fields = ['date', 'time', 'owner', 'apartment', 'master_type', 'master', 'status', 'description', 'comment']
         widgets = {
             'date': forms.DateInput(format=('%Y-%m-%d'), attrs={
