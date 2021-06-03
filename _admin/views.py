@@ -1336,12 +1336,13 @@ def tariffs_delete_view(request, pk):
 
 
 def tariffs_service_delete_view(request, pk):
-    entry = models.TariffService.objects.get(id=pk)
-    invoice = models.Invoice.objects.get(id=entry.id)
-    invoice.total_amount -= float(entry.amount) * float(entry.price)
+    service = models.TariffService.objects.get(id=pk)
+    invoice = models.Invoice.objects.get(id=service.invoice_id)
+    invoice.total_amount = float(invoice.total_amount) - (float(service.amount) * float(service.price))
     invoice.save()
-    entry.delete()
+    service.delete()
     return HttpResponse()
+
 
 def user_admin_role_view(request):
 
