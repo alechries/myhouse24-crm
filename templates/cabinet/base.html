@@ -52,8 +52,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header" style="background-color: #f39c12">
-                            <!--<img src="/app-admin/dist/img/user2-160x160.jpg" class="img-circle" alt="Михаил Поляков">-->
-                            <span><i class="fas fa-user-circle text-purple bg-gray-light img-circle" style="font-size: 78px; text-align: center; width: 78px"></i></span>
+                            {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" class="img-circle" alt="Михаил Поляков">
+                            {% else %}
+                            <span><i class="fas fa-user-circle text-purple bg-gray-light img-circle" style="font-size: 77px; text-align: center; width: 78px"></i></span>
+                            {% endif %}
                             <p style="color: white">{{ user }}</p>
                         </li>
                         <!-- Menu Footer-->
@@ -160,7 +163,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'cabinet_messages' %}" class="nav-link {% if request.path == 'cabinet/messages/view' %} active {% endif %}">
+                        <a href="{% url 'cabinet_messages' %}" class="nav-link {% if  url_name == 'cabinet_messages'%} active {% endif %}">
                             <i class="far fa-envelope"></i>
                             <p>
                                 Сообщения
@@ -168,7 +171,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'cabinet_master-request' %}" class="nav-link {% if request.path == '/admin/master-request' %} active {% endif %}">
+                        <a href="{% url 'cabinet_master-request' %}" class="nav-link {% if  url_name == 'cabinet_master-request'%} active {% endif %}">
                             <i class="fas fa-wrench"></i>
                             <p>
                                 Вызов мастера
@@ -176,7 +179,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'cabinet_user' %}" class="nav-link {% if request.path == '/admin/master-request' %} active {% endif %}">
+                        <a href="{% url 'cabinet_user' %}" class="nav-link
+                            {% if  url_name == 'cabinet_user'%} active
+                            {% elif url_name == 'cabinet_user-change' %} active {% endif %}">
                             <i class="fas fa-user-circle"></i>
                             <p>
                                 Профиль

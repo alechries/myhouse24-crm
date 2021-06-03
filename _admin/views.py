@@ -619,6 +619,8 @@ def house_edit_view(request, pk):
         house_form = forms.HouseForm(prefix='house_form', instance=house)
         section_formset = SectionFormset(prefix='section_form', instance=house)
         user_house_formset = UserFormset(prefix='user_form', instance=house)
+        for form in user_house_formset:
+            form.fields['user'].queryset = models.User.objects.filter(is_superuser=1)
 
     context = {
         'floor_formset': floor_formset,
@@ -845,6 +847,7 @@ def meter_data_create_view(request):
         else:
             alerts.append('Неуспешно')
     form = forms.CounterForm(initial={'number': utility.counter_number()})
+    form.fields['service'].queryset = models.Service.objects.filter(active=1)
 
     context = {'form': form,
                'alerts': alerts
@@ -1334,12 +1337,13 @@ def tariffs_delete_view(request, pk):
 
 
 def tariffs_service_delete_view(request, pk):
-    entry = models.TariffService.objects.get(id=pk)
-    invoice = models.Invoice.objects.get(id=entry.id)
-    invoice.total_amount -= float(entry.amount) * float(entry.price)
+    service = models.TariffService.objects.get(id=pk)
+    invoice = models.Invoice.objects.get(id=service.invoice_id)
+    invoice.total_amount = float(invoice.total_amount) - (float(service.amount) * float(service.price))
     invoice.save()
-    entry.delete()
+    service.delete()
     return HttpResponse()
+
 
 def user_admin_role_view(request):
 
