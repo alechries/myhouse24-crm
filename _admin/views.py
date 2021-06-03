@@ -772,7 +772,7 @@ def master_request_create_view(request):
             alerts.append('Произошла ошибка')
     else:
         form = forms.MasterRequestForm()
-        form.fields['owner'].queryset = models.User.objects.filter(is_superuser=0)
+        form.fields['master'].queryset = models.User.objects.filter(role__master_request_status=1)
 
     context = {'form': form,
                'alerts': alerts}
@@ -782,11 +782,14 @@ def master_request_create_view(request):
 
 def master_request_change_view(request, pk):
     alerts = []
-    form = forms.MasterRequestForm(request.POST or None, instance=get_object_or_404(models.MasterRequest, id=pk))
     if request.method == 'POST':
+        form = forms.MasterRequestForm(request.POST or None, instance=get_object_or_404(models.MasterRequest, id=pk))
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно редактирована!')
+    else:
+        form = forms.MasterRequestForm(request.POST or None, instance=get_object_or_404(models.MasterRequest, id=pk))
+        form.fields['master'].queryset = models.User.objects.filter(role__master_request_status=1)
 
     context = {'form': form,
                'alerts': alerts}
