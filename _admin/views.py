@@ -577,7 +577,8 @@ def house_edit_view(request, pk):
         'user_house_formset': user_house_formset,
         'house_form': house_form,
         'section_formset': section_formset,
-        'alerts': aletrs
+        'alerts': aletrs,
+        'house': house
     }
     context.update(utility.new_user())
     return render(
