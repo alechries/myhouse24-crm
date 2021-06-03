@@ -71,3 +71,25 @@
     </form>
 </section>
 {% endblock %}
+{% block scripts %}
+<script>
+$('#select-house').find('select').each(function() {
+        $(this).on("change", function() {
+            var select_house = $(this);
+            var selected_house = select_house.prop('selectedIndex');
+            var options = select_house.prop('options');
+            $('#select-section').find('select').each(function() {
+                var select_section = $(this);
+                var select_plug = "Сделайте выбор ... ";
+                select_section.find('option').remove().end();
+                select_section.append(new Option(select_plug, ""));
+                $.get("/api/section/?house="+options[selected_house].value, function(data) {
+                    for(var i=0; i < data.length; i++) {
+                        select_section.append(new Option(data[i]['name'], data[i]['id']));
+                    }
+                });
+            });
+        });
+});
+</script>
+{% endblock %}
