@@ -619,6 +619,8 @@ def house_edit_view(request, pk):
         house_form = forms.HouseForm(prefix='house_form', instance=house)
         section_formset = SectionFormset(prefix='section_form', instance=house)
         user_house_formset = UserFormset(prefix='user_form', instance=house)
+        for form in user_house_formset:
+            form.fields['user'].queryset = models.User.objects.filter(is_superuser=1)
 
     context = {
         'floor_formset': floor_formset,
