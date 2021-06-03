@@ -7,6 +7,7 @@ from . import utils as utility
 from django.forms import modelformset_factory
 from django.http import HttpResponse
 from django.forms import inlineformset_factory
+import xlwt
 
 
 def index_view(request):
@@ -70,6 +71,15 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('admin_login')
+
+
+def export_tranfer_xls_view(request):
+    return utils.model_to_xls(
+        xls_name='account-transaction',
+        xls_columns=['Number', 'Manager', 'Account', 'Transfer type', 'Amount', 'Comment', 'Payment made', 'Created date'],
+        model_rows=models.Transfer.objects.all().values_list(
+            'number', 'manager', 'account', 'transfer_type', 'amount', 'comment', 'payment_made', 'created_date'),
+    )
 
 
 def account_transaction_view(request):
@@ -317,6 +327,15 @@ def invoice_delete_view(request, pk):
     invoice = models.Invoice.objects.get(id=pk)
     invoice.delete()
     return redirect('admin_invoice')
+
+
+def export_account_xls_view(request):
+    return utils.model_to_xls(
+        xls_name='account',
+        xls_columns=['Wallet', 'Money', 'Status'],
+        model_rows=models.Account.objects.all().values_list(
+            'wallet', 'money', 'status'),
+    )
 
 
 def account_view(request):
