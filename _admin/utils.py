@@ -42,7 +42,7 @@ def invoice_number():
 
 
 def counter_number():
-    date = datetime.now().strftime('%d%m%y')
+    date = datetime.datetime.now().strftime('%d%m%y')
     if models.Meter.objects.count() > 0:
         initial_len = '00000'
         count = int(models.Meter.objects.all().count()) + 1

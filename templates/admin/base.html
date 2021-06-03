@@ -71,9 +71,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header" style="background-color: #f39c12">
-                            <!--<img src="/app-admin/dist/img/user2-160x160.jpg" class="img-circle" alt="Михаил Поляков">-->
-                            <span><i class="fas fa-user-circle text-purple bg-gray-light img-circle" style="font-size: 78px; text-align: center; width: 78px"></i></span>
+                            {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" class="img-circle" alt="Михаил Поляков">
+                            {% else %}
+                            <span><i class="fas fa-user-circle text-purple bg-gray-light img-circle" style="font-size: 77px; text-align: center; width: 78px"></i></span>
+                            {% endif %}
                             <p style="color: white">{{ user }}</p>
+                            <p style="color: white">{{ user.role.name }}</p>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer d-flex justify-content-around">

@@ -847,6 +847,7 @@ def meter_data_create_view(request):
         else:
             alerts.append('Неуспешно')
     form = forms.CounterForm(initial={'number': utility.counter_number()})
+    form.fields['service'].queryset = models.Service.objects.filter(active=1)
 
     context = {'form': form,
                'alerts': alerts
