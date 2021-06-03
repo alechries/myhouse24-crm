@@ -6,7 +6,7 @@ import time
 
 
 def serial_number_account():
-    date = datetime.now().strftime('%d%m%y')
+    date = datetime.datetime.now().strftime('%d%m%y')
     if models.Account.objects.count() > 0:
         initial_len = '00000'
         count = int(models.Account.objects.all().count()) + 1
