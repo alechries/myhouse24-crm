@@ -36,8 +36,8 @@
                     <div class="default-area">
                             <div class="row">
                                 <div class="col-xs-12 col-md-6">
-                                    <div class="col">
-                                        <label>Владелец Квартиры</label>
+                                    <div class="col" id="select-owner">
+                                        <label>Владелец квартиры</label>
                                         {{ form.owner|as_crispy_field }}
                                     </div>
                                 </div>
@@ -49,7 +49,9 @@
                                 </div>
                                 <div class="col">
                                     <label>Квартира</label>
-                                    {{ form.apartment|as_crispy_field }}
+                                    <div id="select-apartment">
+                                        {{ form.apartment|as_crispy_field }}
+                                    </div>
                                     <label>Тип мастера</label>
                                     {{ form.master_type|as_crispy_field }}
                                     <label>Статус</label>
@@ -73,19 +75,19 @@
 {% endblock %}
 {% block scripts %}
 <script>
-$('#select-house').find('select').each(function() {
+$('#select-owner').find('select').each(function() {
         $(this).on("change", function() {
-            var select_house = $(this);
-            var selected_house = select_house.prop('selectedIndex');
-            var options = select_house.prop('options');
-            $('#select-section').find('select').each(function() {
-                var select_section = $(this);
+            var select_owner = $(this);
+            var selected_owner  = select_owner .prop('selectedIndex');
+            var options = select_owner .prop('options');
+            $('#select-apartment').find('select').each(function() {
+                var select_apartment = $(this);
                 var select_plug = "Сделайте выбор ... ";
-                select_section.find('option').remove().end();
-                select_section.append(new Option(select_plug, ""));
-                $.get("/api/section/?house="+options[selected_house].value, function(data) {
+                select_apartment.find('option').remove().end();
+                select_apartment.append(new Option(select_plug, ""));
+                $.get("/api/apartment/?user="+options[selected_owner].value, function(data) {
                     for(var i=0; i < data.length; i++) {
-                        select_section.append(new Option(data[i]['name'], data[i]['id']));
+                        select_apartment.append(new Option(data[i]['name'], data[i]['id']));
                     }
                 });
             });
