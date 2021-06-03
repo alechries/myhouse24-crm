@@ -85,16 +85,28 @@
                             </div>
                                     {{ tariff_invoice_formset.management_form }}
                                     {% for form in tariff_invoice_formset %}
+                                        {{ form.id }}
                                         <div class="tariff-invoice-form-area">
                                             <div class="row">
-                                                <div class="col">
+                                                <div class="col-3">
                                                     {{ form.service|as_crispy_field }}
                                                 </div>
-                                                <div class="col">
+                                                <div class="col-3">
                                                     {{ form.amount }}
                                                 </div>
-                                                <div class="col">
+                                                <div class="col-3">
                                                     {{ form.price }}
+                                                </div>
+                                                <div class="col-2">
+                                                    {% if form.instance.id %}
+                                                    <a class="btn btn-default btn-sm del-tariff-service-form" href="{% url 'admin_tariffs-service-delete' form.instance.id %}" title="Удалить" style="padding: .5rem">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                    {% else %}
+                                                    <a class="btn btn-default btn-sm del-tariff-service-form" href="#" title="Удалить" style="padding: .5rem">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
