@@ -33,9 +33,9 @@
                             <div class="form-title-line">
                                 <div>Услуга <b class="form-counter">{{ forloop.counter }}</b></div>
                                 {% if form.instance.id %}
-                                <a class="btn btn-danger del-form" href="{% url 'admin_website-services-blocks-delete' form.instance.id %}">DEL</a>
+                                <a class="btn btn-default del-form" href="{% url 'admin_website-services-blocks-delete' form.instance.id %}"><i class="fas fa-trash"></i></a>
                                 {% else %}
-                                <a class="btn btn-danger del-form" href="#">DEL</a>
+                                <a class="btn btn-default del-form" href="#"><i class="fas fa-trash"></i></a>
                                 {% endif %}
                             </div>
                             <div>

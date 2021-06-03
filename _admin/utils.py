@@ -1,6 +1,8 @@
 from _db import models
 from datetime import datetime
 from _db import models
+import datetime
+import time
 
 
 def serial_number_account():
@@ -16,7 +18,7 @@ def serial_number_account():
 
 
 def serial_number_transaction():
-    date = datetime.now().strftime('%d%m%y')
+    date = datetime.datetime.now().strftime('%d%m%y')
     if models.Transfer.objects.count() > 0:
         initial_len = '00000'
         count = int(models.Transfer.objects.all().count()) + 1
@@ -28,7 +30,7 @@ def serial_number_transaction():
 
 
 def invoice_number():
-    date = datetime.now().strftime('%d%m%y')
+    date = datetime.datetime.now().strftime('%d%m%y')
     if models.Invoice.objects.count() > 0:
         initial_len = '00000'
         count = int(models.Invoice.objects.all().count()) + 1
@@ -94,3 +96,14 @@ def new_user():
         'new_user_slice': new_user_slice,
     }
 
+def time_code():
+    year = datetime.date.today().year
+    month = datetime.date.today().month
+    if int(month) < 10:
+        month = f"0{month}"
+    day = datetime.date.today().day
+    if int(day) < 10:
+        day = f"0{day}"
+    t = time.time_ns()
+    code = f"{year}{month}{day}{t}"
+    return code
