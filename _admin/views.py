@@ -770,7 +770,9 @@ def master_request_create_view(request):
             alerts.append('Заявка создана')
         else:
             alerts.append('Произошла ошибка')
-    form = forms.MasterRequestForm()
+    else:
+        form = forms.MasterRequestForm()
+        form.fields['owner'].queryset = models.User.objects.filter(is_superuser=0)
 
     context = {'form': form,
                'alerts': alerts}
