@@ -3,6 +3,7 @@ from _db import models, utils, auth
 from django.db.models import Q
 from django.contrib.auth import login, logout
 from . import forms
+from django.core.mail import send_mail
 from . import utils as utility
 from django.forms import modelformset_factory
 from django.http import HttpResponse
@@ -222,6 +223,8 @@ def invoice_create_view(request):
         form=forms.TariffInvoiceForm,
         max_num=1
     )
+    meter = models.Meter.objects.all()
+    print(meter)
     alerts = []
     if request.method == 'POST':
         invoice_form = forms.InvoiceForm(request.POST, prefix='invoice_form',)
@@ -246,6 +249,7 @@ def invoice_create_view(request):
         tariff_invoice_formset = TariffInvoiceFormset(request.POST or None, prefix='tariff_invoice_form')
 
     context = {
+        'meter': meter,
         'invoice_form': invoice_form,
         'tariff_invoice_formset': tariff_invoice_formset,
         'alerts': alerts
@@ -501,6 +505,22 @@ def user_delete_view(request, pk):
     return redirect('admin_user')
 
 
+def user_invite_view(request):
+    alerts = []
+    if request.method == 'POST':
+        form = forms.UserInviteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            alerts.append('Успех')
+            user_email = models.UserInvite.get_solo().email
+            send_mail('Приглашение в Demo CRM 24', 'Приглашение в CRM', 'dimadjangosendemail@gmail.com',
+                      [user_email])
+    else:
+        form = forms.UserInviteForm()
+    return render(request, 'admin/user/invite.html', {'form': form,
+                                                      'alerts': alerts})
+
+
 def house_view(request):
     houses = models.House.objects.all()
     context = {'houses': houses}
@@ -670,8 +690,25 @@ def message_create_view(request):
             alerts.append('Сообщение отправлено')
         else:
             alerts.append('Произошла ошибка')
-    form = forms.MessageCreateForm()
 
+    form = forms.MessageCreateForm()
+    context = {'form': form,
+               'alerts': alerts}
+    context.update(utility.new_user())
+    return render(request, 'admin/message/create.html', context)
+
+
+def message_indebtedness_create_view(request):
+    alerts = []
+    if request.method == 'POST':
+        form = forms.MessageCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            alerts.append('Сообщение отправлено')
+        else:
+            alerts.append('Произошла ошибка')
+
+    form = forms.MessageCreateForm(initial={'indebtedness': True})
     context = {'form': form,
                'alerts': alerts}
     context.update(utility.new_user())
@@ -1272,6 +1309,9 @@ def tariffs_delete_view(request, pk):
 
 def tariffs_service_delete_view(request, pk):
     entry = models.TariffService.objects.get(id=pk)
+    invoice = models.Invoice.objects.get(id=entry.id)
+    invoice.total_amount -= float(entry.amount) * float(entry.price)
+    invoice.save()
     entry.delete()
     return HttpResponse()
 

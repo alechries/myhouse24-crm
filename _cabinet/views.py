@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from _db import models
 from . import utils as utility
+from django.db.models import Q
 from . import forms
 from _db import models, utils, auth
 from django.contrib.auth import authenticate, login, logout
@@ -110,7 +111,7 @@ def messages_index(request):
     user = request.user
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
-    messages = models.Message.objects.filter(destination_id=user)[::-1]
+    messages = models.Message.objects.filter(Q(destination_id=user) | Q(indebtedness=1))[::-1]
     print(messages)
     return render(request, 'cabinet/messages/index.html', {'user': user,
                                                            'houses': houses,

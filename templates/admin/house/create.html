@@ -78,6 +78,17 @@
                                             <div class="col">
                                                 {{ form.name }}
                                             </div>
+                                            <div class="col-2">
+                                                {% if form.instance.id %}
+                                                <a class="btn btn-default btn-sm del-house-section-form" href="{% url 'admin_section-delete' form.instance.id %}" title="Удалить" style="padding: .5rem; margin-top: 4px;">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                                {% else %}
+                                                <a class="btn btn-default btn-sm del-house-section-form" href="#" title="Удалить" style="padding: .5rem; margin-top: 4px;">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 {% endfor %}
@@ -107,10 +118,10 @@
 
     document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(section_prefix, section_form) }, false);
     $('#add-section-form').click(function() { addForm(section_prefix, section_form, section_counter); });
-    $('.del-section-form').click(function() { delForm(this, section_prefix, section_form, section_counter); });
+    $('.del-house-section-form').click(function() { delForm(this, section_prefix, section_form, section_counter); });
     </script>
     <script>
-    $('.del-section-form').click(function(){
+    $('.del-house-section-form').click(function(){
         var deleteURL = $(this).attr("href");
         token = $("input[name='csrfmiddlewaretoken']").val();
         data = {'csrfmiddlewaretoken':token}

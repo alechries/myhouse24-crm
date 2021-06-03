@@ -827,3 +827,19 @@ class UserHouseForm(forms.ModelForm):
             'id': forms.HiddenInput(),
         }
 
+
+class UserInviteForm(forms.ModelForm):
+    class Meta:
+        model = models.UserInvite
+        fields = ['email', 'phone']
+        widgets = {
+            'phone': forms.TextInput(attrs={
+                'placeholder': 'Введите телефон',
+                'type': 'text',
+                'class': 'form-control',
+            }),
+            'email': forms.EmailInput(attrs={
+                'placeholder': 'Введите email',
+                'class': 'form-control',
+            })
+        }

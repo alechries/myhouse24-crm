@@ -18,8 +18,8 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="margin-right: 90px">
                 <a class="dropdown-item" href="{% url 'admin_user-create' %}">Добавить владельца квартиры</a>
-                <a class="dropdown-item" href="{% url 'admin_message-create' %}">Отправить сообщение должникам</a>
-                <a class="dropdown-item" href="#">Отправить приглашение</a>
+                <a class="dropdown-item" href="{% url 'admin_message-indebtedness-create' %}">Отправить сообщение должникам</a>
+                <a class="dropdown-item" href="{% url 'admin_user-invite' %}">Отправить приглашение</a>
             </div>
         </div>
     </section>

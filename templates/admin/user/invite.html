@@ -1,0 +1,44 @@
+{% extends 'admin/base.html' %}
+{% block page_title %}
+    <h1 class="m-0">Пригласить владельца</h1>
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_user' %}">
+            Владельцы квартиры
+        </a>
+    </li>
+    <li class="breadcrumb-item active">Пригласить владельца</li>
+{% endblock %}
+{% block main_content %}
+<section class="content input-form">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container-fluid">
+            <div class="card card-secondary card-outline">
+                <section>
+                    <div class="default-area">
+                        <div class="row">
+                            <div class="col-4">
+                                {{ form.phone }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                {{ form.email }}
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-success margin-bottom-15" value="Сохранить">
+                </section>
+            </div>
+        </div>
+    </form>
+</section>
+{% endblock %}

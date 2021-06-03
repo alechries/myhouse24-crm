@@ -99,11 +99,11 @@
                                                 </div>
                                                 <div class="col-2">
                                                     {% if form.instance.id %}
-                                                    <a class="btn btn-default btn-sm del-tariff-service-form" href="{% url 'admin_tariffs-service-delete' form.instance.id %}" title="Удалить" style="padding: .5rem">
+                                                    <a class="btn btn-default btn-sm del-tariff-service-form" href="{% url 'admin_tariffs-service-delete' form.instance.id %}" title="Удалить" style="padding: .5rem; margin-top: 4px">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
                                                     {% else %}
-                                                    <a class="btn btn-default btn-sm del-tariff-service-form" href="#" title="Удалить" style="padding: .5rem">
+                                                    <a class="btn btn-default btn-sm del-tariff-service-form" href="#" title="Удалить" style="padding: .5rem; margin-top: 4px">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
                                                     {% endif %}
@@ -123,6 +123,56 @@
                             </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card card-secondary card-outline">
+                    <div class="default-area">
+                        <table class="table table-bordered table-hover table-striped linkedRow">
+                        <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Статус</th>
+                            <th>Дата</th>
+                            <th>Месяц</th>
+                            <th>Дом</th>
+                            <th>Секция</th>
+                            <th>№ квартиры</th>
+                            <th>Счётчик</th>
+                            <th>Показания</th>
+                            <th>Ед. изм</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if meter.count > 0 %}
+                        {% for el in meter %}
+                            <tr data-href="{% url 'admin_meter-data-detail'  pk=el.pk %}">
+                                <td>{{ el.number }}</td>
+                                {% if el.status == 'Новое' %}
+                                    <td style="color: #ffffff; text-align: center"><small class="label label-warning">Новое</small></td>
+                                {% elif el.status == 'Учтено' %}
+                                    <td style="color: #ffffff; text-align: center"><small class="label label-success">Учтено</small></td>
+                                {% elif el.status == 'Учтено и оплаченно' %}
+                                    <td style="color: #ffffff; text-align: center"><small class="label label-success">Учтено и оплаченно</small></td>
+                                {% elif el.status == 'Нулевое' %}
+                                    <td style="color: #ffffff; text-align: center"><small class="label label-warning">Нулевое</small></td>
+                                {% endif %}
+                                <td>{{ el.date|date:"d.m.Y" }}</td>
+                                <td>{{ el.date|date:"M Y" }}</td>
+                                <td>{{ el.apartment.floor.section.house.name }}</td>
+                                <td>{{ el.apartment.floor.section.name }}</td>
+                                <td>{{ el.apartment.name }}</td>
+                                <td>{{ el.service.name }}</td>
+                                <td style="background-color: #DFD5">{{ el.counter }}</td>
+                                <td style="background-color: #DFD5">{{ el.service.measure.name }}</td>
+                            </tr>
+                        {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="10"><div class="empty">Ничего не найдено.</div></td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
                     </div>
                 </div>
             </div>

@@ -462,3 +462,7 @@ class MasterRequest(models.Model):
     def get_full_time(self):
         return f'{self.date} - {self.time}'
 
+
+class UserInvite(SingletonModel):
+    phone = models.CharField(max_length=255, null=True, blank=False)
+    email = models.EmailField(null=True)
