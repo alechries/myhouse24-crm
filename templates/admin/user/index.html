@@ -52,16 +52,23 @@
                             <td>{{ el.number }}</td>
                             <td>{{ el.email }}</td>
                             <td>
+                                {% for apartament in el.get_apartment %}
+                                    <p style="margin-bottom: 0"><a href="{% url 'admin_house-detail' pk=apartament.floor.section.house.id %}">{{ apartament.floor.section.house.name }}</a></p>
+                                {% endfor %}
                             </td>
                             <td>
-                            {% for apartament in el.get_apartment %}
-                            Квартира {{ apartament.name }}
+                            {% for apartment in el.get_apartment %}
+                            <p style="margin-bottom: 0"><a href="{% url 'admin_apart-detail' pk=apartment.id %}"> Квартира {{ apartment.name }}</a></p>
                             {% endfor %}
                             </td>
                             <td>{{ el.date_joined }}</td>
                             <td>{{ el.status }}</td>
                             <td>
-
+                                {% for apartment in el.get_apartment %}
+                                    {% if apartment.account.get_money < 0 %}
+                                    Есть долг
+                                    {% endif %}
+                                {% endfor %}
                             </td>
                             <td>
                                 <div class="btn-group pull-right">
