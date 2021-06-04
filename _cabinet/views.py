@@ -111,7 +111,7 @@ def messages_index(request):
     user = request.user
     houses = models.House.objects.filter(userhouse__user=user)
     apartments = models.Apartment.objects.filter(user=user)
-    messages = models.Message.objects.filter(Q(apartment__user=user) | Q(indebtedness=1))[::-1]
+    messages = models.Message.objects.filter(Q(apartment__user=user) | Q(indebtedness=1) | Q(addressee='NULL'))
     print(messages)
     return render(request, 'cabinet/messages/index.html', {'user': user,
                                                            'houses': houses,

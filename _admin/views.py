@@ -719,12 +719,15 @@ def message_view(request):
 
 
 def message_create_view(request):
+    user = request.user
     alerts = []
     if request.method == 'POST':
         form = forms.MessageCreateForm(request.POST)
-        print(form.data)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.addressee = user
+            instance.save()
+            print(form.data)
             alerts.append('Сообщение отправлено')
         else:
             alerts.append('Произошла ошибка')

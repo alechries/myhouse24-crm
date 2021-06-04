@@ -424,7 +424,7 @@ class WebsiteContacts(SingletonModel):
 
 class Message(models.Model):
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
-    addressee = models.CharField(default='Админ', max_length=255, null=True, blank=True)
+    addressee = models.CharField(max_length=255, null=True, blank=True)
     title = models.CharField(max_length=255)
     text = models.TextField()
     indebtedness = models.BooleanField('', default=False)
