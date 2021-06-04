@@ -85,7 +85,7 @@
                 var options = select_house.prop('options');
                 $('#select-section').find('select').each(function() {
                     var select_section = $(this);
-                    var select_plug = "Все";
+                    var select_plug = "Выберите";
                     select_section.find('option').remove().end();
                     select_section.append(new Option(select_plug, ""));
                     $.get("/api/section/?house="+options[selected_house].value, function(data) {
@@ -103,7 +103,7 @@
                 var options = select_section.prop('options');
                 $('#select-floor').find('select').each(function() {
                     var select_floor = $(this);
-                    var select_plug = "Все";
+                    var select_plug = "Выберите";
                     select_floor.find('option').remove().end();
                     select_floor.append(new Option(select_plug, ""));
                     $.get("/api/floor/?section="+options[selected_section].value, function(data) {
@@ -121,7 +121,7 @@
                 var options = select_floor.prop('options');
                 $('#select-apartment').find('select').each(function() {
                     var select_apartment = $(this);
-                    var select_plug = "Все";
+                    var select_plug = "Выберите";
                     select_apartment.find('option').remove().end();
                     select_apartment.append(new Option(select_plug, ""));
                     $.get("/api/apartment/?floor="+options[selected_floor].value, function(data) {
