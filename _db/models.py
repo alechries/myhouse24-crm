@@ -196,7 +196,7 @@ class Measure(models.Model):  # ед измерения
 
 
 class Tariff(models.Model):
-    edit_date = models.DateTimeField(auto_now_add=True, null=True)
+    edit_date = models.DateTimeField(auto_now=True, null=True)
     name = models.CharField(max_length=155)
     description = models.CharField(max_length=155)
 
