@@ -226,9 +226,8 @@ class WebsiteContactsForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Введите электронную почту',
             }),
-            'map': forms.Textarea(attrs={
+            'map': forms.TextInput(attrs={
                 'class': 'form-control',
-                'rows': '3',
                 'placeholder': 'Введите описание',
             }),
         }
