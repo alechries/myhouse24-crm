@@ -1,4 +1,5 @@
 {% extends 'admin/base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% load crispy_forms_filters %}
 {% block page_title %}
@@ -34,18 +35,15 @@
                                 <label>Площадь (кв.м)</label>
                                 {{ form.apartment_area }}
                             </div>
-                            <!-- Дом
-                            <div class="form-group">
+                            <div class="form-group" id="select-house">
                                 <label>Дом</label>
+                                {{ form.house|as_crispy_field }}
                             </div>
-                            -->
-                            <!-- Секция
-                            <div class="form-group">
+                            <div class="form-group" id="select-section">
                                 <label>Секция</label>
-
+                                {{ form.section|as_crispy_field }}
                             </div>
-                            -->
-                            <div class="form-group">
+                            <div class="form-group" id="select-floor">
                                 <label>Этаж</label>
                                 {{ form.floor|as_crispy_field }}
                             </div>
@@ -76,4 +74,64 @@
             </div><!-- /.container-fluid -->
     </form>
 </section>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'base/js/selectupdate.js' %}"></script>
+    <script>
+        $('#select-house').find('select').each(function() {
+            $(this).on("change", function() {
+                var select_house = $(this);
+                var selected_house = select_house.prop('selectedIndex');
+                var options = select_house.prop('options');
+                $('#select-section').find('select').each(function() {
+                    var select_section = $(this);
+                    var select_plug = "Все";
+                    select_section.find('option').remove().end();
+                    select_section.append(new Option(select_plug, ""));
+                    $.get("/api/section/?house="+options[selected_house].value, function(data) {
+                        for(var i=0; i < data.length; i++) {
+                            select_section.append(new Option(data[i]['name'], data[i]['id']));
+                        }
+                    });
+                });
+            });
+        });
+        $('#select-section').find('select').each(function() {
+            $(this).on("change", function() {
+                var select_section = $(this);
+                var selected_section = select_section.prop('selectedIndex');
+                var options = select_section.prop('options');
+                $('#select-floor').find('select').each(function() {
+                    var select_floor = $(this);
+                    var select_plug = "Все";
+                    select_floor.find('option').remove().end();
+                    select_floor.append(new Option(select_plug, ""));
+                    $.get("/api/floor/?section="+options[selected_section].value, function(data) {
+                        for(var i=0; i < data.length; i++) {
+                            select_floor.append(new Option(data[i]['name'], data[i]['id']));
+                        }
+                    });
+                });
+            });
+        });
+        $('#select-floor').find('select').each(function() {
+            $(this).on("change", function() {
+                var select_floor = $(this);
+                var selected_floor = select_floor.prop('selectedIndex');
+                var options = select_floor.prop('options');
+                $('#select-apartment').find('select').each(function() {
+                    var select_apartment = $(this);
+                    var select_plug = "Все";
+                    select_apartment.find('option').remove().end();
+                    select_apartment.append(new Option(select_plug, ""));
+                    $.get("/api/apartment/?floor="+options[selected_floor].value, function(data) {
+                        for(var i=0; i < data.length; i++) {
+                            select_apartment.append(new Option(data[i]['name'], data[i]['id']));
+                        }
+                    });
+                });
+            });
+        });
+
+    </script>
 {% endblock %}

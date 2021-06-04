@@ -163,7 +163,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'cabinet_messages' %}" class="nav-link {% if  url_name == 'cabinet_messages'%} active {% endif %}">
+                        <a href="{% url 'cabinet_messages' %}" class="nav-link
+                            {% if  url_name == 'cabinet_messages'%} active
+                            {% elif url_name == 'cabinet_messages-detail' %} active {% endif %}">
                             <i class="far fa-envelope"></i>
                             <p>
                                 Сообщения

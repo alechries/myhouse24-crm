@@ -358,10 +358,12 @@ class ApartmentForm(forms.ModelForm):
     house = forms.ModelChoiceField(
         queryset=models.House.objects.all(),
         empty_label='Выберите...',
+        required=False
     )
     section = forms.ModelChoiceField(
         queryset=models.Section.objects.all(),
         empty_label='Выберите...',
+        required=False
     )
     class Meta:
         model = models.Apartment
@@ -552,9 +554,19 @@ class TransactionPurposeForm(forms.ModelForm):
 
 
 class CounterForm(forms.ModelForm):
+    house = forms.ModelChoiceField(
+        queryset=models.House.objects.all(),
+        empty_label='Выберите...',
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CounterForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+
     class Meta:
         model = models.Meter
-        fields = ['apartment', 'number', 'date', 'service', 'status', 'counter']
+        fields = ['apartment', 'number', 'date', 'service', 'status', 'counter', 'house']
         widgets = {
             'counter': forms.NumberInput(attrs={
                 'id': 'AmountInput',

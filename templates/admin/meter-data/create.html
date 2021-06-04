@@ -37,23 +37,37 @@
             <div class="card card-secondary card-outline">
                     <div class="default-area">
                             <div class="row">
-                                <div class="col">
-                                    Квартира
-                                    {{ form.apartment|as_crispy_field }}
+                                <div class="col" id="select-house">
+                                    <label>Дом</label>
+                                    {{ form.house|as_crispy_field }}
                                 </div>
                                 <div class="col">
-                                    Статус
+                                    <label>Статус</label>
                                     {{ form.status|as_crispy_field }}
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col">
-                                    Счётчик
-                                    {{ form.service|as_crispy_field }}
+                                <div class="col" id="select-section" style="display: block">
+                                    <label>Секция</label>
+                                    <select name="meter_form-section" class="select form-control custom-select" required="" id="id_meter_form-section">
+                                      <option value="" selected="">Выберите...</option>
+                                    </select>
                                 </div>
                                 <div class="col">
-                                    Показания
+                                    <label>Показания</label>
                                     {{ form.counter }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6" id="select-apartment" style="display: block">
+                                    <label>Квартира</label>
+                                    {{ form.apartment |as_crispy_field}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>Счётчик</label>
+                                    {{ form.service|as_crispy_field }}
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-end">
@@ -65,7 +79,51 @@
             </div><!-- /.container-fluid -->
     </form>
 </section>
-<script>
-
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'base/js/selectupdate.js' %}"></script>
+    <script>
+$('#select-house').find('select').each(function() {
+        $(this).on("change", function() {
+            var select_house = $(this);
+            var selected_house = select_house.prop('selectedIndex');
+            var options = select_house.prop('options');
+            $('#select-section').find('select').each(function() {
+                var select_section = $(this);
+                var select_plug = "Сделайте выбор ... ";
+                select_section.find('option').remove().end();
+                select_section.append(new Option(select_plug, ""));
+                $.get("/api/section/?house="+options[selected_house].value, function(data) {
+                    for(var i=0; i < data.length; i++) {
+                        select_section.append(new Option(data[i]['name'], data[i]['id']));
+                    }
+                });
+            });
+        });
+});
+$('#select-section').find('select').each(function() {
+        $(this).on("change", function() {
+            var select_section = $(this);
+            var selected_section = select_section.prop('selectedIndex');
+            var options = select_section.prop('options');
+            $('#select-apartment').find('select').each(function() {
+                var select_apartment = $(this);
+                var select_plug = "Сделайте выбор ...";
+                select_apartment.find('option').remove().end();
+                select_apartment.append(new Option(select_plug, ""));
+                $.get("/api/floor/?section="+options[selected_section].value, function(data) {
+                    data_floor = data;
+                    for(var i=0; i < data_floor.length; i++) {
+                        $.get("/api/apartment/?floor="+data_floor[i]['id'], function(data) {
+                            data_apartment = data;
+                            for(var i=0; i < data.length; i++) {
+                                select_apartment.append(new Option(data_apartment[i]['name'], data_apartment[i]['id']));
+                            }
+                        });
+                    }
+                });
+            });
+        });
+});
 </script>
 {% endblock %}

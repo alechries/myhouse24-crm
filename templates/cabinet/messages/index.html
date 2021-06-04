@@ -18,7 +18,7 @@
                     <tbody>
 
                     {% for el in messages %}
-                        <tr>
+                        <tr data-href="{% url 'cabinet_messages-detail'  pk=el.pk %}">
                             <td>{{ forloop.counter }}</td>
                             <td>{{ el.addressee }}</td>
                             <td>{{ el.get_short_text|safe }}</td>
@@ -30,4 +30,11 @@
             </div>
          </div>
     </section>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $('tr[data-href]').on("click", function() {
+    document.location = $(this).data('href');
+    });
+    </script>
 {% endblock %}

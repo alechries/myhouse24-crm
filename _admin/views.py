@@ -215,7 +215,7 @@ def account_transaction_delete_view(request, pk):
 
 
 def invoice_view(request):
-    invoices = models.Invoice.objects.reverse().all()
+    invoices = models.Invoice.objects.all().order_by('-pk')
     context = {'invoices': invoices}
     context.update(utility.calculate_statistic())
     context.update(utility.new_user())
@@ -1322,7 +1322,7 @@ def tariffs_change_view(request, pk=None):
     )
 
 
-def tariffs_copy_view(request):
+def tariffs_copy_view(request, pk):
     return render(request, 'admin/tariffs/copy.html')
 
 

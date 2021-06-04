@@ -13,6 +13,7 @@ urlpatterns = [
     path('tariffs/view/<int:pk>', views.tariffs_view_view, name='cabinet_tariffs-view'),
     path('messages', views.messages_index, name='cabinet_messages'),
     path('messages/view', views.messages_view, name='cabinet_messages-view'),
+    path('messages/detail/<int:pk>', views.messages_detail, name='cabinet_messages-detail'),
     path('messages/create', views.messages_create_view, name='cabinet_messages-create'),
     path('messages/delete', views.messages_delete_view, name='cabinet_messages-delete'),
     path('master-request', views.master_request_view, name='cabinet_master-request'),

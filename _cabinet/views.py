@@ -128,6 +128,11 @@ def messages_create_view(request):
     return render(request, 'cabinet/messages/create.html')
 
 
+def messages_detail(request, pk):
+    message = models.Message.objects.get(id=pk)
+    return render(request, 'cabinet/messages/detail.html', {'message': message})
+
+
 def messages_delete_view(request):
     return render(request, 'cabinet/messages/delete.html')
 
