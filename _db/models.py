@@ -444,6 +444,7 @@ class Message(models.Model):
 
 
 class MessageRecipient(models.Model):
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, null=True)
     house = models.ForeignKey(House, on_delete=models.CASCADE, null=True)
     section = models.ForeignKey(Section, on_delete=models.CASCADE, null=True)
     floor = models.ForeignKey(Floor, on_delete=models.CASCADE, null=True)
