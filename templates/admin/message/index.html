@@ -30,8 +30,14 @@
                     {% if messages.count > 0 %}
                     {% for el in messages %}
                         <tr data-href="{% url 'admin_message-detail'  pk=el.pk %}">
-                            <td></td>
+                            <td>{{ forloop.counter }}</td>
+                            {% if el.apartment.user %}
                             <td>{{ el.apartment.user }}</td>
+                            {% elif el.indebtedness == 1 %}
+                            <td>Пользователи с задолженностью</td>
+                            {% else %}
+                            <td>Все пользователи</td>
+                            {% endif %}
                             <td>{{ el.text }}</td>
                             <td>{{ el.created_date|date:"d.m.Y" }}</td>
                         </tr>

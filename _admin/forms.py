@@ -481,18 +481,22 @@ class MessageCreateForm(forms.ModelForm):
     house = forms.ModelChoiceField(
         queryset=models.House.objects.all(),
         empty_label='Все',
+        required=False
     )
     section = forms.ModelChoiceField(
         queryset=models.Section.objects.all(),
         empty_label='Все',
+        required=False
     )
     floor = forms.ModelChoiceField(
         queryset=models.Floor.objects.all(),
         empty_label='Все',
+        required=False
     )
     apartment = forms.ModelChoiceField(
         queryset=models.Apartment.objects.all(),
         empty_label='Все',
+        required=False
     )
     class Meta:
         model = models.Message

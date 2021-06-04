@@ -712,7 +712,7 @@ def house_delete_view(request, pk):
 
 
 def message_view(request):
-    messages = models.Message.objects.all()
+    messages = models.Message.objects.all().order_by('-pk')
     context = {'messages': messages}
     context.update(utility.new_user())
     return render(request, 'admin/message/index.html', context)
