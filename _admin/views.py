@@ -349,7 +349,7 @@ def export_account_xls_view(request):
 
 
 def account_view(request):
-    account = models.Account.objects.all()
+    account = models.Account.objects.all().order_by('-pk')
     total_arrears = 0
     for el in account:
         el.money = 0
