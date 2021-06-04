@@ -214,7 +214,7 @@ class Account(models.Model):
         ('Inactive', 'Неактивен')
     )
     wallet = models.CharField('Номер лицевого счёта', max_length=255, null=True, unique=True)
-    money = models.FloatField(default=0)
+    money = models.FloatField(default=0, null=True)
     status = models.CharField('', choices=STATUS, max_length=55, blank=True)
 
     def __str__(self):
