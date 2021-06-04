@@ -443,6 +443,14 @@ class Message(models.Model):
         return self.created_date.strftime('%d.%m.%Y')
 
 
+class MessageRecipient(models.Model):
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, null=True)
+    house = models.ForeignKey(House, on_delete=models.CASCADE, null=True)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, null=True)
+    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, null=True)
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, null=True)
+
+
 class MasterRequest(models.Model):
     TYPE = (
         ('Сантехник', 'Сантехник'),
