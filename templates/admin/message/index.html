@@ -31,15 +31,19 @@
                     {% for el in messages %}
                         <tr data-href="{% url 'admin_message-detail'  pk=el.pk %}">
                             <td>{{ forloop.counter }}</td>
-                            {% if el.apartment.user %}
-                            <td>{{ el.apartment.user }}</td>
-                            {% elif el.indebtedness == 1 %}
-                            <td>Пользователи с задолженностью</td>
+                            {% if el.house %}
+                            <td>Всем - {{ el.house.name }}</td>
+                            {% elif el.section %}
+                            <td>Всем - {{ el.section.name }}</td>
+                            {% elif el.floor %}
+                            <td>Всем - {{ el.floor.name }}</td>
+                            {% elif el.apartment %}
+                            <td>Всем - {{ el.apartment.name }}</td>
                             {% else %}
-                            <td>Все пользователи</td>
+                            <td>Всем</td>
                             {% endif %}
-                            <td>{{ el.text }}</td>
-                            <td>{{ el.created_date|date:"d.m.Y" }}</td>
+                            <td>{{ el.message.text }}</td>
+                            <td>{{ el.message.created_date|date:"d.m.Y" }}</td>
                         </tr>
                     {% endfor %}
                     {% else %}

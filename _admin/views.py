@@ -712,7 +712,7 @@ def house_delete_view(request, pk):
 
 
 def message_view(request):
-    messages = models.Message.objects.all().order_by('-pk')
+    messages = models.MessageRecipient.objects.all().order_by('-pk')
     context = {'messages': messages}
     context.update(utility.new_user())
     return render(request, 'admin/message/index.html', context)
@@ -724,14 +724,39 @@ def message_create_view(request):
         form = forms.MessageCreateForm(request.POST)
         print(form.data)
         if form.is_valid():
-            instance = form.save()
-            msg_rec = models.MessageRecipient()
-            msg_rec.message = instance
-            msg_rec.house = form.cleaned_data['house']
-            msg_rec.section = form.cleaned_data['section']
-            msg_rec.floor = form.cleaned_data['floor']
-            msg_rec.apartment = form.cleaned_data['apartment']
-            msg_rec.save()
+            house = form.cleaned_data['house']
+            section = form.cleaned_data['section']
+            floor = form.cleaned_data['floor']
+            apartment = form.cleaned_data['apartment']
+
+            if apartment:
+                instance = form.save()
+            elif floor:
+                apartments = models.Apartment.objects.filter(floor=floor)
+                for apart in apartments:
+                    instance = form.save(commit=False)
+                    instance.apartment = apart
+                    instance.save()
+            elif section:
+                floors = models.Floor.objects.filter(section=section)
+                for floor in floors:
+                    apartments = models.Apartment.objects.filter(floor=floor)
+                    for apart in apartments:
+                        instance = form.save(commit=False)
+                        instance.apartment = apart
+                        instance.save()
+            elif house:
+                sections = models.Section.objects.filter(house=house)
+                for section in sections:
+                    floors = models.Floor.objects.filter(section=section)
+                    for floor in floors:
+                        apartments = models.Apartment.objects.filter(floor=floor)
+                        for apart in apartments:
+                            instance = form.save(commit=False)
+                            instance.apartment = apart
+                            instance.save()
+
+
             alerts.append('Сообщение отправлено')
         else:
             alerts.append('Произошла ошибка')
@@ -761,14 +786,14 @@ def message_indebtedness_create_view(request):
 
 
 def message_detail_view(request, pk):
-    message = get_object_or_404(models.Message, id=pk)
+    message = get_object_or_404(models.MessageRecipient, id=pk)
     context = {'message': message}
     context.update(utility.new_user())
     return render(request, 'admin/message/detail.html', context)
 
 
 def message_delete_view(request, pk):
-    message = get_object_or_404(models.Message, id=pk)
+    message = get_object_or_404(models.MessageRecipient, id=pk)
     message.delete()
     return redirect('admin_message')
 

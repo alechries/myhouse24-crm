@@ -22,18 +22,18 @@
     <div class="card card-secondary card-outline">
         <div class="default-area">
             <div class="row">
-                {{ message.title }}
+                {{ message.message.title }}
             </div>
             <div class="row d-flex justify-content-end">
                 <div class="col">
-                    От: {{ message.addressee }}
+                    От: {{ message.message.addressee }}
                 </div>
                 <div class="col d-flex justify-content-end">
-                    {{ message.created_date }}
+                    {{ message.message.created_date }}
                 </div>
             </div>
             <div>
-                <p>{{ message.text }}</p>
+                <p>{{ message.message.text }}</p>
             </div>
             <div class="row">
             <a href="{% url 'admin_message-delete' pk=message.pk %}" type="button" class="btn btn-default margin-bottom-15">Удалить</a>
