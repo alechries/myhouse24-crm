@@ -378,8 +378,7 @@ def account_detail(request, pk):
 def account_create_view(request):
     alerts = []
     if request.method == 'POST':
-        form = forms.AccountForm()
-        print(form.is_valid())
+        form = forms.AccountForm(request.POST)
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно добавлена!')
