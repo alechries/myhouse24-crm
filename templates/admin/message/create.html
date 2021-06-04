@@ -1,5 +1,6 @@
 {% extends 'admin/base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block page_title %}
     <h1 class="m-0">Новое сообщение</h1>
 {% endblock %}
@@ -36,21 +37,21 @@
                             <label style="padding-right: 5px">Пользователям с задолжностью</label>
                             {{ form.indebtedness }}
                         </div>
-                        <div class="col-lg-6">
+                        <div class="row" id="select-house" style="display: block; margin-top: 35px">
                             <label>ЖК</label>
                             {{ form.house|as_crispy_field }}
                         </div>
-                        <div class="col-lg-6">
+                        <div class="row" id="select-section" style="display: block">
                             <label>Секция</label>
-                            {{ form.section|as_crispy_field }}
+                            {{ form.section |as_crispy_field}}
                         </div>
-                        <div class="col-lg-6">
+                        <div class="row" id="select-floor" style="display: block">
                             <label>Этаж</label>
-                            {{ form.floor|as_crispy_field }}
+                            {{ form.floor |as_crispy_field}}
                         </div>
-                        <div class="col-lg-6">
+                        <div class="row" id="select-apartment" style="display: block">
                             <label>Квартира</label>
-                            {{ form.apartment|as_crispy_field }}
+                            {{ form.apartment |as_crispy_field}}
                         </div>
                     </div>
                     <div class="row d-flex justify-content-end">
@@ -62,4 +63,64 @@
         </div>
         </div>
     </section>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'base/js/selectupdate.js' %}"></script>
+    <script>
+        $('#select-house').find('select').each(function() {
+            $(this).on("change", function() {
+                var select_house = $(this);
+                var selected_house = select_house.prop('selectedIndex');
+                var options = select_house.prop('options');
+                $('#select-section').find('select').each(function() {
+                    var select_section = $(this);
+                    var select_plug = "Все";
+                    select_section.find('option').remove().end();
+                    select_section.append(new Option(select_plug, ""));
+                    $.get("/api/section/?house="+options[selected_house].value, function(data) {
+                        for(var i=0; i < data.length; i++) {
+                            select_section.append(new Option(data[i]['name'], data[i]['id']));
+                        }
+                    });
+                });
+            });
+        });
+        $('#select-section').find('select').each(function() {
+            $(this).on("change", function() {
+                var select_section = $(this);
+                var selected_section = select_section.prop('selectedIndex');
+                var options = select_section.prop('options');
+                $('#select-floor').find('select').each(function() {
+                    var select_floor = $(this);
+                    var select_plug = "Все";
+                    select_floor.find('option').remove().end();
+                    select_floor.append(new Option(select_plug, ""));
+                    $.get("/api/floor/?section="+options[selected_section].value, function(data) {
+                        for(var i=0; i < data.length; i++) {
+                            select_floor.append(new Option(data[i]['name'], data[i]['id']));
+                        }
+                    });
+                });
+            });
+        });
+        $('#select-floor').find('select').each(function() {
+            $(this).on("change", function() {
+                var select_floor = $(this);
+                var selected_floor = select_floor.prop('selectedIndex');
+                var options = select_floor.prop('options');
+                $('#select-apartment').find('select').each(function() {
+                    var select_apartment = $(this);
+                    var select_plug = "Все";
+                    select_apartment.find('option').remove().end();
+                    select_apartment.append(new Option(select_plug, ""));
+                    $.get("/api/apartment/?floor="+options[selected_floor].value, function(data) {
+                        for(var i=0; i < data.length; i++) {
+                            select_apartment.append(new Option(data[i]['name'], data[i]['id']));
+                        }
+                    });
+                });
+            });
+        });
+
+    </script>
 {% endblock %}

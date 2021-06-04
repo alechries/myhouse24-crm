@@ -40,10 +40,14 @@
                             <td>{{ el.date }} - {{ el.time }}</td>
                             <td>{{ el.master_type }}</td>
                             <td>{{ el.description }}</td>
-                            <td>{{ el.apartment }}</td>
-                            <td>{{ el.apartment.user }}</td>
+                            <td><a href="{% url 'admin_apart-detail' pk=el.apartment.pk %}">{{ el.apartment }}</a></td>
+                            <td><a href="{% url 'admin_user-detail' pk=el.apartment.user.pk %}">{{ el.apartment.user.get_full_name }}</a></td>
                             <td>{{ el.apartment.user.number }}</td>
-                            <td>{{ el.master }}</td>
+                            {% if el.master %}
+                            <td><a href="{% url 'admin_user-detail' pk=el.master.pk %}">{{ el.master.get_full_name }}</a></td>
+                            {% else %}
+                            <td>Не указан</td>
+                            {% endif %}
                             {% if el.status == 'Новое' %}
                                 <td style="color: #00ba13; text-align: center"><small class="label label-success">Новое</small></td>
                             {% elif el.status == 'В работе' %}

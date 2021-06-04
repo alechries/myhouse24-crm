@@ -58,7 +58,7 @@
                         </tr>
                         <tr>
                             <td>Дом</td>
-                            <td>{{ meter.apartment.floor.section.house.name }}</td>
+                            <td><a href="{% url 'admin_house-detail' pk=meter.apartment.floor.section.house.pk %}">{{ meter.apartment.floor.section.house.name }}</a></td>
                         </tr>
                         <tr>
                             <td>Секция</td>
@@ -66,11 +66,11 @@
                         </tr>
                         <tr>
                             <td>Квартира</td>
-                            <td>{{ meter.apartment.name }}</td>
+                            <td><a href="{% url 'admin_apart-detail' pk=meter.apartment.pk %}">{{ meter.apartment.name }}</a></td>
                         </tr>
                         <tr>
                             <td>Пользователь</td>
-                            <td>{{ meter.apartment.user }}</td>
+                            <td><a href="{% url 'admin_user-detail' pk=meter.apartment.user.pk %}"> {{ meter.apartment.user }}</a></td>
                         </tr>
                         <tr>
                             <td>Текущие показания</td>

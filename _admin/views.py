@@ -85,7 +85,7 @@ def export_tranfer_xls_view(request):
 
 def account_transaction_view(request):
     statistic = utility.calculate_statistic()
-    accounts = models.Transfer.objects.all()
+    accounts = models.Transfer.objects.all().order_by('-pk')
     context = {'accounts': accounts}
     context.update(statistic)
     context.update(utility.new_user())
@@ -179,11 +179,17 @@ def account_transaction_create_out_view(request):
 
 def account_transaction_change_view(request, pk):
     alerts = []
-    form = forms.AccountTransactionForm(request.POST or None, instance=get_object_or_404(models.Transfer, id=pk))
     if request.method == 'POST':
+        form = forms.AccountTransactionForm(request.POST or None, instance=get_object_or_404(models.Transfer, id=pk))
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно редактирована!')
+    else:
+        form = forms.AccountTransactionForm(initial={'number': utility.serial_number_transaction(),
+                                                     'manager': models.User.objects.filter(
+                                                         role__cash_box_status=1).first()})
+        form.fields['manager'].queryset = models.User.objects.filter(role__cash_box_status=1)
+        form.fields['transfer_type'].queryset = models.TransferType.objects.filter(status='Расход')
     transfer = get_object_or_404(models.Transfer, id=pk)
     context = {'form': form,
                'alerts': alerts,
@@ -209,7 +215,7 @@ def account_transaction_delete_view(request, pk):
 
 
 def invoice_view(request):
-    invoices = models.Invoice.objects.all()
+    invoices = models.Invoice.objects.reverse().all()
     context = {'invoices': invoices}
     context.update(utility.calculate_statistic())
     context.update(utility.new_user())
@@ -706,6 +712,7 @@ def message_create_view(request):
     alerts = []
     if request.method == 'POST':
         form = forms.MessageCreateForm(request.POST)
+        print(form.data)
         if form.is_valid():
             form.save()
             alerts.append('Сообщение отправлено')
@@ -1386,6 +1393,13 @@ def user_admin_users_list(request):
     context = {'users_list': users_list}
     context.update(utility.new_user())
     return render(request, 'admin/user-admin/list.html', context)
+
+
+def user_admin_mail_send(request, pk):
+    user_email = models.User.objects.get(id=pk).email
+    send_mail('Приглашение в Demo CRM 24', 'Приглашение в CRM', 'dimadjangosendemail@gmail.com',
+              [user_email])
+    return redirect('admin_user-users-list')
 
 
 def user_admin_create_view(request):

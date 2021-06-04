@@ -129,10 +129,13 @@ class User(CustomAbstractUser):
     user_type = models.CharField(choices=TYPE, default='Управляющий домом', max_length=155, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        if self.role is not None:
+            return f'{self.role} - {self.first_name} {self.last_name}'
+        else:
+            return f'{self.first_name} {self.last_name}'
 
-    def get_name_and_role(self):
-        return f'{self.first_name} {self.last_name} - {self.role}'
+    def get_full_name(self):
+        return f'{self.first_name} {self.last_name}'
 
     def get_apartment(self):
         return self.user_related.filter(user=self.id)
@@ -264,7 +267,6 @@ class Apartment(models.Model):
         for invoice in invoices:
             arrears += invoice.total_amount
         return arrears
-
 
 
 class Meter(models.Model):
@@ -414,7 +416,7 @@ class WebsiteContacts(SingletonModel):
 
 
 class Message(models.Model):
-    destination = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
     addressee = models.CharField(default='Админ', max_length=255, null=True, blank=True)
     title = models.CharField(max_length=255)
     text = models.TextField()

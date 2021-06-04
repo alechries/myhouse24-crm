@@ -89,6 +89,7 @@ urlpatterns = [
     path('user-app-admin/detail/<int:pk>', views.user_admin_detail_view, name='admin_user-admin-detail'),
     path('user-app-admin/change/<int:pk>', views.user_admin_change_view, name='admin_user-admin-change'),
     path('user-app-admin/delete', views.user_admin_delete_view, name='admin_user-admin-delete'),
+    path('user-app-admin/send/<int:pk>', views.user_admin_mail_send, name='admin_user-admin-mail-send'),
     path('pay-company', views.pay_company_view, name='admin_pay-company'),
     path('transaction-purpose', views.transaction_purpose_view, name='admin_transaction-purpose'),
     path('transaction-purpose/create', views.transaction_purpose_create_view, name='admin_transaction-purpose-create'),

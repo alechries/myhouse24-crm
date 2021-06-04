@@ -23,7 +23,7 @@
                                 <p>Состояние кассы</p>
                             </div>
                             <div class="icon">
-                                <i class="fas fa-dollar"></i>
+                                <i class="fas fa-dollar-sign"></i>
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                                 <p>Баланс по счетам</p>
                             </div>
                             <div class="icon">
-                                <i class="fas fa-dollar"></i>
+                                <i class="fas fa-dollar-sign"></i>
                             </div>
                             <!--<span class="small-box-footer">&nbsp;</span>-->
                         </div>
@@ -46,7 +46,7 @@
                                 <p>Задолженность по счетам</p>
                             </div>
                             <div class="icon">
-                                <i class="fas fa-dollar"></i>
+                                <i class="fas fa-dollar-sign"></i>
                             </div>
                             <!--<span class="small-box-footer">&nbsp;</span>-->
                         </div>
@@ -91,9 +91,21 @@
                             <td>{{ el.number }}</td>
                             <td>{{ el.created_date }}</td>
                             <td>{% if el.payment_made == 1 %}Проведён{% else %}Непроведён{% endif %}</td>
+                            {% if el.transfer_type %}
                             <td>{{ el.transfer_type.name }}</td>
-                            <td>{{ el.user }}</td>
+                            {% else %}
+                            <td>Не установлен</td>
+                            {% endif %}
+                            {% if el.account.get_apartment.user %}
+                            <td>{{ el.account.get_apartment.user.get_full_name }}</td>
+                            {% else %}
+                            <td>Не назначен</td>
+                            {% endif %}
+                            {% if el.account %}
                             <td>{{ el.account }}</td>
+                            {% else %}
+                            <td>Не назначен</td>
+                            {% endif %}
                             {% if el.transfer_type.status == 'Приход' %}
                                 <td style="color: #00ba13; text-align: center"><small class="label label-success">Приход</small></td>
                             {% elif el.solo_status == 1 %}

@@ -76,8 +76,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             {% else %}
                             <span><i class="fas fa-user-circle text-purple bg-gray-light img-circle" style="font-size: 77px; text-align: center; width: 78px"></i></span>
                             {% endif %}
-                            <p style="color: white">{{ user }}</p>
-                            <p style="color: white">{{ user.role.name }}</p>
+                            <p style="color: white">{{ user.get_full_name }} ({{ user.role.name }})</p>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer d-flex justify-content-around">

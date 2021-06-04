@@ -354,10 +354,19 @@ class ApartmentForm(forms.ModelForm):
         super(ApartmentForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_show_labels = False
+
+    house = forms.ModelChoiceField(
+        queryset=models.House.objects.all(),
+        empty_label='Выберите...',
+    )
+    section = forms.ModelChoiceField(
+        queryset=models.Section.objects.all(),
+        empty_label='Выберите...',
+    )
     class Meta:
         model = models.Apartment
         self_account = forms.TextInput()
-        fields = ['apartment_area', 'name', 'floor', 'account', 'user', 'tariff']
+        fields = ['apartment_area', 'name', 'floor', 'account', 'user', 'tariff', 'section', 'house']
         widgets = {
             'name': forms.TextInput(attrs={
                 'input_type': 'text',
@@ -470,19 +479,23 @@ class MessageCreateForm(forms.ModelForm):
         self.helper.form_show_labels = False
     house = forms.ModelChoiceField(
         queryset=models.House.objects.all(),
+        empty_label='Все',
     )
     section = forms.ModelChoiceField(
         queryset=models.Section.objects.all(),
+        empty_label='Все',
     )
     floor = forms.ModelChoiceField(
         queryset=models.Floor.objects.all(),
+        empty_label='Все',
     )
     apartment = forms.ModelChoiceField(
         queryset=models.Apartment.objects.all(),
+        empty_label='Все',
     )
     class Meta:
         model = models.Message
-        fields = ['title', 'destination', 'text', 'indebtedness', 'house', 'section', 'floor', 'apartment']
+        fields = ['title', 'text', 'indebtedness', 'house', 'section', 'floor', 'apartment']
         widgets = {
             'title': forms.TextInput(attrs={
                 'placeholder': 'Введите тему сообщения',
@@ -708,7 +721,7 @@ class PaymentCompany(forms.ModelForm):
             'information': forms.Textarea(attrs={
                 'placeholder': 'Введите дополнительную информацию',
                 'class': 'form-control',
-                'rows': '5',
+                'rows': '12',
             }),
         }
     pass

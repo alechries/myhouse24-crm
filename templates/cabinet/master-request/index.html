@@ -30,9 +30,16 @@
                             <td>{{ el.get_full_time }}</td>
                              <td>{{ el.status }}</td>
                              <td style="max-width: 30px;">
+                                 {% if el.status == 'В работе' %}
+                                 <a class="btn btn-default btn-sm disabled" href="{% url 'cabinet_master-request-delete' pk=el.id %}" title="Удалить">
+                                     <i class="fas fa-trash"></i>
+                                 </a>
+                                 {% else %}
                                  <a class="btn btn-default btn-sm" href="{% url 'cabinet_master-request-delete' pk=el.id %}" title="Удалить">
                                      <i class="fas fa-trash"></i>
                                  </a>
+                                 {% endif %}
+
                              </td>
                         </tr>
                         {% endfor %}

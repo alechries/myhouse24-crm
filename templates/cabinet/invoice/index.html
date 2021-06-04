@@ -9,8 +9,8 @@
                 <table class="table table-bordered table-hover table-striped linkedRow">
                     <thead>
                         <tr>
-                            <th style="width: 40px; min-width: 40px">№</th>
-                            <th style="width: 250px">Дата</th>
+                            <th style="min-width: 60px;">№</th>
+                            <th style="min-width: 80px">Дата</th>
                             <th>Статус</th>
                             <th>Сумма</th>
                         </tr>
@@ -21,7 +21,13 @@
                         <tr data-href="{% url 'cabinet_invoice-view'  pk=el.pk %}">
                             <td>{{ el.number }}</td>
                             <td>{{ el.period_from }} - {{ el.period_to }}</td>
-                            <td>{{ el.type }}</td>
+                            {% if el.type == 'Оплачена' %}
+                                <td style="color: #00ba13"><small class="label label-success">Оплачена</small></td>
+                            {% elif el.type == 'Частично оплачена' %}
+                                <td style="color: #00ba13"><small class="label label-warning">Частично оплачена</small></td>
+                            {% else %}
+                                <td style="color: #c62232"><small class="label label-danger">Неоплачена</small></td>
+                            {% endif %}
                             <td>{{ el.total_amount }}</td>
                         </tr>
                     {% endfor %}

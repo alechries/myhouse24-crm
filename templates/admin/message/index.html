@@ -31,7 +31,7 @@
                     {% for el in messages %}
                         <tr data-href="{% url 'admin_message-detail'  pk=el.pk %}">
                             <td></td>
-                            <td>{{ el.destination }}</td>
+                            <td>{{ el.apartment.user }}</td>
                             <td>{{ el.text }}</td>
                             <td>{{ el.created_date|date:"d.m.Y" }}</td>
                         </tr>

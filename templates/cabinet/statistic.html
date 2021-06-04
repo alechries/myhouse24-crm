@@ -4,6 +4,7 @@
     <section class="content">
     <div class="row">
         <div class="col-lg-4 col-sm-6 col-xs-12">
+            {% if apartment.account.get_money > 0 %}
             <div class="small-box bg-primary">
                 <div class="inner">
                     {% if apartment.account %}
@@ -17,6 +18,21 @@
                     <i class="far fa-money-bill-alt"></i>
                 </div>
             </div>
+            {% else %}
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    {% if apartment.account %}
+                    <h3>{{ apartment.account.get_money }} грн.</h3>
+                    {% else %}
+                    <h3>Нет лицевого счёта</h3>
+                    {% endif %}
+                    <p>Баланс по квартире</p>
+                </div>
+                <div class="icon">
+                    <i class="far fa-money-bill-alt"></i>
+                </div>
+            </div>
+            {% endif %}
         </div>
         <div class="col-lg-4 col-sm-6 col-xs-12">
             <div class="small-box bg-green">
