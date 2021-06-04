@@ -31,7 +31,7 @@
                             <td>Лицевой счёт</td>
                             {% if account %}
                                 {% for el in account %}
-                                <td>{{ el.wallet }}</td>
+                                <td><a href="{% url 'admin_account-detail' pk=el.pk %}">{{ el.wallet }}</a></td>
                                 {% endfor %}
                             {% else %}
                             <td>Нет лицевого счёта</td>
@@ -47,7 +47,11 @@
                         </tr>
                         <tr>
                             <td>Дом</td>
-                            <td>{{ apartment.floor.section.house.name }}</td>
+                            {% if apartment.floor.section.house %}
+                            <td><a href="{% url 'admin_house-detail' pk=apartment.floor.section.house.pk %}">{{ apartment.floor.section.house.name }}</a></td>
+                            {% else %}
+                            <td>Не задано</td>
+                            {% endif %}
                         </tr>
                         <tr>
                             <td>Секция</td>

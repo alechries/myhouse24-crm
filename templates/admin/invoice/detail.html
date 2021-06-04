@@ -79,7 +79,11 @@
                         </tr>
                         <tr>
                             <td>Владелец</td>
+                            {% if invoice.apartment.user %}
                             <td><a href="{% url 'admin_user-detail' pk=invoice.apartment.user.id %}">{{ invoice.apartment.user }}</a></td>
+                            {% else %}
+                            <td>Не задан</td>
+                            {% endif %}
                         </tr>
                         <tr>
                             <td>Лицевой счёт</td>

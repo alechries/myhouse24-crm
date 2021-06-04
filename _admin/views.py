@@ -480,15 +480,16 @@ def user_view(request):
 
 
 def user_create_view(request):
-    form = forms.UserForm(request.POST, request.FILES)
     alerts = []
     if request.method == 'POST':
+        form = forms.UserForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             alerts.append('Запись была успешно добавлена!')
         else:
             alerts.append('Неуспешно')
 
+    form = forms.UserForm(request.POST, request.FILES, initial={'status': "Активен"})
     context = {'form': form,
                'alerts': alerts,
                }

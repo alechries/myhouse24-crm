@@ -348,7 +348,6 @@ class TariffInvoiceForm(forms.ModelForm):
         }
 
 
-
 class ApartmentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ApartmentForm, self).__init__(*args, **kwargs)

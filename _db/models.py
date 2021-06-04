@@ -252,7 +252,7 @@ class Account(models.Model):
 
 class Apartment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='user_related')
-    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, verbose_name='', related_name='floor_related')
+    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, verbose_name='', related_name='floor_related', null=True)
     name = models.CharField('Номер квартиры', max_length=255)
     apartment_area = models.FloatField('Площадь квартиры', max_length=255, null=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True, related_name="appartament_related", unique=True)

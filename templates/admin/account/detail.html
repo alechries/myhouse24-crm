@@ -94,7 +94,7 @@
                         </tr>
                         <tr>
                                 <td>Владелец</td>
-                            {% if account.get_apartment %}
+                            {% if account.get_apartment.user %}
                                 <td><a href="{% url 'admin_user-detail' pk=account.get_apartment.user.id %}">{{ account.get_apartment.user }}</a></td>
                             {% else %}
                                 <td>Нет владельца</td>
