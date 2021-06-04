@@ -92,7 +92,11 @@
                              {% else %}
                                 <td style="color: #c62232"><small class="label label-danger">Неактивен</small></td>
                             {% endif %}
+                            {% if el.get_apartment %}
                             <td>{{ el.get_apartment }}</td>
+                            {% else %}
+                            <td>Не назначено</td>
+                            {% endif %}
                             <td>{{ el.get_apartment.floor.section.house.name }}</td>
                             <td>{{ el.get_apartment.floor.section }}</td>
                             <td>{{ el.get_apartment.user }}</td>

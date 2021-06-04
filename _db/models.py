@@ -233,13 +233,15 @@ class Account(models.Model):
         account_balance = 0
         transaction_in_balance = self.related_account.filter(Q(account_id=self.id), Q(transfer_type__status='Приход'))
         transaction_out_balance = self.related_account.filter(Q(account_id=self.id), Q(transfer_type__status='Расход'))
-        for el in transaction_in_balance:
-            account_balance += el.amount
-
-        for el in transaction_out_balance:
-            account_balance -= el.amount
-        account = self.appartament_related.get(account=self)
-        account_balance -= account.get_arrears()
+        if transaction_in_balance:
+            for el in transaction_in_balance:
+                account_balance += el.amount
+        if transaction_out_balance:
+            for el in transaction_out_balance:
+                account_balance -= el.amount
+        if self.appartament_related.filter(account=self):
+            account = self.appartament_related.get(account=self)
+            account_balance -= account.get_arrears()
         return account_balance
 
 
