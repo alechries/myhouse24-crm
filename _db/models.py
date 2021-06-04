@@ -158,6 +158,11 @@ class House(models.Model):
     def __str__(self):
         return f'{self.name}, ул. {self.address}'
 
+    def get_section(self):
+        if self.house_related.filter(house=self):
+            return self.house_related.filter(house=self)
+        else:
+            return None
 
 class UserHouse(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

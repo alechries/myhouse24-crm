@@ -622,6 +622,11 @@ def house_edit_view(request, pk):
 
     else:
         floor_formset = FloorFormset(prefix='floor_form', queryset=models.Floor.objects.filter(section__house=house))
+        for form in floor_formset:
+            if house.get_section() is not None:
+                form.fields['section'].queryset = models.Section.objects.filter(house=house)
+            else:
+                pass
         house_form = forms.HouseForm(prefix='house_form', instance=house)
         section_formset = SectionFormset(prefix='section_form', instance=house)
         user_house_formset = UserFormset(prefix='user_form', instance=house)
