@@ -719,15 +719,19 @@ def message_view(request):
 
 
 def message_create_view(request):
-    user = request.user
     alerts = []
     if request.method == 'POST':
         form = forms.MessageCreateForm(request.POST)
+        print(form.data)
         if form.is_valid():
-            instance = form.save(commit=False)
-            instance.addressee = user
-            instance.save()
-            print(form.data)
+            instance = form.save()
+            msg_rec = models.MessageRecipient()
+            msg_rec.message = instance
+            msg_rec.house = form.cleaned_data['house']
+            msg_rec.section = form.cleaned_data['section']
+            msg_rec.floor = form.cleaned_data['floor']
+            msg_rec.apartment = form.cleaned_data['apartment']
+            msg_rec.save()
             alerts.append('Сообщение отправлено')
         else:
             alerts.append('Произошла ошибка')
