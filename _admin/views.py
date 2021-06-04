@@ -124,7 +124,7 @@ def account_transaction_copy_view(request, pk):
 
 def account_transaction_detail_view(request, pk):
     transaction = models.Transfer.objects.get(id=pk)
-    if transaction.account is not None:
+    if transaction.account is not None and transaction.account.get_apartment():
         username = transaction.account.get_apartment().user
     else:
         username = None
