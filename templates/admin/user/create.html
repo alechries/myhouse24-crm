@@ -1,5 +1,6 @@
 {% extends 'admin/base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% load crispy_forms_filters %}
 {% block page_title %}
     {% if request.path == '/admin/user' %}
@@ -39,6 +40,13 @@
                     <div class="default-area">
                         <div class="row">
                             <div class="col-xs-12 col-sm-6">
+                                <div class="userAvatar">
+                                    <img class="img-circle pull-left img-responsive" src="{% if current_user.avatar %}{{ current_user.avatar.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" height="160px" width="160px" style="background-color: #adadad">
+                                    <div class="form-group field-userform-image">
+                                        <label class="control-label" for="userform-image">Сменить изображение</label><div class="help-block">
+                                    </div>
+                                    </div>
+                                </div>
                                 {{ form.avatar }}
                             </div>
                             <div class="col-xs-12 col-sm-6">

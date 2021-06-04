@@ -510,16 +510,20 @@ def user_detail_view(request, pk):
 
 def user_change_view(request, pk):
     alerts = []
-    form = forms.UserForm(request.POST or None, instance=get_object_or_404(models.User, id=pk))
+    user = models.User.objects.get(id=pk)
     if request.method == 'POST':
+        form = forms.UserForm(request.POST or None, instance=get_object_or_404(models.User, id=pk))
         if form.is_valid():
             form.save()
             alerts.append('Успех')
         else:
             alerts.append('Неуспешно')
 
+    form = forms.UserForm(request.POST or None, instance=get_object_or_404(models.User, id=pk))
+
     context = {'form': form,
                'alerts': alerts,
+               'current_user': user,
                }
     context.update(utility.new_user())
     return render(request, 'admin/user/create.html', context)
