@@ -76,20 +76,30 @@
                             <div class="box-body">
                                 <p>{{ el.floor.section.house.name }}. {{ el.floor.section.house.address }}, кв. {{ el.name }}</p>
                                 <div class="row">
-                                    <div class="col-xs-12 col-md-6">
-                                        <img src="{% if el.floor.section.house.image1 %}{{ el.floor.section.house.image1.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" style="width: 522px; height: 350px;" class="img-responsive largeImg margin-bottom-30" alt="">
+                                    <div class="col-xs-12 col-lg-6" style="margin-top: 0">
+                                        <div class="row" style="margin-top: 0">
+                                            <div class="col-xs-12 col-md-6">
+                                                <img src="{% if el.floor.section.house.image1 %}{{ el.floor.section.house.image1.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" class="img-responsive smallImg" alt="">
+                                            </div>
+                                            <div class="col-xs-12 col-md-6">
+                                                <img src="{% if el.floor.section.house.image2 %}{{ el.floor.section.house.image2.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" class="img-responsive smallImg" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 0">
+                                            <div class="col-xs-12 col-md-6">
+                                                <img src="{% if el.floor.section.house.image3 %}{{ el.floor.section.house.image3.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" class="img-responsive smallImg" alt="">
+                                            </div>
+                                            <div class="col-xs-12 col-md-6">
+                                                <img src="{% if el.floor.section.house.image4 %}{{ el.floor.section.house.image4.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" class="img-responsive smallImg" alt="">
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-xs-6 col-md-3">
-                                        <img src="{% if el.floor.section.house.image2 %}{{ el.floor.section.house.image2.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
-                                    </div>
-                                    <div class="col-xs-6 col-md-3">
-                                        <img src="{% if el.floor.section.house.image3 %}{{ el.floor.section.house.image3.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
-                                    </div>
-                                    <div class="col-xs-6 col-md-3">
-                                        <img src="{% if el.floor.section.house.image4 %}{{ el.floor.section.house.image4.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
-                                    </div>
-                                    <div class="col-xs-6 col-md-3">
-                                        <img src="{% if el.floor.section.house.image5 %}{{ el.floor.section.house.image5.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" style="width: 248px; height: 160px;" class="img-responsive smallImg margin-bottom-30" alt="">
+                                    <div class="col-xs-12 col-lg-6" style="margin-top: 0">
+                                        <div class="row" style="margin-top: 0">
+                                            <div class="col-xs-12 col-md-12">
+                                                <img src="{% if el.floor.section.house.image5 %}{{ el.floor.section.house.image5.url }}{% else %}{% static 'no_icon.png' %}{% endif %}" class="img-responsive largeImg" alt="" style="width: 350px; height: 250px">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="table-responsive">

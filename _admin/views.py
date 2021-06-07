@@ -712,7 +712,7 @@ def house_delete_view(request, pk):
 
 
 def message_view(request):
-    messages = models.MessageRecipient.objects.all().order_by('-pk')
+    messages = models.Message.objects.all().order_by('-pk')
     context = {'messages': messages}
     context.update(utility.new_user())
     return render(request, 'admin/message/index.html', context)
@@ -728,6 +728,16 @@ def message_create_view(request):
             section = form.cleaned_data['section']
             floor = form.cleaned_data['floor']
             apartment = form.cleaned_data['apartment']
+
+            if apartment:
+                form.instance.addressee = models.Apartment.objects.get(id=apartment.id).name
+            elif floor:
+                form.instance.addressee = models.Floor.objects.get(id=floor.id).name
+            elif section:
+                form.instance.addressee = models.Section.objects.get(id=section.id).name
+            elif house:
+                form.instance.addressee = models.House.objects.get(id=house.id).name
+            form.save()
 
             if apartment:
                 instance = form.save()
@@ -786,14 +796,14 @@ def message_indebtedness_create_view(request):
 
 
 def message_detail_view(request, pk):
-    message = get_object_or_404(models.MessageRecipient, id=pk)
+    message = get_object_or_404(models.Message, id=pk)
     context = {'message': message}
     context.update(utility.new_user())
     return render(request, 'admin/message/detail.html', context)
 
 
 def message_delete_view(request, pk):
-    message = get_object_or_404(models.MessageRecipient, id=pk)
+    message = get_object_or_404(models.Message, id=pk)
     message.delete()
     return redirect('admin_message')
 
@@ -1365,7 +1375,53 @@ def tariffs_change_view(request, pk=None):
 
 
 def tariffs_copy_view(request, pk):
-    return render(request, 'admin/tariffs/copy.html')
+    tariff = models.Tariff.objects.get(id=pk)
+    tariff_service_count = models.TariffService.objects.filter(tariff=tariff).count()
+    TariffServiceFormset = inlineformset_factory(
+        parent_model=models.Tariff,
+        model=models.TariffService,
+        fields=('price', 'service'),
+        widgets={
+            'price': forms.TextInput(attrs={
+                'placeholder': 'Введите цену',
+                'type': 'text',
+                'class': 'form-control',
+                'style': 'margin: 0.25rem 0',
+            }),
+
+        },
+        form=forms.TariffServiceForm,
+        max_num=tariff_service_count if tariff_service_count > 0 else 1
+    )
+    aletrs = []
+    if request.method == 'POST':
+        tariff_form = forms.TariffCreateForm(request.POST, prefix='tariff_form', instance=tariff)
+        tariff_service_formset = TariffServiceFormset(request.POST, prefix='tariff_service_form', instance=tariff)
+        tariff_form.instance.pk = None
+        if tariff_form.is_valid() and tariff_service_formset.is_valid():
+            tariff = tariff_form.save()
+            tariff_service_queryset = tariff_service_formset.save(commit=False)
+
+            for tariff_section_form in tariff_service_queryset:
+                tariff_section_form.tariff.id = tariff.id
+                tariff_section_form.save()
+
+            aletrs = ['Формы сохранены']
+
+    else:
+        tariff_form = forms.TariffCreateForm(prefix='tariff_form', instance=tariff)
+        tariff_service_formset = TariffServiceFormset(prefix='tariff_service_form', instance=tariff)
+
+    context = {
+        'tariff_form': tariff_form,
+        'tariff_service_formset': tariff_service_formset,
+        'alerts': aletrs
+    }
+    context.update(utility.new_user())
+    return render(
+        request, 'admin/tariffs/create.html',
+        context
+    )
 
 
 def tariff_detail_view(request, pk):

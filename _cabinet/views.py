@@ -3,6 +3,7 @@ from _db import models
 from . import utils as utility
 from django.db.models import Q
 from . import forms
+from django.http import HttpResponse
 from _db import models, utils, auth
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
@@ -138,8 +139,10 @@ def messages_detail(request, pk):
     return render(request, 'cabinet/messages/detail.html', {'message': message})
 
 
-def messages_delete_view(request):
-    return render(request, 'cabinet/messages/delete.html')
+def messages_delete_view(request, pk):
+    message = get_object_or_404(models.Message, id=pk)
+    message.delete()
+    return redirect('cabinet_message')
 
 
 def master_request_view(request):
