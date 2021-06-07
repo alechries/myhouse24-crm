@@ -712,7 +712,7 @@ def house_delete_view(request, pk):
 
 
 def message_view(request):
-    messages = models.MessageRecipient.objects.all().order_by('-pk')
+    messages = models.Message.objects.all().order_by('-pk')
     context = {'messages': messages}
     context.update(utility.new_user())
     return render(request, 'admin/message/index.html', context)
@@ -729,7 +729,15 @@ def message_create_view(request):
             floor = form.cleaned_data['floor']
             apartment = form.cleaned_data['apartment']
 
-
+            if apartment:
+                form.instance.addressee = models.Apartment.objects.get(id=apartment.id).name
+            elif floor:
+                form.instance.addressee = models.Floor.objects.get(id=floor.id).name
+            elif section:
+                form.instance.addressee = models.Section.objects.get(id=section.id).name
+            elif house:
+                form.instance.addressee = models.House.objects.get(id=house.id).name
+            form.save()
 
             if apartment:
                 instance = form.save()
@@ -788,14 +796,14 @@ def message_indebtedness_create_view(request):
 
 
 def message_detail_view(request, pk):
-    message = get_object_or_404(models.MessageRecipient, id=pk)
+    message = get_object_or_404(models.Message, id=pk)
     context = {'message': message}
     context.update(utility.new_user())
     return render(request, 'admin/message/detail.html', context)
 
 
 def message_delete_view(request, pk):
-    message = get_object_or_404(models.MessageRecipient, id=pk)
+    message = get_object_or_404(models.Message, id=pk)
     message.delete()
     return redirect('admin_message')
 
