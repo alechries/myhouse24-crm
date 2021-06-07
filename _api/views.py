@@ -18,6 +18,30 @@ class HouseDetail(generics.RetrieveAPIView):
     serializer_class = serializers.HouseSerializer
 
 
+class AccountList(generics.ListAPIView):
+    model = models.Account
+    queryset = models.Account.objects.all()
+    serializer_class = serializers.AccountSerializer
+
+
+class AccountDetail(generics.RetrieveAPIView):
+    model = models.Account
+    queryset = models.Account.objects.all()
+    serializer_class = serializers.AccountSerializer
+
+
+class UserList(generics.ListAPIView):
+    model = models.User
+    queryset = models.User.objects.all()
+    serializer_class = serializers.UserSerializer
+
+
+class UserDetail(generics.RetrieveAPIView):
+    model = models.User
+    queryset = models.User.objects.all()
+    serializer_class = serializers.UserSerializer
+
+
 class SectionList(generics.ListAPIView):
     model = models.House
     serializer_class = serializers.SectionSerializer

@@ -36,3 +36,15 @@ class TariffServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TariffService
         fields = ('id', 'service',  'tariff', 'price')
+
+
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Account
+        fields = ('id', 'wallet',  'money', 'status')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = ('id', 'email',  'first_name', 'last_name', 'middle_name', 'is_active', 'date_joined', 'role', 'number', 'user_type')

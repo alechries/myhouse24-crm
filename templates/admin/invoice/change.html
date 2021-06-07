@@ -45,6 +45,15 @@
                                     <label>Квартира</label>
                                     {{ invoice_form.apartment |as_crispy_field}}
                                 </div>
+                                <div class="row" style="display: block">
+                                    <b>Лицевой счёт:</b> <a id="label-account"></a>
+                                </div>
+                                <div class="row" style="display: block">
+                                    <b>Владелец:</b> <a id="label-owner"></a>
+                                </div>
+                                <div class="row" style="display: block">
+                                    <b>Телефон:</b> <a id="label-phone"></a>
+                                </div>
                             </div>
                             <div class="col-xs-12 col-sm-6">
                                 <div class="form-check d-flex justify-content-start input-form-height-20">
@@ -222,6 +231,22 @@ $('#select-section').find('select').each(function() {
                     }
                 });
             });
+        });
+});
+$('#select-apartment').find('select').each(function() {
+        $(this).on("change", function() {
+            var select_section = $(this);
+            var selected_section = select_section.prop('selectedIndex');
+            var options = select_section.prop('options');
+            $.get("/api/apartment/"+options[selected_section].value, function(apart_data) {
+                $.get("/api/account/"+apart_data['account'], function(acc_data) {
+                    $('#label-account').text(acc_data['wallet'])
+                })
+                $.get("/api/user/"+apart_data['user'], function(usr_data) {
+                    $('#label-owner').text(usr_data['last_name'] +' '+ usr_data['first_name'] +' '+ usr_data['middle_name'])
+                    $('#label-phone').text(usr_data['number'])
+                })
+            })
         });
 });
 
