@@ -48,3 +48,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
         fields = ('id', 'email',  'first_name', 'last_name', 'middle_name', 'is_active', 'date_joined', 'role', 'number', 'user_type')
+
+
+class MeasureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Measure
+        fields = ('id', 'name')

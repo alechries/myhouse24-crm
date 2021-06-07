@@ -42,6 +42,18 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = serializers.UserSerializer
 
 
+class MeasureList(generics.ListAPIView):
+    model = models.Measure
+    queryset = models.Measure.objects.all()
+    serializer_class = serializers.MeasureSerializer
+
+
+class MeasureDetail(generics.RetrieveAPIView):
+    model = models.Measure
+    queryset = models.Measure.objects.all()
+    serializer_class = serializers.MeasureSerializer
+
+
 class SectionList(generics.ListAPIView):
     model = models.House
     serializer_class = serializers.SectionSerializer

@@ -750,6 +750,7 @@ class InvoiceForm(forms.ModelForm):
         queryset=models.House.objects.all(),
         empty_label='Выберите...',
     )
+    measure = forms.CharField()
 
 
     def __init__(self, *args, **kwargs):
@@ -762,6 +763,9 @@ class InvoiceForm(forms.ModelForm):
         model = models.Invoice
         fields = ['number', 'house', 'apartment', 'type', 'date', 'period_from', 'period_to', 'status']
         widgets = {
+            'result': forms.TextInput(attrs={
+                'class': 'form-control',
+            }),
             'number': forms.TextInput(attrs={
                 'class': 'form-control',
             }),

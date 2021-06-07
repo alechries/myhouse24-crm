@@ -46,13 +46,13 @@
                                     {{ invoice_form.apartment |as_crispy_field}}
                                 </div>
                                 <div class="row" style="display: block">
-                                    <b>Лицевой счёт:</b> <a id="label-account"></a>
+                                    <b>Лицевой счёт:</b> <a id="label-account">неизвестно</a>
                                 </div>
                                 <div class="row" style="display: block">
-                                    <b>Владелец:</b> <a id="label-owner"></a>
+                                    <b>Владелец:</b> <a id="label-owner">неизвестно</a>
                                 </div>
                                 <div class="row" style="display: block">
-                                    <b>Телефон:</b> <a id="label-phone"></a>
+                                    <b>Телефон:</b> <a id="label-phone">неизвестно</a>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6">
@@ -82,13 +82,16 @@
                         <div class="row">
                             <div class="col">
                             <div class="row">
-                                <div class="col-3" style="text-align: center;">
+                                <div class="col-2" style="text-align: center;">
                                     <label>Услуга</label>
                                 </div>
-                                <div class="col-3" style="text-align: center;">
+                                <div class="col-2" style="text-align: center;">
                                     <label>Расход</label>
                                 </div>
-                                <div class="col-3" style="text-align: center;">
+                                <div class="col-2" style="text-align: center;">
+                                    <label>Единица измерения</label>
+                                </div>
+                                <div class="col-2" style="text-align: center;">
                                     <label>Цена за еденицу</label>
                                 </div>
                             </div>
@@ -97,16 +100,19 @@
                                         {{ form.id }}
                                         <div class="tariff-invoice-form-area">
                                             <div class="row">
-                                                <div class="col-3">
+                                                <div class="col-2">
                                                     {{ form.service|as_crispy_field }}
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col-2">
                                                     {{ form.amount }}
                                                 </div>
-                                                <div class="col-3">
-                                                    {{ form.price }}
+                                                <div class="col-2">
+                                                    <div class="input-measure form-control disabled" style="margin: 0.25rem 0; color: grey;" >???</div>
                                                 </div>
                                                 <div class="col-2">
+                                                    {{ form.price }}
+                                                </div>
+                                                <div class="col-1">
                                                     {% if form.instance.id %}
                                                     <a class="btn btn-default btn-sm del-tariff-service-form" href="{% url 'admin_tariffs-service-delete' form.instance.id %}" title="Удалить" style="padding: .5rem; margin-top: 4px">
                                                         <i class="fas fa-trash"></i>
@@ -272,7 +278,22 @@ $('#select-apartment').find('select').each(function() {
             })
         }
     }
+    function measure_rewrite(){
+        var forms = document.getElementsByClassName('tariff-invoice-form-area')
+        for (let i = 0; i < forms.length; i++) {
+                    var form = forms[i]
+                    console.log(form)
+                    var selected_service = form.getElementsByTagName('select')[0]
+                    var selected_service = selected_service.selectedIndex
+                    if (selected_service != 0){
 
+                        var measure_element = form.getElementsByClassName('input-measure')[0]
+                        $.get("/api/measure/"+selected_service, function(msr_data) {
+                            measure_element.value = msr_data['name']
+                        })
+                    }
+        }
+    }
 
     let tariff_invoice_prefix = 'tariff_invoice_form';
     let tariff_invoice_form = '.tariff-invoice-form-area';
@@ -288,6 +309,7 @@ $('#select-apartment').find('select').each(function() {
             elements.push(el)
         }
         number_change_event(elements)
+        measure_rewrite()
     });
     $('.del-tariff-service-form').click(function() { delForm(this, tariff_invoice_prefix, tariff_invoice_form, tariff_invoice_counter)});
 
@@ -299,6 +321,8 @@ $('#select-apartment').find('select').each(function() {
     });
     number_change()
     number_change_event(document.getElementsByClassName('invoice-change-event'))
+    $('.tariff-invoice-form-area.select').on('click', measure_rewrite)
+
 </script>
     <script>
     let floor_prefix = 'floor_form';
@@ -317,4 +341,3 @@ $('#select-apartment').find('select').each(function() {
     });
     </script>
 {% endblock %}
-
