@@ -15,6 +15,9 @@ urlpatterns = [
     path('service/<int:pk>', views.ServiceDetail.as_view(), name='service-detail'),
     path('tariffservice/', views.TariffServiceList.as_view(), name='tariffservice-list'),
     path('tariffservice/<int:pk>', views.TariffServiceDetail.as_view(), name='tariffservice-detail'),
-
+    path('account/', views.AccountList.as_view(), name='account-list'),
+    path('account/<int:pk>', views.AccountDetail.as_view(), name='account-detail'),
+    path('user/', views.UserList.as_view(), name='user-list'),
+    path('user/<int:pk>', views.UserDetail.as_view(), name='user-detail'),
 ]
 
