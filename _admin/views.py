@@ -737,6 +737,8 @@ def message_create_view(request):
                 form.instance.addressee = models.Section.objects.get(id=section.id).name
             elif house:
                 form.instance.addressee = models.House.objects.get(id=house.id).name
+            else:
+                form.instance.addressee = 'Всем'
             form.save()
 
             if apartment:
