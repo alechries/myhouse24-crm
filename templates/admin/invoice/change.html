@@ -127,7 +127,12 @@
                                         </div>
                                     {% endfor %}
                             <div class="form-title-line">
-                                <div><button type="button" class="btn btn-secondary" id="add-tariff-invoice-form">Добавить тариф</button></div>
+                                <div>
+                                    <button type="button" class="btn btn-secondary" id="add-tariff-invoice-form">Добавить услугу</button>
+                                    <button type="button" class="btn btn-secondary" id="cp-tariff-form">Установить все услуги согласно тарифу</button>
+                                    <button type="button" class="btn btn-secondary">Добавить показания счётчиков</button>
+                                </div>
+
                                 <div>
                                     <b>Итого:</b>
                                     <a class="amount-price">0</a> грн
@@ -282,11 +287,10 @@ $('#select-apartment').find('select').each(function() {
         var forms = document.getElementsByClassName('tariff-invoice-form-area')
         for (let i = 0; i < forms.length; i++) {
                     var form = forms[i]
-                    console.log(form)
                     var selected_service = form.getElementsByTagName('select')[0]
-                    var selected_service = selected_service.selectedIndex
-                    if (selected_service != 0){
+                    selected_service = selected_service.options[selected_service.selectedIndex].value
 
+                    if (selected_service != 0){
                         var measure_element = form.getElementsByClassName('input-measure')[0]
                         $.get("/api/measure/"+selected_service, function(msr_data) {
                             measure_element.value = msr_data['name']
@@ -300,7 +304,8 @@ $('#select-apartment').find('select').each(function() {
     let tariff_invoice_counter = '.tariff_invoice-form-counter';
 
     document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(tariff_invoice_prefix, tariff_invoice_form) }, false);
-    $('#add-tariff-invoice-form').click(function() {
+
+    function addChoiseFormCustom(){
         let list = addChoiseForm(tariff_invoice_prefix, tariff_invoice_form, tariff_invoice_counter)
         let elements = []
         for (i = 0; i < list.length; i++){
@@ -310,7 +315,45 @@ $('#select-apartment').find('select').each(function() {
         }
         number_change_event(elements)
         measure_rewrite()
+    }
+
+    $('#add-tariff-invoice-form').click(function() {
+        addChoiseFormCustom()
     });
+    $('#cp-tariff-form').click(function() {
+        var apart = document.getElementById('id_invoice_form-apartment')
+        apart = apart.options[apart.selectedIndex].value
+        if (apart){
+            $.get("/api/apartment/"+apart, function(apart_data) {
+                var tariff = apart_data['tariff']
+                if (tariff){
+                    $.get("/api/tariffservice/?tariff="+apart_data['tariff'], function(ts_data) {
+                        var forms = $(".tariff-invoice-form-area")
+                        for (var i = 1; i < forms.length; i++){
+                            forms[i].remove()
+                        }
+                        for (var i = 0; i < ts_data.length; i++){
+                            addChoiseFormCustom()
+                        }
+                        forms = document.getElementsByClassName('tariff-invoice-form-area')
+                        for (var i = 1; i < forms.length; i++){
+                            var area = forms[i]
+                            var sel = area.getElementsByTagName('select')[0]
+                            var val = ts_data[i-1]['service']
+                            for(var j = 0; j < sel.options.length; j++) {
+                                if(sel.options[j].value == val) {
+                                   sel.selectedIndex = j;
+                                   break;
+                                }
+                            }
+                        }
+                    })
+                }
+            })
+        }
+        measure_rewrite()
+    });
+
     $('.del-tariff-service-form').click(function() { delForm(this, tariff_invoice_prefix, tariff_invoice_form, tariff_invoice_counter)});
 
     $('.del-tariff-service-form').click(function(){
