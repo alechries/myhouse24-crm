@@ -750,7 +750,9 @@ class InvoiceForm(forms.ModelForm):
         queryset=models.House.objects.all(),
         empty_label='Выберите...',
     )
-    result = forms.CharField()
+    result = forms.CharField(
+        required=False
+    )
 
 
     def __init__(self, *args, **kwargs):
