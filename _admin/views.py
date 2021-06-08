@@ -93,6 +93,14 @@ def account_transaction_view(request):
     return render(request, 'admin/account-transaction/index.html', context)
 
 
+def account_transaction_filter_view(request, payment_made=None):
+    statistic = utility.calculate_statistic()
+    accounts = models.Transfer.objects.filter(Q(payment_made=payment_made)).order_by('-pk')
+    context = {'accounts': accounts}
+    context.update(statistic)
+    context.update(utility.new_user())
+    return render(request, 'admin/account-transaction/index.html', context)
+
 def account_transaction_filter(request, pk):
     statistic = utility.calculate_statistic()
     accounts = models.Transfer.objects.filter(account_id=pk)

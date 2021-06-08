@@ -1,6 +1,7 @@
 from _db import models
 from . import serializers
 from rest_framework import generics
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
@@ -158,3 +159,16 @@ class TariffServiceDetail(generics.RetrieveAPIView):
     model = models.TariffService
     queryset = models.TariffService.objects.all()
     serializer_class = serializers.TariffServiceSerializer
+
+class ChartData(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, response):
+        labels = ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август"]
+        default_items = [21, 32, 12, 11, 2, 56, 22, 1, 32, 13, 12, 44]
+        data = {
+            "labels": labels,
+            "default": default_items
+        }
+        return Response(data)

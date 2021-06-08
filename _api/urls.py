@@ -21,5 +21,6 @@ urlpatterns = [
     path('account/<int:pk>', views.AccountDetail.as_view(), name='account-detail'),
     path('user/', views.UserList.as_view(), name='user-list'),
     path('user/<int:pk>', views.UserDetail.as_view(), name='user-detail'),
+    path('chart/data', views.ChartData.as_view()),
 ]
 

@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index_view, name='admin_index'),
-    path('test', views.house_edit_view, name='test'),
+    path('test', views.test_view, name='test'),
     path('update-me', views.update_me_view, name='admin_update-me'),
     path('login', views.login_view, name='admin_login'),
     path('logout', views.logout_view, name='admin_logout'),
@@ -16,6 +16,7 @@ urlpatterns = [
     path('account-transaction/copy/<int:pk>', views.account_transaction_copy_view, name='admin_account-transaction-copy'),
     path('account-transaction/filter/<int:pk>', views.account_transaction_filter, name='admin_account-transaction-filter'),
     path('account-transaction/export/xls', views.export_tranfer_xls_view, name='admin_export_account_transaction_xls'),
+    path('account-transaction/filter/<str:payment_made>', views.account_transaction_filter_view, name='admin_account-transaction-filter'),
     path('invoice', views.invoice_view, name='admin_invoice'),
     path('invoice/detail/<int:pk>', views.invoice_detail_view, name='admin_invoice-detail'),
     path('invoice/create', views.invoice_create_view, name='admin_invoice-create'),
