@@ -750,7 +750,6 @@ class InvoiceForm(forms.ModelForm):
         queryset=models.House.objects.all(),
         empty_label='Выберите...',
     )
-    measure = forms.CharField()
     result = forms.CharField()
 
 
