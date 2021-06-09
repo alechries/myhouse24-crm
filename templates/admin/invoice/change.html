@@ -17,14 +17,22 @@
         <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
             <div class="row">
-            <div class="col-md-6 d-flex justify-content-center">
-                <div class="col-md-6">
-                    {{ invoice_form.number }}
+            <div class="page-header-spec">
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <div class="input-group-addon" style="margin: 0">
+                                №
+                            </div>
+                            {{ invoice_form.number }}
+                        </div>
+                    </div>
+                    <span class="label-mid" style="margin-left: 25px">от</span>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            {{ invoice_form.date }}
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    {{ invoice_form.date }}
-                </div>
-            </div>
             </div>
             <div class="container-fluid">
                 <div class="card card-secondary card-outline">
