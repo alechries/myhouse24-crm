@@ -270,7 +270,7 @@ class Apartment(models.Model):
 
     def get_arrears(self):
         arrears = 0
-        invoices = self.apartment_related.filter(type='Неоплачена')
+        invoices = self.apartment_related.all()
         for invoice in invoices:
             arrears += invoice.total_amount
         return arrears

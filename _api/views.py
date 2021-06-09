@@ -1,4 +1,7 @@
 from _db import models
+from datetime import datetime
+from django.db.models import Q
+from itertools import chain
 from . import serializers
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -160,15 +163,69 @@ class TariffServiceDetail(generics.RetrieveAPIView):
     queryset = models.TariffService.objects.all()
     serializer_class = serializers.TariffServiceSerializer
 
+
 class ChartData(APIView):
     authentication_classes = []
     permission_classes = []
 
     def get(self, response):
-        labels = ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август"]
-        default_items = [21, 32, 12, 11, 2, 56, 22, 1, 32, 13, 12, 44]
+        current_year = datetime.now().year
+        months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        input_invoice_data = []
+        output_invoice_data = []
+        output_transfer_data = []
+        input_transfer_data = []
+        for month in months:
+            invoice_in = models.Invoice.objects.filter(Q(date__month=months[month - 1], date__year=current_year),
+                                                       Q(type='Оплачена'))
+            invoice_out = models.Invoice.objects.filter(Q(date__month=months[month - 1], date__year=current_year),
+                                                        Q(type='Неоплачена'))
+            transfer_out = models.Transfer.objects.filter(Q(created_date__month=months[month - 1]),
+                                                          Q(solo_status=0), created_date__year=current_year)
+            transfer_in = models.Transfer.objects.filter(Q(created_date__month=months[month - 1],
+                                                           created_date__year=current_year),
+                                                         (Q(solo_status=1) | Q(solo_status=None)))
+
+            if transfer_out:
+                total = 0
+                for el in transfer_out:
+                    total += el.amount
+                output_transfer_data.append(total)
+            else:
+                output_transfer_data.append(0)
+
+            if transfer_in:
+                total = 0
+                for el in transfer_in:
+                    total += el.amount
+                input_transfer_data.append(total)
+            else:
+                input_transfer_data.append(0)
+
+            if invoice_in:
+                total = 0
+                for el in invoice_in:
+                    total += el.total_amount
+                input_invoice_data.append(total)
+            else:
+                input_invoice_data.append(0)
+
+            if invoice_out:
+                total = 0
+                for el in invoice_out:
+                    total += el.total_amount
+                output_invoice_data.append(total)
+            else:
+                output_invoice_data.append(0)
+        print(output_invoice_data)
+
+        labels = ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь",
+                  "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август"]
         data = {
             "labels": labels,
-            "default": default_items
+            'output_transfer': output_transfer_data,
+            'input_transfer': input_transfer_data,
+            'output_invoice': output_invoice_data,
+            'input_invoice': input_invoice_data,
         }
         return Response(data)

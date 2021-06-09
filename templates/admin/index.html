@@ -138,19 +138,101 @@
 <!--            </div>-->
 <!--        </div>-->
 <!--    </div>-->
-<!--    <div class="row">-->
-<!--        <div class="col-xs-12">-->
-<!--            <div class="box box-default">-->
-<!--                <div class="box-header with-border">-->
-<!--                    <h3 class="box-title">График приходов и расходов по кассе, грн</h3>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div class="row">
+        <div class="col">
+            <div class="card card-secondary card-outline" style="border-top: 3px solid #d2d6de">
+                <div class="box-header with-border">
+                    <h3 class="box-title" style="padding-left: 5px">График приходов и расходов по кассе, грн</h3>
+                    <canvas id="InvoiceChart" style="max-height: 360px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card card-secondary card-outline" style="border-top: 3px solid #d2d6de">
+                <div class="box-header with-border">
+                    <h3 class="box-title" style="padding-left: 5px">График приходов и расходов по кассе, грн</h3>
+                    <canvas id="TransferChart" style="max-height: 360px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
     </section>
 
 {% endblock %}
 {% block scripts %}
-<script>
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    var endpoint = '/api/chart/data'
+    $.ajax({
+        method: "GET",
+        url: endpoint,
+        success: function (data) {
+            labels = data.labels
+            inputData = data.input_transfer
+            outputData = data.output_transfer
+            var ctx = document.getElementById("TransferChart");
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Расход',
+                        borderColor: 'rgba(221, 75, 57, 1)',
+                        backgroundColor: 'rgba(221, 75, 57, 1)',
+                        data: outputData,
+                    },
+                    {
+                        label: 'Приход',
+                        borderColor: 'rgba(0, 166, 90, 1)',
+                        backgroundColor: 'rgba(0, 166, 90, 1)',
+                        data: inputData,
+                    }]
+                }
+            })
+
+        },
+        error: function (error_data) {
+            console.log("error")
+            console.log(error_data)
+        }
+    })
+    </script>
+    <script>
+    var endpoint = '/api/chart/data'
+    $.ajax({
+        method: "GET",
+        url: endpoint,
+        success: function (data) {
+            labels = data.labels
+            inputData = data.input_invoice
+            outputData = data.output_invoice
+            var ctx = document.getElementById("InvoiceChart");
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Задолженность',
+                        borderColor: 'rgba(221, 75, 57, 1)',
+                        backgroundColor: 'rgba(221, 75, 57, 1)',
+                        data: outputData,
+                    },
+                    {
+                        label: 'Погашение задолженности',
+                        borderColor: 'rgba(0, 166, 90, 1)',
+                        backgroundColor: 'rgba(0, 166, 90, 1)',
+                        data: inputData,
+                    }]
+                }
+            })
+
+        },
+        error: function (error_data) {
+            console.log("error")
+            console.log(error_data)
+        }
+    })
+    </script>
 {% endblock %}
