@@ -329,12 +329,11 @@ $('#select-apartment').find('select').each(function() {
                     var selected_service = form.getElementsByTagName('select')[0]
                     console.log("form.getElementsByTagName('select')[0] - " + selected_service)
                     if (selected_service.selectedIndex != 0){
-                        selected_service = selected_service.options[selected_service.selectedIndex].value
-                        console.log('selected_service.options[selected_service.selectedIndex].value - ' + selected_service)
-                        $.get("/api/measure/"+selected_service, function(msr_data) {
-                            var measure_element = form.getElementsByClassName('input-measure')[i]
-                            console.log(measure_element)
-                            measure_element.innerHTML = msr_data['name']
+                        var option = selected_service.options[selected_service.selectedIndex].value
+                        var measure_elements = document.getElementsByClassName('input-measure')
+                        var m_e = measure_elements[i]
+                        $.get("/api/measure/"+option, function(msr_data) {
+                            m_e.innerHTML = msr_data['name']
                         })
                     }
         }
