@@ -750,6 +750,14 @@ class InvoiceForm(forms.ModelForm):
         queryset=models.House.objects.all(),
         empty_label='Выберите...',
     )
+    section = forms.ModelChoiceField(
+        queryset=models.Section.objects.none(),
+        empty_label='Выберите...',
+    )
+    apartment = forms.ModelChoiceField(
+        queryset=models.Apartment.objects.none(),
+        empty_label='Выберите...',
+    )
     result = forms.CharField(
         required=False
     )
@@ -763,7 +771,7 @@ class InvoiceForm(forms.ModelForm):
 
     class Meta:
         model = models.Invoice
-        fields = ['number', 'house', 'apartment', 'type', 'date', 'period_from', 'period_to', 'status', 'result']
+        fields = ['number', 'section', 'house', 'apartment', 'type', 'date', 'period_from', 'period_to', 'status', 'result']
         widgets = {
             'result': forms.TextInput(attrs={
                 'class': 'form-control',

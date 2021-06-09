@@ -248,13 +248,10 @@ def invoice_create_view(request):
         max_num=1
     )
     meter = models.Meter.objects.all()
-    print(meter)
     alerts = []
     if request.method == 'POST':
         invoice_form = forms.InvoiceForm(request.POST, prefix='invoice_form',)
         tariff_invoice_formset = TariffInvoiceFormset(request.POST, prefix='tariff_invoice_form')
-        print(invoice_form.errors)
-        print(tariff_invoice_formset.errors)
         if invoice_form.is_valid() and tariff_invoice_formset.is_valid():
             invoice = invoice_form.save()
             tariff_invoice_queryset = tariff_invoice_formset.save(commit=False)
@@ -271,7 +268,7 @@ def invoice_create_view(request):
                 alerts.append('У квартиры нет счёта!')
 
     else:
-        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form', initial={'number': utility.invoice_number()})
+        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form', initial={'number': utility.invoice_number(),})
         tariff_invoice_formset = TariffInvoiceFormset(request.POST or None, prefix='tariff_invoice_form')
 
     context = {
@@ -318,7 +315,15 @@ def invoice_change_view(request, pk=None):
             alerts.append('Квитанция сохранена')
 
     else:
-        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form', instance=invoice)
+        print(invoice.apartment.floor.section.house.pk)
+        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form', instance=invoice,
+                                         initial={
+                                             'house': invoice.apartment.floor.section.house,
+                                             'section': invoice.apartment.floor.section,
+                                             'apartment': invoice.apartment,
+                                         }
+        )
+
         tariff_invoice_formset = TaroffInvoiceFormset(request.POST or None, prefix='tariff_invoice_form', instance=invoice)
 
     context = {
