@@ -313,10 +313,13 @@ def invoice_change_view(request, pk=None):
         if invoice_form.is_valid() and tariff_invoice_formset.is_valid():
             tariff_invoice_queryset = tariff_invoice_formset.save(commit=False)
             if tariff_invoice_queryset:
-                total = 0
+                for tariff_new in tariff_invoice_queryset:
+                    tariff_old = models.TariffService.objects.get(id=tariff_new.id)
+                    invoice.total_amount -= float(tariff_old.price) * float(tariff_old.amount)
             else:
                 total = invoice_form.instance.total_amount
             for tariff_invoice_form in tariff_invoice_queryset:
+                total = invoice.total_amount
                 tariff_invoice_form.invoice.id = invoice.id
                 total += float(tariff_invoice_form.price) * float(tariff_invoice_form.amount)
                 tariff_invoice_form.save()
