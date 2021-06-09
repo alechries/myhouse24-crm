@@ -1,4 +1,5 @@
 {% extends 'admin/base.html' %}
+{% load crispy_forms_tags %}
 {% block page_title %}
     <h1 class="m-0">Касса</h1>
 {% endblock %}
@@ -70,6 +71,9 @@
     <section class="content input-form">
          <div class="container-fluid">
             <div class="card card-secondary card-outline table-responsive">
+                <div class="pull-right d-flex justify-content-end">
+                    <a class="btn btn-default" href="{% url 'admin_account-transaction' %}" style="margin-right: 10px">Очистить</a>
+                </div>
                     <table class="table table-bordered table-hover table-striped linkedRow">
                         <thead>
                             <tr>
@@ -83,10 +87,23 @@
                                 <th style="width: 110px; min-width: 110px">Сумма (грн)</th>
                                 <th style="width: 80px; min-width: 80px">&nbsp;</th></tr>
                             </tr>
+                            <tr>
+                                <form method="get">
+                                <th>{{ filter.form.number|as_crispy_field }}</th>
+                                <th>{{ filter.form.created_date|as_crispy_field }}</th>
+                                <th>{{ filter.form.payment_made|as_crispy_field }}</th>
+                                <th></th>
+                                <th></th>
+                                <th>{{ filter.form.account|as_crispy_field }}</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                </form>
+                            </tr>
                         </thead>
                         <tbody>
-                        {% if accounts.count > 0  %}
-                        {% for el in accounts %}
+                        {% if filter.qs %}
+                        {% for el in filter.qs %}
                         <tr data-href="{% url 'admin_account-transaction-detail'  pk=el.pk %}">
                             <td>{{ el.number }}</td>
                             <td>{{ el.created_date }}</td>
@@ -133,9 +150,9 @@
                         </tr>
                         {% endfor %}
                         {% else %}
-                        <tr>
-                            <td colspan="9"><div class="empty">Ничего не найдено.</div></td>
-                        </tr>
+                            <tr>
+                                <td colspan="9"><div class="empty">Ничего не найдено.</div></td>
+                            </tr>
                         {% endif %}
                         </tbody>
                     </table>

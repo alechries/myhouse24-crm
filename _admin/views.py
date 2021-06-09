@@ -86,9 +86,9 @@ def export_tranfer_xls_view(request):
 
 
 def account_transaction_view(request):
+    f = forms.TransferFilter(request.GET, queryset=models.Transfer.objects.all().order_by('-pk'))
     statistic = utility.calculate_statistic()
-    accounts = models.Transfer.objects.all().order_by('-pk')
-    context = {'accounts': accounts}
+    context = {'filter': f}
     context.update(statistic)
     context.update(utility.new_user())
 
