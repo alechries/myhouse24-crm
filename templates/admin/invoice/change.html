@@ -248,6 +248,7 @@ $('#select-section').find('select').each(function() {
             });
         });
 });
+
 $('#select-apartment').find('select').each(function() {
         $(this).on("change", function() {
             var select_section = $(this);
@@ -267,6 +268,27 @@ $('#select-apartment').find('select').each(function() {
                 })
             })
         });
+
+});
+
+$('#select-apartment').find('select').each(function() {
+        var select_section = $(this);
+            var selected_section = select_section.prop('selectedIndex');
+            var options = select_section.prop('options');
+            $('#label-account').text('неизвестно')
+            $('#label-owner').text('неизвестно')
+            $('#label-phone').text('неизвестно')
+
+            $.get("/api/apartment/"+options[selected_section].value, function(apart_data) {
+                $.get("/api/account/"+apart_data['account'], function(acc_data) {
+                    $('#label-account').text(acc_data['wallet'])
+                })
+                $.get("/api/user/"+apart_data['user'], function(usr_data) {
+                    $('#label-owner').text(usr_data['last_name'] +' '+ usr_data['first_name'] +' '+ usr_data['middle_name'])
+                    $('#label-phone').text(usr_data['number'])
+                })
+            })
+
 });
 
 </script>
@@ -294,6 +316,7 @@ $('#select-apartment').find('select').each(function() {
     function measure_rewrite(){
         var forms = document.getElementsByClassName('tariff-invoice-form-area')
         for (let i = 0; i < forms.length; i++) {
+                    console.log(i)
                     var form = forms[i]
                     var selected_service = form.getElementsByTagName('select')[0]
                     selected_service = selected_service.options[selected_service.selectedIndex].value
@@ -306,7 +329,7 @@ $('#select-apartment').find('select').each(function() {
                     }
         }
     }
-
+    measure_rewrite()
     let tariff_invoice_prefix = 'tariff_invoice_form';
     let tariff_invoice_form = '.tariff-invoice-form-area';
     let tariff_invoice_counter = '.tariff_invoice-form-counter';
@@ -374,21 +397,19 @@ $('#select-apartment').find('select').each(function() {
     number_change_event(document.getElementsByClassName('invoice-change-event'))
     $('.tariff-invoice-form-area.select').on('click', measure_rewrite)
 
-</script>
-    <script>
     let floor_prefix = 'floor_form';
     let floor_form = '.floor-form-area';
     let floor_counter = '.floor-form-counter';
     document.addEventListener('DOMContentLoaded', function(){ addHiddenForm(floor_prefix, floor_form) }, false);
     $('#add-floor-form').click(function() { addChoiseForm(floor_prefix, floor_form, floor_counter); });
     $('.del-house-floor-form').click(function() { delForm(this, floor_prefix, floor_form, floor_counter); });
-    </script>
-    <script>
-     $('.del-house-floor-form').click(function(){
+
+    $('.del-house-floor-form').click(function(){
         var deleteURL = $(this).attr("href");
         token = $("input[name='csrfmiddlewaretoken']").val();
         data = {'csrfmiddlewaretoken':token}
         if (deleteURL != '#') requestWithoutReload(deleteURL, data);
     });
-    </script>
+
+</script>
 {% endblock %}

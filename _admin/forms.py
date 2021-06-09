@@ -754,6 +754,10 @@ class InvoiceForm(forms.ModelForm):
         queryset=models.Section.objects.all(),
         empty_label='Выберите...',
     )
+    apartment = forms.ModelChoiceField(
+        queryset=models.Apartment.objects.all(),
+        empty_label='Выберите...',
+    )
     result = forms.CharField(
         required=False
     )
