@@ -253,6 +253,10 @@ $('#select-apartment').find('select').each(function() {
             var select_section = $(this);
             var selected_section = select_section.prop('selectedIndex');
             var options = select_section.prop('options');
+            $('#label-account').text('неизвестно')
+            $('#label-owner').text('неизвестно')
+            $('#label-phone').text('неизвестно')
+
             $.get("/api/apartment/"+options[selected_section].value, function(apart_data) {
                 $.get("/api/account/"+apart_data['account'], function(acc_data) {
                     $('#label-account').text(acc_data['wallet'])

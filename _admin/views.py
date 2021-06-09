@@ -315,15 +315,7 @@ def invoice_change_view(request, pk=None):
             alerts.append('Квитанция сохранена')
 
     else:
-        print(invoice.apartment.floor.section.house.pk)
-        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form', instance=invoice,
-                                         initial={
-                                             'house': invoice.apartment.floor.section.house,
-                                             'section': invoice.apartment.floor.section,
-                                             'apartment': invoice.apartment,
-                                         }
-        )
-
+        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form', instance=invoice)
         tariff_invoice_formset = TaroffInvoiceFormset(request.POST or None, prefix='tariff_invoice_form', instance=invoice)
 
     context = {
