@@ -336,12 +336,14 @@ class TariffInvoiceForm(forms.ModelForm):
                 'class': 'form-control invoice-change-event invoice-amount',
                 'step': "1",
                 'style': 'margin: 0.25rem 0',
+                'required': True
             }),
             'price': forms.NumberInput(attrs={
                 'placeholder': 'Введите показания',
                 'step': "0.1",
                 'class': 'form-control invoice-change-event invoice-price',
                 'style': 'margin: 0.25rem 0',
+                'required': True
             }),
 
         }

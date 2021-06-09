@@ -51,6 +51,7 @@ urlpatterns = [
     path('house/floor/delete/<int:pk>', views.floor_delete_view, name='admin_floor-delete'),
     path('house/detail/<int:pk>', views.house_detail_view, name='admin_house-detail'),
     path('message', views.message_view, name='admin_message'),
+    path('message/search/', views.message_search_view, name='admin_message-search'),
     path('message/create', views.message_create_view, name='admin_message-create'),
     path('message/delete/list', views.message_delete_list_view, name='admin_message-delete-list'),
     path('message/indebtedness/create', views.message_indebtedness_create_view, name='admin_message-indebtedness-create'),

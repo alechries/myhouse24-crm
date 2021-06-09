@@ -742,6 +742,18 @@ def message_view(request):
     return render(request, 'admin/message/index.html', context)
 
 
+def message_search_view(request):
+    print(123)
+    search_query = request.GET.get('message_search', '')
+    if search_query:
+        message = models.Message.objects.filter(Q(title=search_query) | Q(text=search_query))
+    else:
+        message = models.Message.objects.all()
+    context = {'messages': message}
+    context.update(utility.new_user())
+    return render(request, 'admin/message/index.html', context)
+
+
 def message_delete_list_view(request):
     if request.method == 'POST':
         mail_list = request.POST.getlist('checks')
