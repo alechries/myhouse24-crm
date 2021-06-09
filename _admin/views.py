@@ -305,7 +305,10 @@ def invoice_change_view(request, pk=None):
         tariff_invoice_formset = TaroffInvoiceFormset(request.POST, prefix='tariff_invoice_form', instance=invoice)
         if invoice_form.is_valid() and tariff_invoice_formset.is_valid():
             tariff_invoice_queryset = tariff_invoice_formset.save(commit=False)
-            total = invoice_form.instance.total_amount
+            if tariff_invoice_queryset:
+                total = 0
+            else:
+                total = invoice_form.instance.total_amount
             for tariff_invoice_form in tariff_invoice_queryset:
                 tariff_invoice_form.invoice.id = invoice.id
                 total += float(tariff_invoice_form.price) * float(tariff_invoice_form.amount)
@@ -315,7 +318,11 @@ def invoice_change_view(request, pk=None):
             alerts.append('Квитанция сохранена')
 
     else:
-        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form', instance=invoice)
+        invoice_form = forms.InvoiceForm(request.POST or None, prefix='invoice_form', instance=invoice,
+                                         initial={'house': invoice.apartment.floor.section.house,
+                                                  'section': invoice.apartment.floor.section,
+                                                  'apartment': invoice.apartment}
+                                         )
         tariff_invoice_formset = TaroffInvoiceFormset(request.POST or None, prefix='tariff_invoice_form', instance=invoice)
 
     context = {
