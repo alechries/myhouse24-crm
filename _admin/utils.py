@@ -73,7 +73,7 @@ def calculate_statistic():
 
     for account in account:
         if account.get_money() > 0:
-            system_balance += account.get_money()
+            system_balance += account.get_system_money()
 
     for el in transfer_out_list:
         if el.amount is not None:

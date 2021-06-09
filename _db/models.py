@@ -234,6 +234,18 @@ class Account(models.Model):
     def get_account(self):
         return self.appartament_related.get(account=self.id)
 
+    def get_system_money(self):
+        account_balance = 0
+        transaction_in_balance = self.related_account.filter(Q(account_id=self.id), Q(transfer_type__status='Приход'))
+        transaction_out_balance = self.related_account.filter(Q(account_id=self.id), Q(transfer_type__status='Расход'))
+        if transaction_in_balance:
+            for el in transaction_in_balance:
+                account_balance += el.amount
+        if transaction_out_balance:
+            for el in transaction_out_balance:
+                account_balance -= el.amount
+        return account_balance
+
     def get_money(self):
         account_balance = 0
         transaction_in_balance = self.related_account.filter(Q(account_id=self.id), Q(transfer_type__status='Приход'))
