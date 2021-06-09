@@ -217,7 +217,7 @@ class ChartData(APIView):
                 output_invoice_data.append(total)
             else:
                 output_invoice_data.append(0)
-        print(output_invoice_data)
+
 
         labels = ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь",
                   "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август"]
