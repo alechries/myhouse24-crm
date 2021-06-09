@@ -37,9 +37,7 @@
                                 </div>
                                 <div class="row" id="select-section" style="display: block">
                                     <label>Секция</label>
-                                    <select name="invoice_form-section" class="select form-control custom-select" required="" id="id_invoice_form-section">
-                                      <option value="" selected="">Выберите...</option>
-                                    </select>
+                                    {{ invoice_form.section |as_crispy_field}}
                                 </div>
                                 <div class="row" id="select-apartment" style="display: block">
                                     <label>Квартира</label>
@@ -94,6 +92,9 @@
                                 <div class="col-2" style="text-align: center;">
                                     <label>Цена за еденицу</label>
                                 </div>
+                                <div class="col-2" style="text-align: center;">
+                                    <label>Стоимость</label>
+                                </div>
                             </div>
                                     {{ tariff_invoice_formset.management_form }}
                                     {% for form in tariff_invoice_formset %}
@@ -111,6 +112,9 @@
                                                 </div>
                                                 <div class="col-2">
                                                     {{ form.price }}
+                                                </div>
+                                                 <div class="col-2">
+                                                    <div class="input-price form-control disabled" style="margin: 0.25rem 0; color: grey;" >???</div>
                                                 </div>
                                                 <div class="col-1">
                                                     {% if form.instance.id %}
@@ -249,6 +253,10 @@ $('#select-apartment').find('select').each(function() {
             var select_section = $(this);
             var selected_section = select_section.prop('selectedIndex');
             var options = select_section.prop('options');
+            $('#label-account').text('неизвестно')
+            $('#label-owner').text('неизвестно')
+            $('#label-phone').text('неизвестно')
+
             $.get("/api/apartment/"+options[selected_section].value, function(apart_data) {
                 $.get("/api/account/"+apart_data['account'], function(acc_data) {
                     $('#label-account').text(acc_data['wallet'])
