@@ -19,6 +19,7 @@ urlpatterns = [
     path('account-transaction/filter/<str:payment_made>', views.account_transaction_filter_view, name='admin_account-transaction-filter'),
     path('invoice', views.invoice_view, name='admin_invoice'),
     path('invoice/detail/<int:pk>', views.invoice_detail_view, name='admin_invoice-detail'),
+    path('invoice/delete', views.invoice_delete_list_view, name='admin_invoice-delete-list'),
     path('invoice/create', views.invoice_create_view, name='admin_invoice-create'),
     path('invoice/copy', views.invoice_copy_view, name='admin_invoice-copy'),
     path('invoice/change/<int:pk>', views.invoice_change_view, name='admin_invoice-change'),

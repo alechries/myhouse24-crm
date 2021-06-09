@@ -61,8 +61,14 @@
          <div class="container-fluid">
             <div class="card card-secondary card-outline table-responsive">
                     <table class="table table-bordered table-hover table-striped linkedRow">
+                    <form method="POST" enctype="multipart/form-data" action="{% url 'admin_invoice-delete-list'%}">
+                    {% csrf_token %}
+                    <div class="pull-right">
+                        <input type="submit" class="btn btn-default margin-bottom-15 pull-right" value="Удалить" style="margin: 0 5px">
+                    </div>
                         <thead>
                             <tr>
+                                <th><input type="checkbox" name="select-all" id="select-all" /></th>
                                 <th style="width: 125px; min-width: 125px">№ квитанции</th>
                                 <th style="width: 120px; min-width: 120px">Статус</th>
                                 <th style="width:auto">Дата</th>
@@ -75,45 +81,48 @@
                             </tr>
                         </thead>
                         <tbody>
-                        {% if invoices.count > 0 %} <!-- Итерируемый объект квитанций на оплату -->
-                        {% for el in invoices %} <!-- Итерируемый объект квитанций на оплату -->
-                        <tr data-href="{% url 'admin_invoice-detail'  pk=el.pk %}">
-                            <td>{{ el.number }}</td>
-                            {% if el.type == 'Оплачена' %}
-                                <td style="color: #00ba13"><small class="label label-success">Оплачена</small></td>
-                            {% elif el.type == 'Частично оплачена' %}
-                                <td style="color: #00ba13"><small class="label label-warning">Частично оплачена</small></td>
-                            {% else %}
-                                <td style="color: #c62232"><small class="label label-danger">Неоплачена</small></td>
-                            {% endif %}
-                            <td>{{ el.period_from|date:"d.m.Y" }}</td>
-                            <td>{{ el.period_from|date:"M Y" }}</td>
-                            <td>{{ el.apartment.name }}</td>
-                            <td>{{ el.apartment.user}}</td>
-                            {% if el.status == True %}
-                            <td>Проведена</td>
-                            {% else %}
-                            <td>Не проведена</td>
-                            {% endif %}
-                            <td>{{ el.total_amount }}</td>
-                            <td>
-                                <div class="btn-group pull-right">
-                                    <a class="btn btn-default btn-sm" href="{% url 'admin_invoice-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </a>
-                                    <a class="btn btn-default btn-sm" href="{% url 'admin_invoice-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="9"><div class="empty">Ничего не найдено.</div></td>
+
+                            {% if invoices.count > 0 %} <!-- Итерируемый объект квитанций на оплату -->
+                            {% for el in invoices %} <!-- Итерируемый объект квитанций на оплату -->
+                            <tr data-href="{% url 'admin_invoice-detail'  pk=el.pk %}">
+                                <td><input type="checkbox"  name="checks" value="{{el.id}}">
+                                <td>{{ el.number }}</td>
+                                {% if el.type == 'Оплачена' %}
+                                    <td style="color: #00ba13"><small class="label label-success">Оплачена</small></td>
+                                {% elif el.type == 'Частично оплачена' %}
+                                    <td style="color: #00ba13"><small class="label label-warning">Частично оплачена</small></td>
+                                {% else %}
+                                    <td style="color: #c62232"><small class="label label-danger">Неоплачена</small></td>
+                                {% endif %}
+                                <td>{{ el.period_from|date:"d.m.Y" }}</td>
+                                <td>{{ el.period_from|date:"M Y" }}</td>
+                                <td>{{ el.apartment.name }}</td>
+                                <td>{{ el.apartment.user}}</td>
+                                {% if el.status == True %}
+                                <td>Проведена</td>
+                                {% else %}
+                                <td>Не проведена</td>
+                                {% endif %}
+                                <td>{{ el.total_amount }}</td>
+                                <td>
+                                    <div class="btn-group pull-right">
+                                        <a class="btn btn-default btn-sm" href="{% url 'admin_invoice-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                        <a class="btn btn-default btn-sm" href="{% url 'admin_invoice-delete' pk=el.pk %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
                             </tr>
-                        {% endif %}
+                            {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="10"><div class="empty">Ничего не найдено.</div></td>
+                                </tr>
+                            {% endif %}
                         </tbody>
+                    </form>
                     </table>
             </div>
          </div>
@@ -121,8 +130,33 @@
 {% endblock %}
 {% block scripts %}
     <script>
-    $('tr[data-href]').on("click", function() {
-    document.location = $(this).data('href');
+    $('.linkedRow tbody tr').click(function() {
+        var url = $(this).data('href');
+        if (url) {
+            document.location.href = $(this).data('href');
+        }
+    }).find('a, button, input, select, textarea').hover(function() { // Список тегов при наведении на которые, не будет происходить переход по ссылке
+        $(this).parents('tr').unbind('click');
+    }, function() {
+        $(this).parents('tr').click(function() {
+            var url = $(this).data('href');
+            if (url) {
+                document.location.href = $(this).data('href');
+            }
+        });
+    });
+    // Listen for click on toggle checkbox
+    $('#select-all').click(function(event) {
+        if(this.checked) {
+            // Iterate each checkbox
+            $(':checkbox').each(function() {
+                this.checked = true;
+            });
+        } else {
+            $(':checkbox').each(function() {
+                this.checked = false;
+            });
+        }
     });
     </script>
 {% endblock %}

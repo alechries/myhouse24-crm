@@ -343,6 +343,16 @@ def invoice_detail_view(request, pk):
     return render(request, 'admin/invoice/detail.html', context)
 
 
+def invoice_delete_list_view(request):
+    if request.method == 'POST':
+        invoice_list = request.POST.getlist('checks')
+        print(invoice_list)
+        for invoice in invoice_list:
+            models.Invoice.objects.get(id=invoice).delete()
+
+    return redirect('admin_invoice')
+
+
 def invoice_delete_view(request, pk):
     invoice = models.Invoice.objects.get(id=pk)
     invoice.delete()
