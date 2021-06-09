@@ -341,7 +341,7 @@ class Invoice(models.Model):
 
 
 class TariffService(models.Model):
-    amount = models.FloatField(verbose_name='К-во едениц измерения')
+    amount = models.FloatField(verbose_name='К-во едениц измерения', null=True)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, null=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True, verbose_name='')
     tariff = models.ForeignKey(Tariff, on_delete=models.CASCADE, null=True, blank=True, related_name='tariff_related')
