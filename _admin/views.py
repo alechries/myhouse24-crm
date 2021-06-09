@@ -305,7 +305,7 @@ def invoice_change_view(request, pk=None):
         tariff_invoice_formset = TaroffInvoiceFormset(request.POST, prefix='tariff_invoice_form', instance=invoice)
         if invoice_form.is_valid() and tariff_invoice_formset.is_valid():
             tariff_invoice_queryset = tariff_invoice_formset.save(commit=False)
-            total = 0
+            total = invoice_form.instance.total_amount
             for tariff_invoice_form in tariff_invoice_queryset:
                 tariff_invoice_form.invoice.id = invoice.id
                 total += float(tariff_invoice_form.price) * float(tariff_invoice_form.amount)
