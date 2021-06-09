@@ -40,13 +40,21 @@
                                 <div class="tariff-service-form-area">
                                     {{ form.id }}
                                     <div class="row">
-                                        <div class="col-7">
+                                        <div class="col-4">
                                             <label>Услуга</label>
                                             {{ form.service|as_crispy_field }}
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-2">
                                             <label>Цена</label>
                                             {{ form.price }}
+                                        </div>
+                                        <div class="col-2">
+                                            <label>Валюта</label>
+                                            <div class="input-currency form-control disabled" style="margin: 0.25rem 0; color: grey;" >???</div>
+                                        </div>
+                                        <div class="col-2">
+                                            <label>Ед. изм.</label>
+                                            <div class="input-unit form-control disabled" style="margin: 0.25rem 0; color: grey;" >???</div>
                                         </div>
                                         <div class="col-2 d-flex" style="margin-top: 42px; margin-bottom: 10px">
                                             {% if form.instance.id %}

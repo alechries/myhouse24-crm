@@ -310,6 +310,7 @@ class TariffCreateForm(forms.ModelForm):
 
 
 class TariffServiceForm(forms.ModelForm):
+    currency = forms.CharField
     class Meta:
         model = models.TariffService
         fields = ['id', 'price', 'service']
