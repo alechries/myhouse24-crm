@@ -305,17 +305,17 @@ class TransferType(models.Model):
 
 
 class Transfer(models.Model):
-    solo_status = models.BooleanField(null=True, verbose_name='дефолтное значение для пустых трансферов: 0 - расх')
-    number = models.CharField('Номер транзакции', max_length=255)
+    solo_status = models.BooleanField(null=True, verbose_name='')
+    number = models.CharField('', max_length=255)
     manager = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name='transfer_manager', verbose_name='')
     account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True,  verbose_name='', null=True, related_name='related_account')
-    transfer_type = models.ForeignKey(TransferType, on_delete=models.CASCADE, blank=True, null=True)
+    transfer_type = models.ForeignKey(TransferType, on_delete=models.CASCADE, blank=True, null=True, verbose_name='')
     amount = models.IntegerField(verbose_name='', blank=True)
     comment = models.TextField('', null=True, blank=True)
     # статус платежа
     payment_made = models.BooleanField(verbose_name='', default=True)
     #
-    created_date = models.DateField(default=timezone.now, null=True)
+    created_date = models.DateField('', default=timezone.now, null=True)
 
 
 class Invoice(models.Model):

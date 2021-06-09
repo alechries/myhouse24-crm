@@ -37,7 +37,9 @@ def index_view(request):
 
 
 def test_view(request):
-    return render(request, 'admin/test.html')
+    f = forms.TransferFilter(request.GET, queryset=models.Transfer.objects.all())
+
+    return render(request, 'admin/test.html', {'filter': f})
 
 
 def update_me_view(request):
@@ -331,6 +333,7 @@ def invoice_change_view(request, pk=None):
         tariff_invoice_formset = TaroffInvoiceFormset(request.POST or None, prefix='tariff_invoice_form', instance=invoice)
 
     context = {
+        'meter': models.Meter.objects.filter(apartment=invoice.apartment),
         'invoice_form': invoice_form,
         'tariff_invoice_formset': tariff_invoice_formset,
         'alerts': alerts
@@ -798,7 +801,6 @@ def message_create_view(request):
             else:
                 form.instance.destination = 'Всем'
             form.instance.addressee = request.user.get_full_name()
-            form.save()
             print('123', form.data)
             if apartment:
                 instance = form.save()
@@ -824,6 +826,7 @@ def message_create_view(request):
                         apartments = models.Apartment.objects.filter(floor=floor)
                         for apart in apartments:
                             instance = form.save(commit=False)
+                            instance.id = None
                             instance.apartment = apart
                             instance.save()
 

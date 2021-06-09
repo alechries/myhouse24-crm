@@ -1,56 +1,161 @@
 {% extends 'admin/base.html' %}
+{% load crispy_forms_tags %}
 {% block page_title %}
-    <h1 class="m-0">Редактирование услуг</h1>
+    <h1 class="m-0">Касса</h1>
+{% endblock %}
+{% block pagination_link %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'admin_index' %}">
+            <i class="fas fa-home"></i>
+            Главная
+        </a>
+    </li>
+    <li class="breadcrumb-item active">Касса</li>
 {% endblock %}
 {% block main_content %}
-    <section class="content input-form">
-        <div class="container-fluid">
-            <div class="card card-secondary card-outline">
-                <div class="default-area">
-                    <div>
-                      <canvas id="myChart"></canvas>
+    <section class="content" style="min-height: 0">
+        <div class="row">
+            <div class="col-xs-12 col-lg-9">
+                <div class="row">
+                    <div class="col-xs-12 col-md-4">
+                        <div class="small-box bg-green overflow-hidden">
+                            <div class="inner">
+                                <h3>{{ system_balance }} грн</h3>
+                                <p>Состояние кассы</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        <div class="small-box bg-blue overflow-hidden">
+                            <div class="inner">
+                                <h3>{{ account_balance }} грн</h3>
+                                <p>Баланс по счетам</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <!--<span class="small-box-footer">&nbsp;</span>-->
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        <div class="small-box bg-red overflow-hidden">
+                            <div class="inner">
+                                <h3>{{ account_arrears }} грн</h3>
+                                <p>Задолженность по счетам</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <!--<span class="small-box-footer">&nbsp;</span>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-lg-3">
+                <div class="dropdown pull-right">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Выберите действие
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url 'admin_account-transaction-create_in' %}">Создать приход</a>
+                        <a class="dropdown-item" href="{% url 'admin_account-transaction-create_out' %}">Создать расход</a>
+                        <a class="dropdown-item" href="{% url 'admin_export_account_transaction_xls' %}">Выгрузить в Excel</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    <section class="content input-form">
+         <div class="container-fluid">
+            <div class="card card-secondary card-outline table-responsive">
+                    <table class="table table-bordered table-hover table-striped linkedRow">
+                        <thead>
+                            <tr>
+                                <th style="width: 125px; min-width: 125px">№</th>
+                                <th style="width: 125px; min-width: 150px">Дата</th>
+                                <th style="width: 120px; min-width: 120px">Статус</th>
+                                <th style="width:auto">Тип платежа</th>
+                                <th style="min-width: 200px">Владелец</th>
+                                <th style="min-width: 160px">Лицевой счет</th>
+                                <th>Приход/расход</th>
+                                <th style="width: 110px; min-width: 110px">Сумма (грн)</th>
+                                <th style="width: 80px; min-width: 80px">&nbsp;</th></tr>
+                            </tr>
+                            <tr>
+                                <form method="get">
+                                <th>{{ filter.form.number|as_crispy_field }}</th>
+                                <th>{{ filter.form.created_date|as_crispy_field }}</th>
+                                <th>{{ filter.form.payment_made|as_crispy_field }}</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                    <input type="submit" />
+                                </form>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for el in filter.qs %}
+                        <tr data-href="{% url 'admin_account-transaction-detail'  pk=el.pk %}">
+                            <td>{{ el.number }}</td>
+                            <td>{{ el.created_date }}</td>
+                            <td>{% if el.payment_made == 1 %}Проведён{% else %}Непроведён{% endif %}</td>
+                            {% if el.transfer_type %}
+                            <td>{{ el.transfer_type.name }}</td>
+                            {% else %}
+                            <td>Не установлен</td>
+                            {% endif %}
+                            {% if el.account.get_apartment.user %}
+                            <td>{{ el.account.get_apartment.user.get_full_name }}</td>
+                            {% else %}
+                            <td>Не назначен</td>
+                            {% endif %}
+                            {% if el.account %}
+                            <td>{{ el.account }}</td>
+                            {% else %}
+                            <td>Не назначен</td>
+                            {% endif %}
+                            {% if el.transfer_type.status == 'Приход' %}
+                                <td style="color: #00ba13; text-align: center"><small class="label label-success">Приход</small></td>
+                            {% elif el.solo_status == 1 %}
+                                <td style="color: #00ba13; text-align: center"><small class="label label-success">Приход</small></td>
+                            {% else %}
+                                <td style="color: #c62232; text-align: center"><small class="label label-danger">Расход</small></td>
+                            {% endif %}
+                            {% if el.transfer_type.status == 'Приход' %}
+                                <td style="color: #00ba13">{{ el.amount }}</td>
+                            {% elif el.solo_status == 1 %}
+                                <td style="color: #00ba13">{{ el.amount }}</td>
+                            {% else %}
+                                <td style="color: #c62232">-{{ el.amount }}</td>
+                            {% endif %}
+                            <td>
+                                <div class="btn-group pull-right">
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-transaction-change' pk=el.pk %}" title="Редактировать" data-toggle="tooltip">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <a class="btn btn-default btn-sm" href="{% url 'admin_account-transaction-delete' pk=el.pk %}" title="Удалить">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+            </div>
+         </div>
+    </section>
 {% endblock %}
 {% block scripts %}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-    var endpoint = '/api/chart/data'
-    $.ajax({
-        method: "GET",
-        url: endpoint,
-        success: function (data) {
-            labels = data.labels
-            inputData = data.input
-            outputData = data.output
-            var ctx = document.getElementById("myChart");
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Расход',
-                        borderColor: 'red',
-                        backgroundColor: 'red',
-                        data: outputData,
-                    },
-                    {
-                        label: 'Приход',
-                        borderColor: 'green',
-                        backgroundColor: 'green',
-                        data: inputData,
-                    }]
-                }
-            })
-
-        },
-        error: function (error_data) {
-            console.log("error")
-            console.log(error_data)
-        }
-    })
+    $('tr[data-href]').on("click", function() {
+    document.location = $(this).data('href');
+    });
     </script>
 {% endblock %}

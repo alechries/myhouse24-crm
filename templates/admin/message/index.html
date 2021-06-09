@@ -19,12 +19,14 @@
             <div class="card card-secondary card-outline table-responsive">
                 <table class="table table-bordered table-hover table-striped linkedRow">
                 <div class="col-3">
-                    <form action="{% url 'admin_message-search' %}">
-                        {% csrf_token %}
-                        <input type="text" name="message_search" value="" class="form-control input-sm" placeholder="Поиск">
-                    </form>
                 </div>
                     <thead>
+                    <div class="col-3">
+                         <form action="{% url 'admin_message-search' %}">
+                            {% csrf_token %}
+                            <input type="text" name="message_search" value="" class="form-control input-sm" placeholder="Поиск">
+                        </form>
+                    </div>
                         <form method="POST" enctype="multipart/form-data" action="{% url 'admin_message-delete-list'%}">
                             {% csrf_token %}
                             <div class="pull-right">

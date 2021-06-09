@@ -3,6 +3,9 @@ from _db import models
 from django.forms import TextInput, CharField, Form
 from datetime import datetime
 from crispy_forms.helper import FormHelper
+import django_filters
+from django_filters import DateFromToRangeFilter, DateFilter
+from django_filters.widgets import RangeWidget
 from django.contrib.auth import (
     authenticate, get_user_model, password_validation,
 )
@@ -762,7 +765,6 @@ class InvoiceForm(forms.ModelForm):
         required=False
     )
 
-
     def __init__(self, *args, **kwargs):
         super(InvoiceForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -895,6 +897,25 @@ class UserInviteForm(forms.ModelForm):
                 'type': 'text',
                 'class': 'form-control',
             }),
+            'email': forms.EmailInput(attrs={
+                'placeholder': 'Введите email',
+                'class': 'form-control',
+            })
+        }
+
+
+class TransferFilter(django_filters.FilterSet):
+    def __init__(self, *args, **kwargs):
+        super(TransferFilter, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+
+    class Meta:
+        date = DateFilter()
+        model = models.Transfer
+        fields = ['number', 'created_date', 'transfer_type', 'account', 'payment_made']
+        widgets = {
+            'created_date': forms.DateInput(),
             'email': forms.EmailInput(attrs={
                 'placeholder': 'Введите email',
                 'class': 'form-control',
