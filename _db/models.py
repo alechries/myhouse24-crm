@@ -425,10 +425,11 @@ class WebsiteContacts(SingletonModel):
 class Message(models.Model):
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, blank=True, verbose_name='', null=True)
     addressee = models.CharField(max_length=255, null=True, blank=True)
+    destination = models.CharField(max_length=255, null=True, blank=True)
     title = models.CharField(max_length=255)
     text = models.TextField()
     indebtedness = models.BooleanField('', default=False)
-    created_date = models.DateField(default=timezone.now)
+    created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title

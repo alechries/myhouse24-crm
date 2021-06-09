@@ -738,11 +738,19 @@ def message_view(request):
     return render(request, 'admin/message/index.html', context)
 
 
+def message_delete_list_view(request):
+    if request.method == 'POST':
+        mail_list = request.POST.getlist('checks')
+        for mail in mail_list:
+            models.Message.objects.get(id=mail).delete()
+
+    return redirect('admin_message')
+
+
 def message_create_view(request):
     alerts = []
     if request.method == 'POST':
         form = forms.MessageCreateForm(request.POST)
-        print(form.data)
         if form.is_valid():
             house = form.cleaned_data['house']
             section = form.cleaned_data['section']
@@ -750,17 +758,27 @@ def message_create_view(request):
             apartment = form.cleaned_data['apartment']
 
             if apartment:
-                form.instance.addressee = models.Apartment.objects.get(id=apartment.id).name
+                destination = f'{models.House.objects.get(id=house.id).name},' \
+                            f' {models.Section.objects.get(id=section.id).name}, ' \
+                            f'{models.Floor.objects.get(id=floor.id).name}, ' \
+                            f'кв.{models.Apartment.objects.get(id=apartment.id).name}'
+                form.instance.destination = destination
             elif floor:
-                form.instance.addressee = models.Floor.objects.get(id=floor.id).name
+                destination = f'{models.House.objects.get(id=house.id).name},' \
+                            f' {models.Section.objects.get(id=section.id).name}, ' \
+                            f'{models.Floor.objects.get(id=floor.id).name}'
+                form.instance.destination = destination
             elif section:
-                form.instance.addressee = models.Section.objects.get(id=section.id).name
+                destination = f'{models.House.objects.get(id=house.id).name}, ' \
+                            f'{models.Section.objects.get(id=section.id).name}'
+                form.instance.destination = destination
             elif house:
-                form.instance.addressee = models.House.objects.get(id=house.id).name
+                form.instance.destination = models.House.objects.get(id=house.id).name
             else:
-                form.instance.addressee = 'Всем'
+                form.instance.destination = 'Всем'
+            form.instance.addressee = request.user.get_full_name()
             form.save()
-
+            print('123', form.data)
             if apartment:
                 instance = form.save()
             elif floor:
@@ -787,7 +805,6 @@ def message_create_view(request):
                             instance = form.save(commit=False)
                             instance.apartment = apart
                             instance.save()
-
 
             alerts.append('Сообщение отправлено')
         else:

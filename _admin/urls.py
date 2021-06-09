@@ -52,6 +52,7 @@ urlpatterns = [
     path('house/detail/<int:pk>', views.house_detail_view, name='admin_house-detail'),
     path('message', views.message_view, name='admin_message'),
     path('message/create', views.message_create_view, name='admin_message-create'),
+    path('message/delete/list', views.message_delete_list_view, name='admin_message-delete-list'),
     path('message/indebtedness/create', views.message_indebtedness_create_view, name='admin_message-indebtedness-create'),
     path('message/detail/<int:pk>', views.message_detail_view, name='admin_message-detail'),
     path('message/delete/<int:pk>', views.message_delete_view, name='admin_message-delete'),

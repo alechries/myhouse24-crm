@@ -17,10 +17,18 @@
     <section class="content input-form">
          <div class="container-fluid">
             <div class="card card-secondary card-outline table-responsive">
+            <form method="POST" enctype="multipart/form-data" action="{% url 'admin_message-delete-list'%}">
+                    {% csrf_token %}
                 <table class="table table-bordered table-hover table-striped linkedRow">
                     <thead>
                     <tr>
-                        <th style="width: 40px; min-width: 40px"></th>
+                        <div class="pull-right">
+                        <input type="submit" class="btn btn-default margin-bottom-15 pull-right" value="Удалить" style="margin: 0 5px">
+                    </div>
+                    </tr>
+                    <tr>
+
+                        <th style="width: 40px; min-width: 40px"><input type="checkbox" name="select-all" id="select-all" /></th>
                         <th>Получатели</th>
                         <th>Текст</th>
                         <th style="width: 120px">Дата</th>
@@ -30,10 +38,10 @@
                     {% if messages.count > 0 %}
                     {% for el in messages %}
                         <tr data-href="{% url 'admin_message-detail'  pk=el.pk %}">
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ el.addressee }}</td>
-                            <td>{{ el.text }}</td>
-                            <td>{{ el.created_date|date:"d.m.Y" }}</td>
+                            <td><input type="checkbox"  name="checks" value="{{el.id}}">
+                            <td>{{ el.destination }}</td>
+                            <td>{{ el.get_short_text|safe }}</td>
+                            <td style="min-width: 180px">{{ el.created_date|date:"d.m.Y - H:i" }}</td>
                         </tr>
                     {% endfor %}
                     {% else %}
@@ -43,14 +51,39 @@
                     {% endif %}
                     </tbody>
                 </table>
+            </form>
             </div>
          </div>
     </section>
 {% endblock %}
 {% block scripts %}
     <script>
-    $('tr[data-href]').on("click", function() {
-    document.location = $(this).data('href');
+    $('.linkedRow tbody tr').click(function() {
+        var url = $(this).data('href');
+        if (url) {
+            document.location.href = $(this).data('href');
+        }
+    }).find('a, button, input, select, textarea').hover(function() { // Список тегов при наведении на которые, не будет происходить переход по ссылке
+        $(this).parents('tr').unbind('click');
+    }, function() {
+        $(this).parents('tr').click(function() {
+            var url = $(this).data('href');
+            if (url) {
+                document.location.href = $(this).data('href');
+            }
+        });
+    });
+    $('#select-all').click(function(event) {
+        if(this.checked) {
+            // Iterate each checkbox
+            $(':checkbox').each(function() {
+                this.checked = true;
+            });
+        } else {
+            $(':checkbox').each(function() {
+                this.checked = false;
+            });
+        }
     });
     </script>
 {% endblock %}
