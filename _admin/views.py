@@ -258,6 +258,10 @@ def invoice_create_view(request):
             tariff_invoice_queryset = tariff_invoice_formset.save(commit=False)
             total = 0
             for tariff_invoice_form in tariff_invoice_queryset:
+                if tariff_invoice_form.amount is None:
+                    tariff_invoice_form.amount = 0
+                if tariff_invoice_form.price is None:
+                    tariff_invoice_form.price = 0
                 tariff_invoice_form.invoice.id = invoice.id
                 total += float(tariff_invoice_form.price) * float(tariff_invoice_form.amount)
                 tariff_invoice_form.save()
