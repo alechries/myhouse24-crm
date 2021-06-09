@@ -316,15 +316,17 @@ $('#select-apartment').find('select').each(function() {
     function measure_rewrite(){
         var forms = document.getElementsByClassName('tariff-invoice-form-area')
         for (let i = 0; i < forms.length; i++) {
-                    console.log(i)
+                    console.log('--------------' + i)
                     var form = forms[i]
                     var selected_service = form.getElementsByTagName('select')[0]
-                    selected_service = selected_service.options[selected_service.selectedIndex].value
-
-                    if (selected_service != 0){
-                        var measure_element = form.getElementsByClassName('input-measure')[0]
+                    console.log("form.getElementsByTagName('select')[0] - " + selected_service)
+                    if (selected_service.selectedIndex != 0){
+                        selected_service = selected_service.options[selected_service.selectedIndex].value
+                        console.log('selected_service.options[selected_service.selectedIndex].value - ' + selected_service)
                         $.get("/api/measure/"+selected_service, function(msr_data) {
-                            measure_element.value = msr_data['name']
+                            var measure_element = form.getElementsByClassName('input-measure')[i]
+                            console.log(measure_element)
+                            measure_element.innerHTML = msr_data['name']
                         })
                     }
         }
